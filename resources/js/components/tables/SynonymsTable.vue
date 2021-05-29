@@ -1,6 +1,5 @@
 <template>
   <div class="synonyms-table">
-
     <b-table
       :data="data"
       :loading="loading"
@@ -75,13 +74,17 @@
 </template>
 
 <script>
+import PersistentTableMixin from '@/mixins/PersistentTableMixin'
 import NzPerPageSelect from '@/components/table/PerPageSelect'
 import NzSortableColumnHeader from '@/components/table/SortableColumnHeader'
 
 export default {
   name: "nzSynonymsTable",
 
+  mixins: [PersistentTableMixin],
+
   components: {
+
     NzPerPageSelect,
     NzSortableColumnHeader
   },
@@ -110,7 +113,6 @@ export default {
       sortOrder: 'desc',
       page: 1,
       perPage: this.perPageOptions[0],
-      checkedRows: [],
     }
   },
 
@@ -121,7 +123,6 @@ export default {
   methods: {
     loadAsyncData() {
       this.loading = true
-      this.checkedRows = []
 
       return axios.get(route(this.listRoute).withQuery({
         sort_by: `${this.sortField}.${this.sortOrder}`,
