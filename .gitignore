@@ -13,5 +13,4 @@ yarn-error.log
 .env
 .php_cs.cache
 .phpunit.result.cache
-/.vscode/
-/public/js/
+
