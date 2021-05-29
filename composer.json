@@ -1,8 +1,8 @@
 {
-    "name": "biologer/biologer",
+    "name": "biologer/birdloger",
     "type": "project",
-    "description": "Database of wildlife of Serbia",
-    "keywords": ["biologer", "reptile", "amphibia", "butterfly", "insect", "serbia"],
+    "description": "Database of bird species in Serbia",
+    "keywords": ["biologer", "birdloger", "birds", "serbia"],
     "license": "MIT",
     "authors": [
         {
@@ -10,10 +10,16 @@
             "email": "nen.zivanovic@gmail.com",
             "homepage": "https://nenadzivanovic.in.rs",
             "role": "Developer"
+        },
+        {
+            "name": "Nikola Vasić",
+            "email": "nikolavasic88@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
         "php": "^7.2.5",
+        "ext-gd": "*",
         "astrotomic/laravel-translatable": "^11.8",
         "box/spout": "^2.7",
         "doctrine/dbal": "^2.10",
@@ -37,9 +43,11 @@
         "spatie/laravel-cookie-consent": "^2.10",
         "spatie/laravel-menu": "^3.4",
         "stevebauman/purify": "^3.0",
-        "tightenco/ziggy": "^0.9"
+        "tightenco/ziggy": "^0.9",
+        "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
+        "beyondcode/laravel-dump-server": "^1.7",
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.4",
         "itsgoingd/clockwork": "^4.0",

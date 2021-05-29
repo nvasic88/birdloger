@@ -58,6 +58,15 @@ class ViewServiceProvider extends ServiceProvider
                         ->prepend('<p class="menu-label">'.trans('navigation.my').'</p>')
                         ->addClass('menu-list')
                         ->route('contributor.field-observations.index', trans('navigation.field_observations'))
+                        /*->routeIf(
+                            auth()->user()->hasAnyRole(['admin', 'electrocution']),
+                            'contributor.electrocution-observations.index',
+                            trans('navigation.electrocution_observations')
+                        )->routeIf(
+                            auth()->user()->hasAnyRole(['admin', 'crime']),
+                            'contributor.crime-observations.index',
+                            trans('navigation.crime_observations')
+                        )*/
                         ->setActiveClass('is-active')
                         ->setActiveClassOnLink()
                         ->setActiveFromRequest()
@@ -97,6 +106,10 @@ class ViewServiceProvider extends ServiceProvider
                             ['list', \App\Taxon::class],
                             'admin.taxa.index',
                             trans('navigation.taxa')
+                        )->routeIf(
+                            auth()->user()->hasRole('admin'),
+                            'admin.synonyms.index',
+                            trans('navigation.synonyms')
                         )->routeIfCan(
                             ['list', \App\User::class],
                             'admin.users.index',

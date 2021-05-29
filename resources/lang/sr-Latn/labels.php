@@ -52,7 +52,7 @@ return [
         'last_name' => 'Prezime',
         'institution' => 'Institucija',
         'roles' => 'Uloge',
-        'curated_taxa' => 'Taksoni koje uređuje',
+        'curated_taxa' => 'Ptice koje uređuje',
         'email' => 'E-pošta',
         'search' => 'Traži',
     ],
@@ -60,15 +60,15 @@ return [
     'taxa' => [
         'rank' => 'Kategorija',
         'name' => 'Naziv',
-        'parent' => 'Roditeljski takson',
+        'parent' => 'Roditeljski ptica',
         'author' => 'Autor',
         'native_name' => 'Narodni naziv',
         'description' => 'Opis',
         'fe_old_id' => '(stara) FaunaEuropea ID',
         'fe_id' => 'FaunaEuropea ID',
-        'restricted' => 'Takson sa ograničenim podacima',
-        'allochthonous' => 'Takson je alohton',
-        'invasive' => 'Takson je invazivan',
+        'restricted' => 'Ptica sa ograničenim podacima',
+        'allochthonous' => 'Ptica je alohtona',
+        'invasive' => 'Ptica je invazivna',
         'stages' => 'Stadijumi',
         'conservation_legislations' => 'Zakonska zaštita',
         'conservation_documents' => 'Ostala dokumenta',
@@ -78,16 +78,43 @@ return [
         'yes' => 'Da',
         'no' => 'Ne',
 
-        'include_lower_taxa' => 'Uključujući niže taksone',
+        'include_lower_taxa' => 'Uključujući niže ptice',
 
         'atlas_codes' => 'Atlas kodovi',
         'uses_atlas_codes' => 'Koristi Atlas kodove',
+
+        'spid' => 'SPID',
+        'birdlife_seq' => 'BirdLife sekvenca',
+        'birdlife_id' => 'BirdLife ID',
+        'ebba_code' => 'EBBA code',
+        'refer' => 'Referentna lista',
+        'euring_code' => 'EURING code',
+        'euring_sci_name' => 'EURING sci ime',
+        'eunis_n2000code' => 'EUNIS n2000 code',
+        'eunis_sci_name' => 'EUNIS sci ime',
+        'bioras_sci_name' => 'BioRaS sci ime',
+        'sg' => 'SG',
+        'gn_status' => 'GN status',
+        'prior' => 'Prioritetna lista',
+        'strictly_protected' => 'Strogo zaštićena',
+        'strictly_note' => 'Napomena za s.z.v.',
+        'protected' => 'Zaštićena',
+        'protected_note' => 'Napomena za z.v.',
+        'type' => 'Tip',
+        'iucn_cat' => 'IUCN kategorija',
+        'sp' => 'SP',
+        'full_sci_name' => 'Pun naučni naziv',
+        'synonyms' => 'Lista sinonima',
+        'addSynonym' => 'Dodaj sinonim',
+        'annex' => 'Annex'
+
     ],
 
     'field_observations' => [
-        'taxon' => 'Takson',
+        'taxon' => 'Ptica',
+        'taxon_id' => 'ID Ptice',
         'original_identification' => 'Originalna identifikacija',
-        'search_for_taxon' => 'Traži takson...',
+        'search_for_taxon' => 'Traži pticu...',
         'date' => 'Datum',
         'year' => 'Godina',
         'month' => 'Mesec',
@@ -116,6 +143,7 @@ return [
         'stage' => 'Stadijum',
         'time' => 'Vreme',
         'observer' => 'Uočio',
+        'observers' => 'Uočili',
         'identifier' => 'Identifikovao',
         'found_dead' => 'Jedinka nađena mrtva?',
         'found_dead_note' => 'Beleške o mrtvoj jedinki',
@@ -131,6 +159,9 @@ return [
         'dataset' => 'Set podataka',
         'mgrs10k' => 'MGRS 10K',
         'atlas_code' => 'Atlas kod',
+        'number_of' => 'Broj čega',
+        'description' => 'Detaljan opis',
+        'comment' => 'Komentar',
 
         'statuses' => [
             'approved' => 'Odobreno',
@@ -141,18 +172,33 @@ return [
         'save_tooltip' => 'Čuva trenutni nalaz i vraća vas u listu nalaza. Možete koristiti i prečicu Ctrl+Enter na tastaturi.',
         'save_more_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta. Možete koristiti i prečicu Ctrl+Shift+Enter na tastaturi.',
 
-        'include_lower_taxa' => 'Uključujući niže taksone',
-
+        'include_lower_taxa' => 'Uključujući niže ptice',
         'submitted_using' => 'Poslato preko',
+    ],
+
+    'observations' => [
+        'observers' => 'Posmatrači',
+        'number_label' => 'RBr',
+        'firstName' => 'Ime',
+        'lastName' => 'Prezime',
+        'nickName' => 'Nadimak',
+        'city' => 'Grad',
+        'fid' => 'Feature ID',
+        'rid' => 'RID',
+        'data_limit' => 'Data limit',
+        'data_provider' => 'Data provider',
+        'add_observer' => 'Dodaj posmatrača',
+        'remove_observer_tooltip' => 'Ukloni posmatrača',
+        'id_tooltip' => 'Naziv ptice mora biti izabran preko pretrage, ID se automatski popunjava',
     ],
 
     'view_groups' => [
         'name' => 'Naziv',
         'parent' => 'Viša grupa',
         'description' => 'Opis',
-        'taxa' => 'Taksoni',
+        'taxa' => 'Ptice',
         'image' => 'Slika',
-        'only_observed_taxa' => 'Samo opaženi taksoni',
+        'only_observed_taxa' => 'Samo opaženi ptice',
     ],
 
     'exports' => [
@@ -180,7 +226,7 @@ return [
         'has_heading' => 'Prvi red sadrži nazive kolona',
         'columns' => 'Kolone',
         'user' => 'Za korisnika',
-        'approve_curated' => 'Potvrdi nalaze za taksone koje uređujem',
+        'approve_curated' => 'Potvrdi nalaze za pticama koje uređujem',
     ],
 
     'announcements' => [
@@ -225,8 +271,8 @@ return [
         'citation' => 'Citiranje',
         'cited_publication' => 'Citirana publikacija',
         'search_for_publication' => 'Traži publikaciju',
-        'taxon' => 'Takson',
-        'search_for_taxon' => 'Traži takson',
+        'taxon' => 'Ptica',
+        'search_for_taxon' => 'Traži pticu',
         'date' => 'Datum',
         'year' => 'Godina',
         'month' => 'Mesec',
@@ -289,10 +335,10 @@ return [
         'save_tooltip' => 'Čuva trenutni nalaz i vraća vas u listu nalaza. Možete koristiti i prečicu Ctrl+Enter na tastaturi.',
         'save_more_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta. Možete koristiti i prečicu Ctrl+Shift+Enter na tastaturi.',
 
-        'save_more_same_taxon' => 'Save (još, isti takson)',
+        'save_more_same_taxon' => 'Save (još, ista ptica)',
         'save_more_same_taxon_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta i za isti taskon.',
 
-        'include_lower_taxa' => 'Uključujući niže taksone',
+        'include_lower_taxa' => 'Uključujući niže ptice',
     ],
 
     'preferences' => [

@@ -13,6 +13,7 @@
             :red-lists="{{ $redLists }}"
             :red-list-categories="{{ $redListCategories }}"
             :stages="{{ $stages }}"
+            :annexes="{{ $annexes }}"
             :taxon="{{ $taxon }}"
             :native-names="{{ $taxon->getAttributeTranslations('native_name') }}"
             :descriptions="{{ $taxon->getAttributeTranslations('description') }}"

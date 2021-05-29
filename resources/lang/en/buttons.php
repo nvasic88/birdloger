@@ -3,6 +3,7 @@
 return [
     'save' => 'Save',
     'save_more' => 'Save (more)',
+    'save_edit' => 'Save (continue)',
     'cancel' => 'Cancel',
     'filters' => 'Filters',
     'apply' => 'Apply',

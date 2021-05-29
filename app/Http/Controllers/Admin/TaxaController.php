@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Annex;
 use App\ConservationDocument;
 use App\ConservationLegislation;
 use App\Exports\Taxa\CustomTaxaExport;
@@ -38,6 +39,7 @@ class TaxaController
             'redLists' => RedList::all(),
             'redListCategories' => collect(RedList::CATEGORIES),
             'stages' => Stage::all(),
+            'annexes' => Annex::all(),
         ]);
     }
 
@@ -50,13 +52,19 @@ class TaxaController
     public function edit(Taxon $taxon)
     {
         return view('admin.taxa.edit', [
-            'taxon' => $taxon->load(['parent', 'redLists', 'conservationLegislations', 'conservationDocuments', 'stages']),
+            'taxon' => $taxon->load([
+                'parent', 'redLists', 'conservationLegislations', 'conservationDocuments', 'stages', 'annexes'
+            ]),
             'ranks' => Taxon::getRankOptions(),
             'conservationLegislations' => ConservationLegislation::all(),
             'conservationDocuments' => ConservationDocument::all(),
             'redLists' => RedList::all(),
             'redListCategories' => collect(RedList::CATEGORIES),
             'stages' => Stage::all(),
+            'synonyms' => $taxon->load(['synonyms']),
+            'annexes' => Annex::all(),
+            'family' => $taxon->load(['family']),
+            'synonym_names' => [],
         ]);
     }
 }

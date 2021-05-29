@@ -13,7 +13,7 @@ class AnnouncementsController
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Http\Resources\AnnouncementResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {

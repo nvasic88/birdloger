@@ -67,7 +67,7 @@ class FieldObservationImport extends BaseImport
     {
         return collect([
             [
-                'label' => trans('labels.field_observations.taxon'),
+                'label' => trans('labels.taxon.name'),
                 'value' => 'taxon',
                 'required' => true,
             ],
@@ -196,9 +196,13 @@ class FieldObservationImport extends BaseImport
                 return $columns;
             }
 
+            // TODO: Check this later
+            return $columns;
+            /*
             return $columns->filter(function ($column) {
                 return ! in_array($column['value'], ['identifier', 'observer']);
             })->values();
+            */
         });
     }
 

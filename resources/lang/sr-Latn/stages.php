@@ -1,10 +1,12 @@
 <?php
 
 return [
-    'egg' => 'Jaje',
-    'larva' => 'Larva',
-    'pupa' => 'Lutka',
+    'egg' => 'Jaja',
+    'nidicolous' => 'Čučavac',
+    'nidifugous' => 'Potrkušac',
     'juvenile' => 'Mladunac',
-    'adult' => 'Odrasli',
-    'unknown' => 'Nepoznat',
+    'immature' => 'Polno nezrela',
+    'fledgling' => 'Poletarac',
+    'adult' => 'Odrasla',
+    'unknown' => 'Nepoznata',
 ];

@@ -7,6 +7,7 @@ use App\FieldObservation;
 use App\License;
 use App\Notifications\FieldObservationForApproval;
 use App\ObservationType;
+use App\Observer;
 use App\Rules\Day;
 use App\Rules\Decimal;
 use App\Rules\Month;
@@ -29,8 +30,8 @@ class StoreFieldObservation extends FormRequest
     public function rules()
     {
         return [
-            'taxon_id' => ['nullable', 'exists:taxa,id'],
-            'taxon_suggestion' => ['nullable', 'string', 'max:191'],
+            'taxon_id' => ['required', 'exists:taxa,id'],
+            'taxon_suggestion' => ['required', 'string', 'max:191'],
             'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -46,7 +47,7 @@ class StoreFieldObservation extends FormRequest
             ],
             'latitude' => ['required', new Decimal(['min' => -90, 'max' => 90])],
             'longitude' => ['required', new Decimal(['min' => -180, 'max' => 180])],
-            'elevation' => ['required', 'integer', 'max:10000'],
+            'elevation' => ['nullable', 'integer', 'max:10000'],
             'accuracy' => ['nullable', 'integer', 'max:10000'],
             'observer' => ['nullable', 'string'],
             'identifier' => ['nullable', 'string'],
@@ -79,6 +80,14 @@ class StoreFieldObservation extends FormRequest
             'identified_by_id' => ['nullable', Rule::exists('users', 'id')],
             'dataset' => ['nullable', 'string', 'max:255'],
             'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
+            'number_of' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'comment' => ['nullable', 'string'],
+            'data_provider' => ['nullable', 'string'],
+            'data_limit' => ['nullable', 'string'],
+            'fid' => ['nullable', 'string'],
+            'rid' => ['nullable', 'integer'],
+            'field_observers' => ['nullable', 'array'],
         ];
     }
 
@@ -95,6 +104,8 @@ class StoreFieldObservation extends FormRequest
                     collect($this->input('photos', [])),
                     $this->user()->settings()->get('image_license')
                 );
+
+                $this->createObservers($fieldObservation);
 
                 $this->syncRelations($fieldObservation);
 
@@ -135,6 +146,8 @@ class StoreFieldObservation extends FormRequest
             'observed_by_id' => $this->getObservedBy(),
             'identified_by_id' => $this->getIdentifedBy(),
             'atlas_code' => $this->input('atlas_code'),
+            'fid' => $this->input('fid'),
+            'rid' => $this->input('rid'),
         ];
     }
 
@@ -165,13 +178,18 @@ class StoreFieldObservation extends FormRequest
             'sex' => $this->input('sex'),
             'stage_id' => $this->input('stage_id'),
             'number' => $this->input('number'),
+            'number_of' => $this->input('number_of'),
             'note' => $this->input('note'),
             'project' => $this->input('project'),
             'habitat' => $this->input('habitat'),
             'found_on' => $this->input('found_on'),
+            'description' => $this->input('description'),
             'original_identification' => $this->getTaxonName(),
             'dataset' => $this->input('dataset') ?? Dataset::default(),
             'client_name' => $this->getClientName(),
+            'comment' => $this->input('comment'),
+            'data_provider' => $this->input('data_provider'),
+            'data_limit' => $this->input('data_limit'),
         ];
     }
 
@@ -327,5 +345,21 @@ class StoreFieldObservation extends FormRequest
         }
 
         return $token->client->name;
+    }
+
+    private function createObservers(FieldObservation $fieldObservation)
+    {
+        $observer_ids = array();
+        foreach($this->input('field_observers') as $observer){
+            $obs = Observer::firstOrCreate([
+                'firstName' => $observer['firstName'],
+                'lastName' => $observer['lastName'],
+                'nickname' => $observer['nickname'],
+                'city' => $observer['city'],
+            ]);
+            $obs->save();
+            $observer_ids[] = $obs->id;
+        }
+        $fieldObservation->observation->observers()->sync($observer_ids, []);
     }
 }

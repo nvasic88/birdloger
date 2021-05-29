@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\FieldObservations\CustomFieldObservationsExport;
 use App\FieldObservation;
+use App\ObservationType;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class FieldObservationsController
@@ -51,11 +52,10 @@ class FieldObservationsController
 
         return view('admin.field-observations.edit', [
             'fieldObservation' => $fieldObservation->load([
-                'observation.taxon.curators', 'observation.taxon.stages',
+                'observation.taxon.curators',
                 'observedBy', 'identifiedBy',
             ]),
-            'stages' => \App\Stage::all(),
-            'observationTypes' => \App\ObservationType::all(),
+            'observationTypes' => ObservationType::all(),
         ]);
     }
 }

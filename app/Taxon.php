@@ -6,6 +6,7 @@ use App\Filters\Filterable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\DB;
+
 use Spatie\Activitylog\Models\Activity;
 
 class Taxon extends Model
@@ -65,6 +66,10 @@ class Taxon extends Model
         'allochthonous' => false,
         'invasive' => false,
         'restricted' => false,
+        'refer' => false,
+        'prior' => false,
+        'strictly_protected' => false,
+        'protected' => false
     ];
 
     /**
@@ -103,6 +108,10 @@ class Taxon extends Model
         'elevation' => 'integer',
         'restricted' => 'boolean',
         'uses_atlas_codes' => 'boolean',
+        'refer' => 'boolean',
+        'prior' => 'boolean',
+        'protected' => 'boolean',
+        'strictly_protected' => 'boolean',
     ];
 
     /**
@@ -159,7 +168,7 @@ class Taxon extends Model
     public static function sortableFields()
     {
         return [
-            'id', 'name', 'rank_level',
+            'id', 'name', 'rank_level', 'spid'
         ];
     }
 
@@ -255,6 +264,16 @@ class Taxon extends Model
     }
 
     /**
+     * Annexes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function annexes()
+    {
+        return $this->belongsToMany(Annex::class);
+    }
+
+    /**
      * Actovity log.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -272,6 +291,30 @@ class Taxon extends Model
     public function groups()
     {
         return $this->belongsToMany(ViewGroup::class);
+    }
+
+    /**
+     * Synonyms for the taxon.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function synonyms()
+    {
+        return $this->hasMany(Synonym::class);
+    }
+
+    /**
+     * Taxon belong to one family
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function family()
+    {
+        return $this->belongsTo(Family::class);
+    }
+
+    public function order(){
+        return $this->hasOneThrough(Order::class, Family::class);
     }
 
     /**
@@ -307,9 +350,8 @@ class Taxon extends Model
     {
         return $query->where(function ($query) use ($name) {
             $query->where('name', 'like', '%' . $name . '%')
-                ->orWhereTranslationLike('native_name', '%'.$name.'%');
+                ->orWhereTranslationLike('native_name', '%' . $name . '%');
         });
-
     }
 
     /**
@@ -401,7 +443,7 @@ class Taxon extends Model
      */
     public function getRankTranslationAttribute()
     {
-        return trans('taxonomy.'.$this->rank);
+        return trans('taxonomy.' . $this->rank);
     }
 
     /**
@@ -595,7 +637,7 @@ class Taxon extends Model
     /**
      * Taxon ranks as options for frontend.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public static function getRankOptions()
     {
@@ -603,7 +645,7 @@ class Taxon extends Model
             return [
                 'level' => $level,
                 'value' => $rank,
-                'label' => trans('taxonomy.'.$rank),
+                'label' => trans('taxonomy.' . $rank),
             ];
         })->values();
     }

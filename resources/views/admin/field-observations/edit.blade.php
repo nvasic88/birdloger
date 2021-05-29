@@ -12,6 +12,7 @@
             :observation-types="{{ $observationTypes }}"
             :atlas-codes="{{ \App\AtlasCode::all() }}"
             :observation="{{ $fieldObservation }}"
+            :stages="{{\App\Stage::all()}}"
             should-confirm-submit
             confirm-submit-message="{{ __('Reason for changing data. Please try to be precise in order to keep the track of changes and ensure data verification.') }}"
             should-ask-reason

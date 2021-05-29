@@ -15,7 +15,8 @@ class ApprovedFieldObservationsBatchController
     /**
      * Approve multiple field observations.
      *
-     * @return \App\Http\Resources\FieldObservationResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store()
     {
@@ -25,6 +26,7 @@ class ApprovedFieldObservationsBatchController
             ],
         ]);
 
+
         $fieldObservations = $this->getFieldObservations();
 
         $fieldObservations->each(function ($fieldObservation) {
@@ -32,6 +34,7 @@ class ApprovedFieldObservationsBatchController
         });
 
         $fieldObservations->approve();
+
 
         $fieldObservations->each(function ($fieldObservation) {
             $this->logActivity($fieldObservation);

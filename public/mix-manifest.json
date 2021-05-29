@@ -1,13 +1,8 @@
 {
-    "/js/app.js": "/js/app.js?id=cfaf10ab81f9b456781f",
-    "/css/app.css": "/css/app.css?id=4e7af0c57f830514d955",
-    "/js/app.js.map": "/js/app.js.map?id=b6e9e1d3796d8031b94c",
-    "/js/dashboard.js": "/js/dashboard.js?id=658ebb342a60af6c54b4",
-    "/js/dashboard.js.map": "/js/dashboard.js.map?id=e29ea995d70ac90834a7",
-    "/js/public.js": "/js/public.js?id=17d64e948bfdc0c74874",
-    "/js/public.js.map": "/js/public.js.map?id=6547bee6df2d2f4759bb",
-    "/js/vendors~buefy.js": "/js/vendors~buefy.js?id=8c111fae07258520f427",
-    "/js/vendors~buefy.js.map": "/js/vendors~buefy.js.map?id=4058e8306a0f5ccce6bf",
-    "/js/vendors~public.js": "/js/vendors~public.js?id=901cb12b5368c72eb54f",
-    "/js/vendors~public.js.map": "/js/vendors~public.js.map?id=d451d676e982e7b07c94"
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/js/dashboard.js": "/js/dashboard.js?id=3d186737e08bd786f793",
+    "/js/public.js": "/js/public.js?id=7e76b32b39b01240ce10",
+    "/js/vendors~buefy.js": "/js/vendors~buefy.js?id=5d6f4482cdfeda8c88c9",
+    "/js/vendors~public.js": "/js/vendors~public.js?id=83372884f4a2b91b6577"
 }

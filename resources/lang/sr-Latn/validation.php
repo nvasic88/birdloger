@@ -122,7 +122,7 @@ return [
     'year' => 'Godina nije ispravna.',
     'decimal' => 'Polje :attribute mora biti decimalni broj.',
     'contains_non_empty' => 'Polje :attribute mora sadržati barem jednu popunjenu opciju.',
-    'unique_taxon_name' => 'Ime taksona mora biti jedinstveno u okviru glavnih grupa organizama iz živog sveta.',
+    'unique_taxon_name' => 'Ime ptice mora biti jedinstveno u bazi.',
 
     /*
     |--------------------------------------------------------------------------
@@ -154,6 +154,5 @@ return [
     |
     */
 
-    'attributes' => [
-    ],
+    'attributes' => [],
 ];

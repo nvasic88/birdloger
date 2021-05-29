@@ -227,13 +227,24 @@ class Observation extends Model
     }
 
     /**
+     * Observers of this observation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function observers()
+    {
+        return $this->belongsToMany(Observer::class);
+    }
+
+
+    /**
      * Get sex translation.
      *
      * @return string
      */
     public function getSexTranslationAttribute()
     {
-        return $this->sex ? trans('labels.sexes.'.$this->sex) : null;
+        return $this->sex ? trans('labels.sexes.' . $this->sex) : null;
     }
 
     /**
@@ -257,7 +268,7 @@ class Observation extends Model
      */
     public function isDateComplete()
     {
-        return ! (is_null($this->year)
+        return !(is_null($this->year)
             || is_null($this->month)
             || is_null($this->day));
     }
@@ -281,7 +292,7 @@ class Observation extends Model
      */
     public function unapprove()
     {
-        if (! is_null($this->approved_at)) {
+        if (!is_null($this->approved_at)) {
             $this->forceFill(['approved_at' => null])->save();
         }
     }
@@ -293,7 +304,7 @@ class Observation extends Model
      */
     public function isApproved()
     {
-        return ! empty($this->approved_at);
+        return !empty($this->approved_at);
     }
 
     /**

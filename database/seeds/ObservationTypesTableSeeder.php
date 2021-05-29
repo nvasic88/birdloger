@@ -20,25 +20,11 @@ class ObservationTypesTableSeeder extends Seeder
             'sr-Latn' => ['name' => 'Posmatrano'],
         ]);
 
-        ObservationType::firstOrCreate(['slug' => 'photographed'])->update([
-            'en' => ['name' => 'Photographed'],
-            'hr' => ['name' => 'Fotografirano'],
-            'sr' => ['name' => 'Фотографисано'],
-            'sr-Latn' => ['name' => 'Fotografisano'],
-        ]);
-
         ObservationType::firstOrCreate(['slug' => 'call'])->update([
             'en' => ['name' => 'Call'],
             'hr' => ['name' => 'Glasanje'],
             'sr' => ['name' => 'Оглашавање'],
             'sr-Latn' => ['name' => 'Oglašavanje'],
-        ]);
-
-        ObservationType::firstOrCreate(['slug' => 'exuviae'])->update([
-            'en' => ['name' => 'Exuviae'],
-            'hr' => ['name' => 'Svlak'],
-            'sr' => ['name' => 'Егзувија'],
-            'sr-Latn' => ['name' => 'Egzuvija'],
         ]);
     }
 }

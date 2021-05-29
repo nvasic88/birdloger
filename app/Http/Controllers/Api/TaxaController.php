@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTaxon;
 use App\Http\Requests\UpdateTaxon;
 use App\Http\Resources\TaxonCollectionResource;
 use App\Http\Resources\TaxonResource;
+use App\Synonym;
 use App\Taxon;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class TaxaController
     public function index(Request $request)
     {
         $taxa = Taxon::with([
-            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators',
+            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators', 'family'
         ])->filter($request)->orderBy('id')->paginate($request->input('per_page', 15));
 
         return new TaxonCollectionResource($taxa);
@@ -34,7 +35,7 @@ class TaxaController
     public function show(Taxon $taxon)
     {
         return new TaxonResource($taxon->load([
-            'conservationLegislations', 'redLists', 'conservationDocuments',
+            'conservationLegislations', 'redLists', 'conservationDocuments'
         ]));
     }
 
@@ -69,6 +70,10 @@ class TaxaController
      */
     public function destroy(Taxon $taxon)
     {
+        $synonyms = Synonym::where('taxon_id', $taxon->id);
+        $synonyms->each(function ($synonym){
+            $synonym->delete();
+        });
         $taxon->delete();
 
         return response()->json(null, 204);

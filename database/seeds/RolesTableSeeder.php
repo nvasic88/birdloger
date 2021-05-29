@@ -8,6 +8,8 @@ class RolesTableSeeder extends Seeder
     protected $roles = [
         'admin',
         'curator',
+        'crime',
+        'electrocution',
     ];
 
     /**

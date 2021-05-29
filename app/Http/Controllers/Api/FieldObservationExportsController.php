@@ -12,14 +12,14 @@ use Illuminate\Validation\Rule;
 class FieldObservationExportsController
 {
     /**
-     * @var \App\Exports\FieldObservations\FieldObservationsExportFactory
+     * @var FieldObservationsExportFactory
      */
     protected $fieldObservationsExport;
 
     /**
      * Construct controller instance.
      *
-     * @param  \App\Exports\FieldObservations\FieldObservationsExportFactory  $fieldObservationsExport
+     * @param FieldObservationsExportFactory $fieldObservationsExport
      */
     public function __construct(FieldObservationsExportFactory $fieldObservationsExport)
     {

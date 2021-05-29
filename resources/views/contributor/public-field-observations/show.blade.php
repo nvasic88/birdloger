@@ -125,13 +125,23 @@
                 @endif
 
                 <tr>
-                    <td><b>{{ __('labels.field_observations.observer') }}</b></td>
-                    <td class="is-fullwidth">{{ $fieldObservation->observer }}</td>
+                    <td><b>{{ __('labels.field_observations.observer')}}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observer}}
+                        @foreach ($fieldObservation->observation->observers as $observer)
+                            @if($loop->first){{";"}}@endif
+                            {{$observer->firstName}} {{$observer->lastName}}
+                            @if(!$loop->last)
+                                    {{";"}}
+                            @endif
+                        @endforeach
+                    </td>
+
                 </tr>
 
                 <tr>
                     <td><b>{{ __('labels.field_observations.identifier') }}</b></td>
                     <td class="is-fullwidth">{{ $fieldObservation->identifier }}</td>
+
                 </tr>
 
                 <tr>

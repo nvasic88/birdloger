@@ -2,13 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\Annex;
 use App\ConservationDocument;
 use App\ConservationLegislation;
 use App\RedList;
 use App\Rules\UniqueTaxonName;
 use App\Stage;
+use App\Synonym;
 use App\Support\Localization;
 use App\Taxon;
+use App\Order;
+use App\Family;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -38,13 +42,14 @@ class StoreTaxon extends FormRequest
             'parent_id' => ['nullable', 'exists:taxa,id'],
             'rank' => ['required', Rule::in(array_keys(Taxon::RANKS))],
             'author' => ['nullable', 'string'],
-            'fe_old_id' => ['nullable', 'integer'],
             'fe_id' => ['nullable'],
             'restricted' => ['boolean'],
             'allochthonous' => ['boolean'],
             'invasive' => ['boolean'],
             'stages_ids' => ['nullable', 'array'],
             'stages_ids.*' => ['required', Rule::in(Stage::pluck('id'))],
+            'annexes_ids' => ['nullable', 'array'],
+            'annexes_ids.*' => ['required', Rule::in(Annex::pluck('id')->all())],
             'conservation_legislations_ids' => [
                 'nullable', 'array', Rule::in(ConservationLegislation::pluck('id')),
             ],
@@ -64,6 +69,30 @@ class StoreTaxon extends FormRequest
             'native_name' => ['required', 'array'],
             'description' => ['required', 'array'],
             'uses_atlas_codes' => ['boolean'],
+
+            'spid' => ['required', 'string', 'unique:taxa'],
+            'birdlife_seq' => ['required', 'integer', 'unique:taxa'],
+            'birdlife_id' => ['required', 'integer', 'unique:taxa'],
+            'ebba_code' => ['nullable', 'integer'],
+            'euring_code' => ['nullable', 'integer', 'unique:taxa'],
+            'euring_sci_name' => ['nullable', 'string'],
+            'eunis_n2000code' => ['nullable', 'string', 'unique:taxa'],
+            'eunis_sci_name' => ['nullable', 'string'],
+            'bioras_sci_name' => ['nullable', 'string'],
+            'refer' => ['nullable', 'boolean'],
+            'prior' => ['nullable', 'boolean'],
+            'gn_status' => ['nullable', 'string'],
+            'type' => ['required', 'string'],
+            'family_id' => ['required', 'integer'],
+            'strictly_protected' => ['nullable', 'boolean'],
+            'strictly_note' => ['nullable', 'string'],
+            'protected' => ['nullable', 'boolean'],
+            'protected_note' => ['nullable', 'string'],
+            'iucn_cat' => ['nullable', 'string'],
+            'full_sci_name' => ['nullable', 'string'],
+
+            'family_name' => ['required', 'string'],
+            'order_name' => ['required', 'string'],
         ];
     }
 
@@ -86,11 +115,16 @@ class StoreTaxon extends FormRequest
      */
     protected function createTaxon()
     {
-        return Taxon::create(array_merge(array_map('trim', $this->only(['name', 'rank'])), $this->only([
-            'parent_id', 'fe_id', 'author', 'fe_old_id', 'restricted', 'allochthonous', 'invasive', 'uses_atlas_codes'
-        ]), Localization::transformTranslations($this->only([
-            'description', 'native_name',
-        ]))));
+        return Taxon::create(array_merge(array_map('trim', $this->only(['name', 'rank'])),
+            $this->createOrGetFamilyArray(), $this->only([
+                'parent_id', 'author', 'restricted', 'allochthonous', 'invasive', 'uses_atlas_codes',
+                'spid', 'birdlife_seq', 'birdlife_id', 'ebba_code', 'euring_code',
+                'euring_sci_name', 'eunis_n2000code', 'eunis_sci_name', 'bioras_sci_name',
+                'refer', 'prior', 'gn_status', 'type', 'strictly_protected', 'strictly_note',
+                'protected', 'protected_note', 'iucn_cat', 'full_sci_name', 'order_id'
+            ]), Localization::transformTranslations($this->only([
+                'description', 'native_name',
+            ]))));
     }
 
     /**
@@ -120,6 +154,21 @@ class StoreTaxon extends FormRequest
         $taxon->redLists()->sync(
             $this->mapRedListsData($this->input('red_lists_data', []))
         );
+        $taxon->annexes()->sync($this->input('annexes_ids', []));
+    }
+
+    protected function createOrGetFamilyArray(){
+        $orderTrim = array_map('trim', $this->only('order_name'));
+        $orderName['name'] = $orderTrim['order_name'];
+        $order = Order::firstOrCreate($orderName);
+        $order->save();
+
+        $familyTrim = array_map('trim', $this->only('family_name'));
+        $familyName['name'] = $familyTrim['family_name'];
+        $family = Family::firstOrCreate(array_merge($familyName, ['order_id' => $order->id]));
+        $family->save();
+
+        return array_map('trim', ['family_id'=>strval($family->id), 'order_id'=>strval($order->id)]);
     }
 
     /**
@@ -131,6 +180,7 @@ class StoreTaxon extends FormRequest
     {
         return DB::transaction(function () {
             return tap($this->createTaxon(), function ($taxon) {
+                $this->createSynonyms($taxon);
                 $this->syncRelations($taxon);
                 $this->logCreatedActivity($taxon);
             });
@@ -148,5 +198,16 @@ class StoreTaxon extends FormRequest
         activity()->performedOn($taxon)
             ->causedBy($this->user())
             ->log('created');
+    }
+
+    protected function createSynonyms(Taxon $taxon){
+        $synonym_names = $this->input('synonym_names');
+        foreach ($synonym_names as $k => $v){
+            $synonym = Synonym::firstOrCreate([
+                'name' => $v,
+                'taxon_id' => $taxon->id,
+                ]);
+            $synonym->save();
+        }
     }
 }
