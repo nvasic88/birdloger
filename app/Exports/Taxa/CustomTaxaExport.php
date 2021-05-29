@@ -46,10 +46,6 @@ class CustomTaxaExport extends BaseExport
                 'value' => 'invasive',
             ],
             [
-                'label' => trans('labels.taxa.fe_old_id'),
-                'value' => 'fe_old_id',
-            ],
-            [
                 'label' => trans('labels.taxa.fe_id'),
                 'value' => 'fe_id',
             ],

@@ -2,9 +2,11 @@
 
 return [
     'egg' => 'Egg',
-    'larva' => 'Larva',
-    'pupa' => 'Pupa',
+    'nidicolous' => 'Nidicolous',
+    'nidifugous' => 'Nidifugous',
     'juvenile' => 'Juvenile',
+    'immature' => 'Immature',
+    'fledgling' => 'Fledgling',
     'adult' => 'Adult',
     'unknown' => 'Unknown',
 ];

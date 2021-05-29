@@ -27,6 +27,7 @@ class FieldObservationDiff
             'sex',
             'stage',
             'number',
+            'number_of',
             'note',
             'project',
             'habitat',
@@ -41,6 +42,12 @@ class FieldObservationDiff
             'identifier',
             'dataset',
             'atlas_code',
+            'description',
+            'comment',
+            'data_limit',
+            'data_provider',
+            'rid',
+            'fid',
         ];
     }
 

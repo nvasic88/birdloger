@@ -47,6 +47,49 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         ->middleware('can:delete,taxon')
         ->name('api.taxa.destroy');
 
+    // Synonyms
+    Route::get('synonyms', 'SynonymsController@index')
+        ->name('api.synonyms.index');
+
+    Route::post('synonyms', 'SynonymsController@store')
+        ->name('api.synonyms.create');
+
+    Route::get('synonyms/{synonym}', 'SynonymsController@show')
+        ->name('api.synonyms.show');
+
+    Route::put('synonyms/{synonym}', 'SynonymsController@update')
+        ->name('api.synonyms.update');
+
+    Route::delete('synonyms/{synonym}', 'SynonymsController@destroy')
+        ->name('api.synonyms.destroy');
+
+    // Observers
+    Route::post('observers', 'ObserversController@store')
+        ->name('api.observers.create');
+
+    Route::delete('observers/{observer}', 'ObserversController@destroy')
+        ->name('api.observers.destroy');
+
+    //Orders
+    Route::post('orders', 'OrdersController@store')
+        ->name('api.orders.create');
+
+    Route::put('orders/{id}', 'OrdersController@update')
+        ->name('api.orders.update');
+
+    Route::get('orders/{name}', 'OrdersController@check')
+        ->name('api.orders.check')->where('name', '[A-Za-z]+');
+
+    //Families
+    Route::post('families', 'FamiliesController@store')
+        ->name('api.families.create');
+
+    Route::put('families/{id}', 'FamiliesController@update')
+        ->name('api.families.update');
+
+    Route::get('families/{name}', 'FamiliesController@check')
+        ->name('api.families.check')->where('name', '[A-Za-z]+');
+
     Route::get('observation-types', 'ObservationTypesController@index')
         ->name('api.observation-types.index');
 

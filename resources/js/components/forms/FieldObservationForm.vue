@@ -2,17 +2,35 @@
   <form :action="action" method="POST" :lang="locale" class="field-observation-form">
     <div class="columns is-desktop">
       <div class="column is-half-desktop">
-        <nz-taxon-autocomplete
-          v-model="form.taxon_suggestion"
-          @select="onTaxonSelect"
-          :taxon="observation.taxon"
-          :error="form.errors.has('taxon_id')"
-          :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
-          autofocus
-          ref="taxonAutocomplete"
-          :label="trans('labels.field_observations.taxon')"
-          :placeholder="trans('labels.field_observations.search_for_taxon')"
-        />
+        <div class="columns">
+          <div class="column is-2">
+            <b-field
+              :label="trans('labels.field_observations.taxon_id')"
+              label-for="taxon_id"
+              :type="form.errors.has('taxon_id') ? 'is-danger' : null"
+              :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
+              class="is-required"
+              v-tooltip="trans('labels.observations.id_tooltip')"
+
+            >
+              <b-input id="taxon_id" type="number" v-model="form.taxon_id" disabled="disabled"/>
+            </b-field>
+          </div>
+          <div class="column">
+            <nz-taxon-autocomplete
+              v-model="form.taxon_suggestion"
+              @select="onTaxonSelect"
+              :taxon="observation.taxon"
+              :error="form.errors.has('taxon_id')"
+              :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
+              autofocus
+              ref="taxonAutocomplete"
+              :label="trans('labels.field_observations.taxon')"
+              :placeholder="trans('labels.field_observations.search_for_taxon')"
+              class="is-required"
+            />
+          </div>
+        </div>
 
         <nz-date-input
           :year.sync="form.year"
@@ -101,7 +119,9 @@
     </button>
 
     <div class="mt-4" v-show="showMoreDetails">
+
       <div class="columns">
+
         <div class="column">
           <b-field
             :label="trans('labels.field_observations.stage')"
@@ -154,7 +174,6 @@
       </b-field>
 
       <b-field
-        v-if="usesAtlasCodes"
         :label="trans('labels.field_observations.atlas_code')"
         label-for="atlas-code"
         :type="form.errors.has('atlas_code') ? 'is-danger' : null"
@@ -166,14 +185,81 @@
         </b-select>
       </b-field>
 
-      <b-field
-        :label="trans('labels.field_observations.number')"
-        label-for="number"
-        :type="form.errors.has('number') ? 'is-danger' : null"
-        :message="form.errors.has('number') ? form.errors.first('number') : null"
-      >
-        <b-input id="number" type="number" v-model="form.number" />
-      </b-field>
+      <div class="columns">
+
+        <div class="column">
+          <b-field
+            :label="trans('labels.field_observations.number')"
+            label-for="number"
+            :type="form.errors.has('number') ? 'is-danger' : null"
+            :message="form.errors.has('number') ? form.errors.first('number') : null"
+          >
+            <b-input id="number" type="number" v-model="form.number" />
+          </b-field>
+        </div>
+
+        <div class="column">
+          <b-field
+            :label="trans('labels.field_observations.number_of')"
+            label-for="number_of"
+            :type="form.errors.has('number_of') ? 'is-danger' : null"
+            :message="form.errors.has('number_of') ? form.errors.first('number_of') : null"
+          >
+            <b-select v-model="form.number_of" expanded>
+              <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+              <option value="jedinka" >Jedinka</option>
+              <option value="par">Par</option>
+              <option value="pevajući mužjak">Pevajući mužjak</option>
+              <option value="aktivno gnezdo">Aktivno gnezdo</option>
+              <option value="porodica sa mladuncima">Porodica sa mladuncima</option>
+            </b-select>
+          </b-field>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <b-field
+            :label="trans('labels.observations.data_provider')"
+            label-for="data_provider"
+            :error="form.errors.has('data_provider')"
+            :message="form.errors.has('data_provider') ? form.errors.first('data_provider') : null"
+          >
+            <b-input id="data_provider" name="data_provider" v-model="form.data_provider" />
+          </b-field>
+        </div>
+        <div class="column">
+          <b-field
+            :label="trans('labels.observations.data_limit')"
+            label-for="data_limit"
+            :error="form.errors.has('data_limit')"
+            :message="form.errors.has('data_limit') ? form.errors.first('data_limit') : null"
+          >
+            <b-input id="data_limit" name="data_limit" v-model="form.data_limit" />
+          </b-field>
+        </div>
+        <div class="column">
+          <b-field
+            :label="trans('labels.observations.fid')"
+            label-for="fid"
+            :error="form.errors.has('fid')"
+            :message="form.errors.has('fid') ? form.errors.first('fid') : null"
+          >
+            <b-input id="fid" name="fid" v-model="form.fid" />
+          </b-field>
+        </div>
+        <div class="column">
+          <b-field
+            :label="trans('labels.observations.rid')"
+            label-for="rid"
+            :type="form.errors.has('rid') ? 'is-danger' : null"
+            :message="form.errors.has('rid') ? form.errors.first('rid') : null"
+          >
+            <b-input id="rid" type="number" v-model="form.rid" />
+          </b-field>
+        </div>
+
+      </div>
 
       <b-field
         :label="trans('labels.field_observations.note')"
@@ -184,34 +270,16 @@
         <b-input id="note" type="textarea" v-model="form.note" />
       </b-field>
 
-      <div class="columns">
-        <div class="column">
-          <b-field
-            :label="trans('labels.field_observations.habitat')"
-            label-for="habitat"
-            :error="form.errors.has('habitat')"
-            :message="form.errors.has('habitat') ? form.errors.first('habitat') : null"
-          >
-            <b-input id="habitat" name="habitat" v-model="form.habitat" />
-          </b-field>
-        </div>
 
-        <div class="column">
-          <b-field
-            :label="trans('labels.literature_observations.found_on')"
-            :type="form.errors.has('found_on') ? 'is-danger' : null"
-            :message="form.errors.has('found_on') ? form.errors.first('found_on') : null"
-          >
-            <label for="found_on" class="label" slot="label">
-              <span class="is-dashed" v-tooltip="{content: trans('labels.literature_observations.found_on_tooltip')}">
-                {{ trans('labels.literature_observations.found_on') }}
-              </span>
-            </label>
+      <b-field
+        :label="trans('labels.field_observations.habitat')"
+        label-for="habitat"
+        :error="form.errors.has('habitat')"
+        :message="form.errors.has('habitat') ? form.errors.first('habitat') : null"
+      >
+        <b-input id="habitat" name="habitat" v-model="form.habitat" />
+      </b-field>
 
-            <b-input id="found_on" name="found_on" v-model="form.found_on"/>
-          </b-field>
-        </div>
-      </div>
 
       <b-field
         :label="trans('labels.field_observations.time')"
@@ -231,6 +299,24 @@
             <b-icon icon="close"></b-icon>
           </button>
         </b-timepicker>
+      </b-field>
+
+      <b-field
+        :label="trans('labels.field_observations.description')"
+        label-for="description"
+        :error="form.errors.has('description')"
+        :message="form.errors.has('description') ? form.errors.first('description') : null"
+      >
+        <b-input id="description" type="textarea" v-model="form.description" />
+      </b-field>
+
+      <b-field
+        :label="trans('labels.field_observations.comment')"
+        label-for="comment"
+        :error="form.errors.has('comment')"
+        :message="form.errors.has('comment') ? form.errors.first('comment') : null"
+      >
+        <b-input id="comment" type="textarea" v-model="form.comment" />
       </b-field>
 
       <div class="columns">
@@ -276,16 +362,6 @@
 
       <template v-if="showObserverIdentifier">
         <nz-user-autocomplete
-          v-model="form.observer"
-          @select="onObserverSelect"
-          :error="form.errors.has('observer')"
-          :message="form.errors.has('observer') ? form.errors.first('observer') : null"
-          :user="form.observed_by"
-          :label="trans('labels.field_observations.observer')"
-          :placeholder="currentUser.full_name"
-        />
-
-        <nz-user-autocomplete
           v-model="form.identifier"
           @select="onIdentifierSelect"
           :error="form.errors.has('identifier')"
@@ -306,14 +382,76 @@
           >
             <b-select id="data_license" v-model="form.data_license" expanded>
               <option :value="null">{{ trans('labels.field_observations.default') }}</option>
-              <option v-for="(label, value) in licenses" :value="value" v-text="label"></option>
+              <option v-for="(label, value) in licenses" :value="value" v-text="label" v-bind:key="value"></option>
             </b-select>
           </b-field>
         </div>
       </div>
-    </div>
 
     <hr>
+    <div><b>{{ trans('labels.observations.observers') }}</b></div>
+    <div class="columns">
+        <div class="column is-2"><b>{{ trans('labels.observations.firstName') }}</b></div>
+        <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
+        <div class="column is-2"><b>{{ trans('labels.observations.nickName') }}</b></div>
+        <div class="column is-2"><b>{{ trans('labels.observations.city') }}</b></div>
+        <div class="column is-1"></div>
+    </div>
+    <div class="columns" v-for="(observer, index) in observers" :key="index">
+        <div class="column is-2">{{observer.firstName}}</div>
+        <div class="column is-2">{{observer.lastName}}</div>
+        <div class="column is-2">{{observer.nickname}}</div>
+        <div class="column is-2">{{observer.city}}</div>
+        <div class="column is-1">
+          <button type="button"
+                  class="button has-text-danger"
+                  @click="removeObserver(index)"
+                  v-tooltip="{content: trans('labels.observervation.remove_observer_tooltip')}">
+            &times;
+          </button>
+        </div>
+    </div>
+    <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
+      <div class="column is-2">{{observer.firstName}}</div>
+      <div class="column is-2">{{observer.lastName}}</div>
+      <div class="column is-2">{{observer.nickname}}</div>
+      <div class="column is-2">{{observer.city}}</div>
+      <div class="column is-1"><button type="button" class="button has-text-danger" @click="removeObserver(index)">&times;
+      </button></div>
+    </div>
+    <div class="columns">
+        <div class="column is-2">
+          <b-field
+            :type="observerErrors.observerFirstName ? 'is-danger' : null"
+            :message="observerErrors.observerFirstName ? observerErrors.observerFirstName : null"
+          >
+            <b-input id="observerFirstName" maxlength="50" v-model="observerFirstName"
+                     v-on:keydown.native.enter.prevent="$refs.observerLastName.focus"/>
+          </b-field>
+        </div>
+        <div class="column is-2">
+          <b-field
+            :type="observerErrors.observerLastName ? 'is-danger' : null"
+            :message="observerErrors.observerLastName ? observerErrors.observerLastName : null"
+          >
+            <b-input id="observerLastName" maxlength="50" v-model="observerLastName" ref="observerLastName"
+                     v-on:keydown.native.enter.prevent="$refs.observerNickname.focus"/>
+          </b-field>
+        </div>
+        <div class="column is-2">
+          <b-input maxlength="30" v-model="observerNickname" ref="observerNickname"
+                   v-on:keydown.native.enter.prevent="$refs.observerCity.focus"/>
+        </div>
+        <div class="column is-2">
+          <b-input maxlength="30" v-model="observerCity" ref="observerCity"
+                   v-on:keydown.native.enter.prevent="addObserver"/>
+        </div>
+        <div class="column is-1">
+          <button type="button" class="button is-primary" @click="addObserver">{{trans('labels.observations.add_observer')}}</button>
+        </div>
+    </div>
+    <hr>
+    </div>
 
     <button
       type="submit"
@@ -397,6 +535,7 @@ export default {
           note: '',
           sex: null,
           number: null,
+          number_of: 'jedinka',
           project: null,
           habitat: null,
           found_on: null,
@@ -407,12 +546,20 @@ export default {
           image_license: null,
           time: null,
           types: [],
+          observers: [],
+          field_observers: [],
           observed_by_id: null,
           observed_by: null,
           identified_by_id: null,
           identified_by: null,
           dataset: null,
           atlas_code: null,
+          description: '',
+          comment: '',
+          fid: '',
+          rid: null,
+          data_provider: null,
+          data_limit: '',
         }
       }
     },
@@ -432,7 +579,17 @@ export default {
         default: () => []
     },
 
+    stages: {
+      type: Array,
+      default: () => []
+    },
+
     showObserverIdentifier: Boolean,
+
+    fieldObservers: {
+      type: Array,
+      default: () => []
+    },
 
     atlasCodes: Array,
   },
@@ -440,20 +597,25 @@ export default {
   data() {
     return {
       keepAfterSubmit: this.getAttributesToKeep(),
-      showMoreDetails: false,
+      showMoreDetails: true,
       locale: window.App.locale,
       observationTypeSearch: '',
       shouldClearType: false,
       exifExtracted: false,
       lastStageId: this.observation.stage_id,
+      observers: this.observation.observers,
+      observerFirstName: '',
+      observerLastName: '',
+      observerNickname: '',
+      observerCity: '',
+      observerErrors: {
+        type: Array,
+        default: () => []
+      },
     }
   },
 
   computed: {
-    stages() {
-      return this.form.taxon ? this.form.taxon.stages : []
-    },
-
     time() {
       return this.form.time ? dayjs(this.form.time, 'HH:mm').toDate() : null
     },
@@ -486,8 +648,8 @@ export default {
      * @return {Boolean}
      */
     identificationChanged() {
-      return this.form.taxon_id != this.observation.taxon_id ||
-        this.form.taxon_suggestion != this.observation.taxon_suggestion
+      return this.form.taxon_id !== this.observation.taxon_id ||
+        this.form.taxon_suggestion !== this.observation.taxon_suggestion
     },
 
     usesAtlasCodes() {
@@ -516,10 +678,50 @@ export default {
       return new Form({
         ...observation,
         observation_types_ids: observation.types.map(type => type.id),
-        reason: null
+        observers: this.observation.observers,
+        reason: null,
+        field_observers: this.fieldObservers,
       }, {
         resetOnSuccess: false
       })
+    },
+
+    checkForm() {
+
+      if (this.observerFirstName && this.observerLastName) return true;
+
+    },
+
+    addObserver() {
+      if (this.observerFirstName && this.observerLastName) {
+        this.fieldObservers.push({
+          'firstName': this.observerFirstName,
+          'lastName': this.observerLastName,
+          'nickname': this.observerNickname,
+          'city': this.observerCity,
+        })
+        this.observerFirstName = null;
+        this.observerLastName = null;
+        this.observerNickname = null;
+        this.observerCity = null;
+        this.observerErrors = [];
+      } else {
+
+        if (!this.observerFirstName) {
+          this.observerErrors.observerFirstName = "This field is required";
+          this.$forceUpdate();
+        }
+        if (!this.observerLastName) {
+          this.observerErrors.observerLastName = "This field is required";
+          this.$forceUpdate();
+        }
+      }
+
+    },
+
+    removeObserver(index) {
+        axios.delete(route('api.observers.destroy', this.observers[index]));
+        this.$delete(this.observers, index);
     },
 
     /**

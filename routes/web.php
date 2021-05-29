@@ -45,6 +45,9 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
     Route::get('announcements', 'AnnouncementsController@index')->name('announcements.index');
     Route::get('announcements/{announcement}', 'AnnouncementsController@show')->name('announcements.show');
 
+    // Synonyms page
+    Route::get('synonyms/{synonym}', 'SynonymsController@show')->name('synonyms.show');
+
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::redirect('/preferences', '/preferences/general')->name('preferences.index');
 
@@ -165,6 +168,19 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
             Route::get('taxa/new', 'TaxaController@create')
                 ->middleware('role:admin,curator')
                 ->name('taxa.create');
+
+            Route::get('synonyms', 'SynonymsController@index')
+                ->middleware('role:admin')
+                ->name('synonyms.index');
+
+            Route::get('synonyms/new', 'SynonymsController@create')
+                ->name('synonyms.create');
+
+            Route::get('synonyms/{synonym}/edit', 'SynonymsController@edit')
+                ->name('synonyms.edit');
+
+            Route::delete('synonyms/{synonym}', 'SynonymsController@destroy')
+                ->name('synonyms.destroy');
 
             Route::get('users', 'UsersController@index')
                 ->middleware('can:list,App\User')

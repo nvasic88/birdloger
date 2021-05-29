@@ -124,7 +124,7 @@ return [
     'year' => 'Invalid year.',
     'decimal' => 'The :attribute must be a decimal number.',
     'contains_non_empty' => 'The :attribute must contain at least one non-empty item.',
-    'unique_taxon_name' => 'Taxon name must be unique within the major life group.',
+    'unique_taxon_name' => 'Bird name must be unique.',
 
     /*
     |--------------------------------------------------------------------------

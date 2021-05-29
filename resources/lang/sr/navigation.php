@@ -38,6 +38,7 @@ return [
     'field_observations' => 'Теренски налази',
     'observation_details' => 'Детаљи налаза',
     'all_field_observations' => 'Сви теренски налази',
+	'synonyms' => 'Синоними',
     'public_field_observations' => 'Јавни теренски налази',
     'field_observations_import' => 'Увоз теренских налаза',
     'import' => 'Увоз',

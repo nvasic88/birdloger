@@ -80,7 +80,7 @@ class FieldObservationPolicy
      */
     public function approve(User $user, FieldObservation $fieldObservation)
     {
-        return $this->isCurator($user, $fieldObservation);
+        return $this->isCurator($user, $fieldObservation) || $user->hasRole('admin');
     }
 
     /**
@@ -92,7 +92,7 @@ class FieldObservationPolicy
      */
     public function markAsUnidentifiable(User $user, FieldObservation $fieldObservation)
     {
-        return $this->isCurator($user, $fieldObservation);
+        return $this->isCurator($user, $fieldObservation) || $user->hasRole('admin');
     }
 
     /**
@@ -104,7 +104,7 @@ class FieldObservationPolicy
      */
     public function moveToPending(User $user, FieldObservation $fieldObservation)
     {
-        return $this->isCurator($user, $fieldObservation);
+        return $this->isCurator($user, $fieldObservation) || $user->hasRole('admin');
     }
 
     /**

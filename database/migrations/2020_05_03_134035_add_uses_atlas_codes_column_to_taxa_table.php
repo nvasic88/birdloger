@@ -14,7 +14,7 @@ class AddUsesAtlasCodesColumnToTaxaTable extends Migration
     public function up()
     {
         Schema::table('taxa', function (Blueprint $table) {
-            $table->boolean('uses_atlas_codes')->after('invasive')->default(false);
+            $table->boolean('uses_atlas_codes')->after('invasive')->default(true);
         });
     }
 

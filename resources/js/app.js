@@ -42,6 +42,9 @@ Vue.component('NzTaxaTable', () => import('./components/tables/TaxaTable'))
 Vue.component('NzUsersTable', () => import('./components/tables/UsersTable'))
 Vue.component('NzAnnouncementsTable', () => import('./components/tables/AnnouncementsTable'))
 Vue.component('NzViewGroupsTable', () => import('./components/tables/ViewGroupsTable'))
+
+Vue.component('NzSynonymsTable', () => import('./components/tables/SynonymsTable'))
+
 Vue.component('NzFieldObservationsTable', () => import('./components/tables/FieldObservationsTable'))
 Vue.component('NzLiteratureObservationsTable', () => import('./components/tables/LiteratureObservationsTable'))
 Vue.component('NzPublicationsTable', () => import('./components/tables/PublicationsTable'))
@@ -51,6 +54,9 @@ Vue.component('NzUserForm', () => import('./components/forms/UserForm'))
 Vue.component('NzTaxonForm', () => import('./components/forms/TaxonForm'))
 Vue.component('NzFieldObservationForm', () => import('./components/forms/FieldObservationForm'))
 Vue.component('NzLiteratureObservationForm', () => import('./components/forms/LiteratureObservationForm'))
+
+Vue.component('NzSynonymForm', () => import('./components/forms/SynonymForm'))
+
 Vue.component('NzViewGroupForm', () => import('./components/forms/ViewGroupForm'))
 Vue.component('NzAnnouncementForm', () => import('./components/forms/AnnouncementForm'))
 Vue.component('NzPublicationForm', () => import('./components/forms/PublicationForm'))

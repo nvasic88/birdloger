@@ -111,6 +111,10 @@ class FieldObservation extends Model implements FlatArrayable
         return $this->observation->photos();
     }
 
+    public function stages(){
+        return $this->hasMany(Stage::class);
+    }
+
     /**
      * Types of the observation.
      *
@@ -177,7 +181,7 @@ class FieldObservation extends Model implements FlatArrayable
      * Get observations created by given user.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \App\User  $user
+     * @param User $user
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCreatedBy($query, User $user)
@@ -243,7 +247,7 @@ class FieldObservation extends Model implements FlatArrayable
      * Get only observations of taxa curated by given user.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \App\User  $user
+     * @param User $user
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCuratedBy($query, User $user)
@@ -331,7 +335,7 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function getStatusTranslationAttribute()
     {
-        return trans('labels.field_observations.statuses.'.$this->status);
+        return trans('labels.field_observations.statuses.' . $this->status);
     }
 
     /**
@@ -341,7 +345,7 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function getLicenseTranslationAttribute()
     {
-        return trans('licenses.'.$this->license);
+        return trans('licenses.' . $this->license);
     }
 
     /**
@@ -442,7 +446,7 @@ class FieldObservation extends Model implements FlatArrayable
     {
         $this->observation->unapprove();
 
-        if (! $this->unidentifiable) {
+        if (!$this->unidentifiable) {
             $this->forceFill(['unidentifiable' => true])->save();
         }
 
@@ -482,13 +486,13 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function isPending()
     {
-        return ! $this->isApproved() && ! $this->unidentifiable;
+        return !$this->isApproved() && !$this->unidentifiable;
     }
 
     /**
      * Check if observation is created by given user.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @return bool
      */
     public function isCreatedBy(User $user)
@@ -499,11 +503,11 @@ class FieldObservation extends Model implements FlatArrayable
     /**
      * Check if given user should curate this observation.
      *
-     * @param  \App\User  $user
-     * @param  bool  $evenWithoutTaxa
+     * @param User $user
+     * @param bool $evenWithoutTaxa
      * @return bool
      */
-    public function shouldBeCuratedBy(User $user, $evenWithoutTaxa = true)
+    public function shouldBeCuratedBy(User $user, bool $evenWithoutTaxa = true)
     {
         return $this->observation->shouldBeCuratedBy($user, $evenWithoutTaxa);
     }
@@ -601,6 +605,7 @@ class FieldObservation extends Model implements FlatArrayable
             'sex' => $this->observation->sex,
             'stage_id' => $this->observation->stage_id,
             'number' => $this->observation->number,
+            'number_of' => $this->observation->number_of,
             'note' => $this->observation->note,
             'project' => $this->observation->project,
             'habitat' => $this->observation->habitat,
@@ -618,6 +623,13 @@ class FieldObservation extends Model implements FlatArrayable
             'identified_by' => $this->identifiedBy,
             'dataset' => $this->observation->dataset,
             'atlas_code' => $this->atlas_code,
+            'observers' => $this->observation->observers,
+            'description' => $this->observation->description,
+            'comment' => $this->observation->comment,
+            'data_provider' => $this->observation->data_provider,
+            'data_limit' => $this->observation->data_limit,
+            'fid' => $this->fid,
+            'rid' => $this->rid,
         ];
     }
 
@@ -649,6 +661,7 @@ class FieldObservation extends Model implements FlatArrayable
             'sex' => $this->observation->sex,
             'stage_id' => $this->observation->stage_id,
             'number' => $this->observation->number,
+            'number_of' => $this->observation->number_of,
             'note' => $this->observation->note,
             'project' => $this->observation->project,
             'habitat' => $this->observation->habitat,
@@ -666,6 +679,13 @@ class FieldObservation extends Model implements FlatArrayable
             'identified_by' => $this->identifiedBy,
             'dataset' => $this->observation->dataset,
             'atlas_code' => $this->atlas_code,
+            'observers' => $this->observation->observers,
+            'description' => $this->observation->description,
+            'comment' => $this->observation->comment,
+            'data_provider' => $this->observation->data_provider,
+            'data_limit' => $this->observation->data_limit,
+            'fid' => $this->fid,
+            'rid' => $this->rid,
         ];
     }
 

@@ -67,7 +67,7 @@
           <p class="help is-danger" v-if="errors.has('accuracy')" v-text="errors.first('accuracy')"></p>
         </div>
 
-        <div class="field is-expanded is-required">
+        <div class="field is-expanded">
           <label class="label is-small">{{ trans('labels.field_observations.elevation_m') }}</label>
 
           <div class="control is-fullwidth">
@@ -134,7 +134,7 @@ export default {
   data() {
     return {
       emptyAccuracy: this.calculateEmptyAccuracy(window.App.gmaps.center.zoom),
-      showDetails: false,
+      showDetails: true,
       elevationService: null,
       center: window.App.gmaps.center
     }

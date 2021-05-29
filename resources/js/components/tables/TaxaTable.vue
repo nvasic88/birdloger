@@ -2,7 +2,7 @@
   <div class="taxa-table">
     <div class="level">
       <div class="level-left">
-        <div class="level-item">
+        <div class="level-item" v-if="1 !== 1">
           <button
               type="button"
               class="button is-touch-full"
@@ -105,8 +105,12 @@
           {{ row.id }}
         </b-table-column>
 
-        <b-table-column field="rank_level" :label="trans('labels.taxa.rank')" sortable>
-          {{ row.rank_translation }}
+        <b-table-column field="spid" :label="trans('labels.taxa.spid')" width="60" numeric sortable>
+          {{ row.spid }}
+        </b-table-column>
+
+        <b-table-column field="type" :label="trans('labels.taxa.type')" width="40">
+          {{ row.type }}
         </b-table-column>
 
         <b-table-column field="name" :label="trans('labels.taxa.name')" sortable>
@@ -201,8 +205,8 @@ export default {
       data: [],
       total: 0,
       loading: false,
-      sortField: 'id',
-      sortOrder: 'desc',
+      sortField: 'spid',
+      sortOrder: 'asc',
       defaultSortOrder: 'asc',
       page: 1,
       perPage: this.perPageOptions[0],
@@ -247,7 +251,7 @@ export default {
       this.loading = true
 
       const { selectedTaxon, ...filter } = this.filter
-
+      console.log(this.listRoute);
       return axios.get(route(this.listRoute).withQuery({
         ...filter,
         sort_by: this.sortBy,

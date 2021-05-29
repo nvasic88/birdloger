@@ -3,6 +3,7 @@
 return [
     'save' => 'Sačuvaj',
     'save_more' => 'Sačuvaj (još)',
+    'save_edit' => 'Sačuvaj (nastavi)',
     'cancel' => 'Otkaži',
     'filters' => 'Filteri',
     'apply' => 'Primeni',

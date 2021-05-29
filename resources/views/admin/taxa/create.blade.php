@@ -13,6 +13,7 @@
             :red-lists="{{ $redLists }}"
             :red-list-categories="{{ $redListCategories }}"
             :stages="{{ $stages }}"
+            :annexes="{{ $annexes }}"
             should-confirm-cancel
         ></nz-taxon-form>
     </div>

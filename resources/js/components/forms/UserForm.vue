@@ -38,7 +38,7 @@
           :data="filteredTaxa"
           autocomplete
           field="name"
-          placeholder="Type taxon name"
+          :placeholder="trans('labels.field_observations.search_for_taxon')"
           @typing="onTaxonNameInput"
         >
           <template v-slot:default="props">

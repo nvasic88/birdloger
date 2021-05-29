@@ -7,9 +7,11 @@ class StagesTableSeeder extends Seeder
 {
     protected $stages = [
         'egg',
-        'larva',
-        'pupa',
+        'nidicolous',
+        'nidifugous',
         'juvenile',
+        'immature',
+        'fledgling',
         'adult',
     ];
     /**
