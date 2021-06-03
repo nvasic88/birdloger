@@ -30,7 +30,7 @@ abstract class BaseExport
             'type' => static::class,
             'filter' => collect($filter),
             'user_id' => auth()->id(),
-            'filename' => Str::random().'.csv',
+            'filename' => Str::random().'.xlsx',
             'status' => ExportStatus::QUEUED,
             'columns' => $columns,
             'locale' => app()->getLocale(),
@@ -104,14 +104,14 @@ abstract class BaseExport
     }
 
     /**
-     * Get CSV writer instance.
+     * Get XLSX writer instance.
      *
      * @param  string  $path
      * @return \Box\Spout\Writer\WriterInterface
      */
     private function makeWriter($path)
     {
-        return WriterFactory::create(Type::CSV)->openToFile($path);
+        return WriterFactory::create(Type::XLSX)->openToFile($path);
     }
 
     /**

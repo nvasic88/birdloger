@@ -10,7 +10,7 @@ class Observer extends Model
         'created_at', 'updated_at',
     ];
 
-    protected $fillable = ['firstName', 'lastName', 'city', 'nickname'];
+    protected $fillable = ['firstName', 'lastName'];
     /**
      * One observer for multiple observations
      *
@@ -32,8 +32,6 @@ class Observer extends Model
             'id' => $this->id,
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
-            'city' => $this->city,
-            'nickname' => $this->nickname,
         ];
     }
 
@@ -49,8 +47,6 @@ class Observer extends Model
             'id' => $this->id,
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
-            'city' => $this->city,
-            'nickname' => $this->nickname,
         ];
     }
 }

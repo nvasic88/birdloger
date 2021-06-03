@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAtlasCodeColumnToFieldObservationsTable extends Migration
+class AddAtlasCodeColumnToObservationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddAtlasCodeColumnToFieldObservationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('field_observations', function (Blueprint $table) {
+        Schema::table('observations', function (Blueprint $table) {
             $table->tinyInteger('atlas_code')->before('created_at')->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddAtlasCodeColumnToFieldObservationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('field_observations', function (Blueprint $table) {
+        Schema::table('observations', function (Blueprint $table) {
             $table->dropColumn('atlas_code');
         });
     }

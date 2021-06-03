@@ -169,6 +169,12 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
                 ->middleware('role:admin,curator')
                 ->name('taxa.create');
 
+            Route::get('taxa/import', 'TaxaImportController@index')
+                ->name('taxa-import.index');
+
+            Route::view('taxa/import/guide', 'admin.taxon-import.guide')
+                ->name('taxa-import.guide');
+
             Route::get('synonyms', 'SynonymsController@index')
                 ->middleware('role:admin')
                 ->name('synonyms.index');

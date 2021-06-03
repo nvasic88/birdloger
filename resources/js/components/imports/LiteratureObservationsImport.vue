@@ -119,17 +119,15 @@
       :paginated="true"
       :per-page="30"
       :current-page.sync="currentErrorsPage"
-      class="is-danger">
+      class="is-danger"
+    >
+      <b-table-column field="row" :label="trans('labels.imports.row_number')" numeric v-slot="{ row }">
+        {{ row.row }}
+      </b-table-column>
 
-      <template slot-scope="props">
-          <b-table-column field="row" :label="trans('labels.imports.row_number')">
-              {{ props.row.row }}
-          </b-table-column>
-
-          <b-table-column field="error" :label="trans('labels.imports.error')">
-              {{ props.row.error }}
-          </b-table-column>
-      </template>
+      <b-table-column field="error" :label="trans('labels.imports.error')" v-slot="{ row }">
+        {{ row.error }}
+      </b-table-column>
     </b-table>
   </div>
 </template>
@@ -412,24 +410,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .buttons {
-    .field {
-      margin-bottom: 0;
+.buttons {
+  .field {
+    margin-bottom: 0;
 
-      &.file {
-        margin-right: .5rem;
+    &.file {
+      margin-right: .5rem;
+    }
+
+    .upload {
+      &:hover {
+        cursor: pointer;
       }
 
-      .upload {
-        &:hover {
-          cursor: pointer;
-        }
+      .button {
+        margin-right: 0;
 
-        .button {
-          margin-right: 0;
-
-        }
       }
     }
   }
+}
 </style>

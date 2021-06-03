@@ -84,7 +84,7 @@ export default {
       processing: false,
       currentExport: null,
       selectedColumns: [],
-      withHeader: false,
+      withHeader: true,
       form: new Form(),
     }
   },

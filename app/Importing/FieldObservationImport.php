@@ -6,7 +6,9 @@ use App\AtlasCode;
 use App\DEM\Reader as DEMReader;
 use App\FieldObservation;
 use App\License;
+use App\NumberOf;
 use App\Observation;
+use App\Observer;
 use App\Rules\Day;
 use App\Rules\Decimal;
 use App\Rules\Month;
@@ -67,23 +69,18 @@ class FieldObservationImport extends BaseImport
     {
         return collect([
             [
-                'label' => trans('labels.taxon.name'),
-                'value' => 'taxon',
-                'required' => true,
-            ],
-            [
-                'label' => trans('labels.field_observations.year'),
-                'value' => 'year',
-                'required' => true,
-            ],
-            [
-                'label' => trans('labels.field_observations.month'),
-                'value' => 'month',
+                'label' => trans('labels.id'),
+                'value' => 'id',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.day'),
-                'value' => 'day',
+                'label' => trans('labels.observations.rid'),
+                'value' => 'rid',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.fid'),
+                'value' => 'fid',
                 'required' => false,
             ],
             [
@@ -97,19 +94,19 @@ class FieldObservationImport extends BaseImport
                 'required' => true,
             ],
             [
-                'label' => trans('labels.field_observations.elevation'),
-                'value' => 'elevation',
+                'label' => trans('labels.field_observations.day'),
+                'value' => 'day',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.accuracy'),
-                'value' => 'accuracy',
+                'label' => trans('labels.field_observations.month'),
+                'value' => 'month',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.location'),
-                'value' => 'location',
-                'required' => false,
+                'label' => trans('labels.field_observations.year'),
+                'value' => 'year',
+                'required' => true,
             ],
             [
                 'label' => trans('labels.field_observations.time'),
@@ -117,23 +114,43 @@ class FieldObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.note'),
-                'value' => 'note',
+                'label' => trans('labels.field_observations.taxon'),
+                'value' => 'taxon',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.found_dead'),
-                'value' => 'found_dead',
+                'label' => trans('labels.taxa.spid'),
+                'value' => 'spid',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.observations.atlas_code'),
+                'value' => 'atlas_code',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.found_dead_note'),
-                'value' => 'found_dead_note',
+                'label' => trans('labels.field_observations.number'),
+                'value' => 'number',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.observer'),
-                'value' => 'observer',
+                'label' => trans('labels.field_observations.number_of'),
+                'value' => 'number_of',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.data_provider'),
+                'value' => 'data_provider',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.data_limit'),
+                'value' => 'data_limit',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.comment'),
+                'value' => 'comment',
                 'required' => false,
             ],
             [
@@ -142,13 +159,53 @@ class FieldObservationImport extends BaseImport
                 'required' => false,
             ],
             [
+                'label' => trans('labels.exports.observers'),
+                'value' => 'observers',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.location'),
+                'value' => 'location',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.mgrs10k'),
+                'value' => 'mgrs10k',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.accuracy'),
+                'value' => 'accuracy',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.elevation'),
+                'value' => 'elevation',
+                'required' => false,
+            ],
+            [
                 'label' => trans('labels.field_observations.sex'),
                 'value' => 'sex',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.number'),
-                'value' => 'number',
+                'label' => trans('labels.field_observations.stage'),
+                'value' => 'stage',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.data_license'),
+                'value' => 'license',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.note'),
+                'value' => 'note',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.description'),
+                'value' => 'description',
                 'required' => false,
             ],
             [
@@ -167,13 +224,13 @@ class FieldObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.stage'),
-                'value' => 'stage',
+                'label' => trans('labels.field_observations.found_dead'),
+                'value' => 'found_dead',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.original_identification'),
-                'value' => 'original_identification',
+                'label' => trans('labels.field_observations.found_dead_note'),
+                'value' => 'found_dead_note',
                 'required' => false,
             ],
             [
@@ -181,28 +238,17 @@ class FieldObservationImport extends BaseImport
                 'value' => 'dataset',
                 'required' => false,
             ],
-            [
-                'label' => trans('labels.field_observations.data_license'),
-                'value' => 'license',
-                'required' => true,
-            ],
-            [
-                'label' => trans('labels.field_observations.atlas_code'),
-                'value' => 'atlas_code',
-                'required' => false,
-            ],
+
+
         ])->pipe(function ($columns) use ($user) {
             if (! $user || optional($user)->hasAnyRole(['admin', 'curator'])) {
                 return $columns;
             }
 
-            // TODO: Check this later
-            return $columns;
-            /*
             return $columns->filter(function ($column) {
-                return ! in_array($column['value'], ['identifier', 'observer']);
+                return ! in_array($column['value'], ['identifier', 'observers']);
             })->values();
-            */
+
         });
     }
 
@@ -226,17 +272,21 @@ class FieldObservationImport extends BaseImport
     /**
      * Make validator instance.
      *
-     * @param  array  $data
-     * @return \Illuminate\Validation\Validator
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function makeValidator(array $data)
     {
         return Validator::make($data, [
             'taxon' => [
-                'required',
-                Rule::exists('taxa', 'name'),
+                'nullable',
+                'string'
             ],
-            'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
+            'spid' => [
+                'required',
+                Rule::exists('taxa', 'spid'),
+            ],
+            'year' => ['bail', 'date_format:Y', 'required', 'before_or_equal:now'],
             'month' => [
                 'bail',
                 'nullable',
@@ -252,12 +302,13 @@ class FieldObservationImport extends BaseImport
             'latitude' => ['required', new Decimal(['min' => -90, 'max' => 90])],
             'longitude' => ['required', new Decimal(['min' => -180, 'max' => 180])],
             'elevation' => ['nullable', 'integer', 'max:10000'],
-            'accuracy' => ['nullable', 'integer', 'max:10000'],
-            'observer' => ['nullable', 'string'],
+            'accuracy' => ['nullable', 'integer', 'max:50000'],
+            'observers' => ['nullable', 'string'],
             'identifier' => ['nullable', 'string'],
-            'stage' => ['nullable', Rule::in($this->stagesTranslatedNames())],
-            'sex' => ['nullable', Rule::in(Sex::labels())],
+            'sex' => ['nullable', Rule::in(Sex::options())],
             'number' => ['nullable', 'integer', 'min:1'],
+            'number_of' => ['nullable', 'string',
+                Rule::in(NumberOf::options())],
             'found_dead' => ['nullable', 'string', Rule::in($this->yesNo())],
             'found_dead_note' => ['nullable', 'string', 'max:1000'],
             'time' => ['nullable', 'date_format:H:i'],
@@ -265,45 +316,61 @@ class FieldObservationImport extends BaseImport
             'habitat' => ['nullable', 'string', 'max:191'],
             'found_on' => ['nullable', 'string', 'max:191'],
             'note' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
             'original_identification' => ['nullable', 'string'],
             'dataset' => ['nullable', 'string'],
-            'license' => ['nullable', 'string', Rule::in(License::allActive()->pluck('name'))],
+            'rid' => ['nullable', 'integer', 'min:1'],
+            'fid' => ['nullable', 'string'],
+            'data_provider' => ['nullable', 'string'],
+            'data_limit' => ['nullable', 'string'],
+            'comment' => ['nullable', 'string'],
             'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
         ], [
             'year.date_format' => trans('validation.year'),
             'sex.in' => __('validation.in_extended', [
                 'attribute' => __('labels.literature_observations.sex'),
-                'options' => Sex::labels()->implode(', '),
+                'options' => Sex::labels()->implode('; '),
             ]),
             'stage.in' => __('validation.in_extended', [
                 'attribute' => __('labels.literature_observations.stage'),
-                'options' => $this->stagesTranslatedNames()->implode(', '),
+                'options' => $this->stagesTranslatedNames()->implode('; '),
             ]),
         ], [
-            'taxon' => trans('labels.field_observations.taxon'),
-            'year' => trans('labels.field_observations.year'),
-            'month' => trans('labels.field_observations.month'),
-            'day' => trans('labels.field_observations.day'),
+            'rid' => trans('labels.observations.rid'),
+            'fid' => trans('labels.observations.fid'),
             'latitude' => trans('labels.field_observations.latitude'),
             'longitude' => trans('labels.field_observations.longitude'),
-            'elevation' => trans('labels.field_observations.elevation'),
-            'accuracy' => trans('labels.field_observations.accuracy'),
-            'observer' => trans('labels.field_observations.observer'),
-            'identifier' => trans('labels.field_observations.identifier'),
-            'stage' => trans('labels.field_observations.stage'),
-            'sex' => trans('labels.field_observations.sex'),
-            'number' => trans('labels.field_observations.number'),
-            'found_dead' => trans('labels.field_observations.found_dead'),
-            'found_dead_note' => trans('labels.field_observations.found_dead_note'),
+            'day' => trans('labels.field_observations.day'),
+            'month' => trans('labels.field_observations.month'),
+            'year' => trans('labels.field_observations.year'),
             'time' => trans('labels.field_observations.time'),
+            'taxon' => trans('labels.field_observations.taxon'),
+            'spid' => trans('labels.taxa.spid'),
+            'atlas_code' => trans('labels.observations.atlas_code'),
+            'number' => trans('labels.field_observations.number'),
+            'number_of' => trans('labels.field_observations.number_of'),
+            'data_provider' => trans('labels.observations.data_provider'),
+            'data_limit' => trans('labels.observations.data_limit'),
+            'comment' => trans('labels.field_observations.comment'),
+            'identifier' => trans('labels.field_observations.identifier'),
+            'observers' => trans('labels.observations.observers'),
+            'location' => trans('labels.field_observations.location'),
+            'accuracy' => trans('labels.field_observations.accuracy'),
+            'elevation' => trans('labels.field_observations.elevation'),
+            'sex' => trans('labels.field_observations.sex'),
+            'stage' => trans('labels.field_observations.stage'),
+            'license' => trans('labels.field_observations.data_license'),
+            'note' => trans('labels.field_observations.note'),
             'project' => trans('labels.field_observations.project'),
             'habitat' => trans('labels.field_observations.habitat'),
             'found_on' => trans('labels.field_observations.found_on'),
-            'note' => trans('labels.field_observations.note'),
+            'found_dead' => trans('labels.field_observations.found_dead'),
+            'found_dead_note' => trans('labels.field_observations.found_dead_note'),
+            # 'status' => trans('labels.field_observations.status'),
+            # 'types' => trans('labels.field_observations.types'),
             'original_identification' => trans('labels.field_observations.original_identification'),
             'dataset' => trans('labels.field_observations.dataset'),
-            'license' => trans('labels.field_observations.data_license'),
-            'atlas_code' => trans('labels.field_observations.atlas_code'),
+            'description' => trans('labels.field_observations.description')
         ]);
     }
 
@@ -320,7 +387,7 @@ class FieldObservationImport extends BaseImport
     }
 
     /**
-     * Store data from single CSV row.
+     * Store data from single XLSX row.
      *
      * @param  array  $item
      * @return void
@@ -334,6 +401,8 @@ class FieldObservationImport extends BaseImport
         $observation = $fieldObservation->observation()->save(
             new Observation($this->getGeneralObservationData($item))
         );
+
+        $fieldObservation->observation->observers()->sync($this->getObservers($item), []);
 
         activity()->performedOn($fieldObservation)
             ->causedBy($this->model()->user)
@@ -354,18 +423,17 @@ class FieldObservationImport extends BaseImport
      */
     protected function getSpecificObservationData(array $item)
     {
-        $atlasCode = Arr::get($item, 'atlas_code');
-
         return [
             'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
             'found_dead' => $this->getFoundDead($item),
             'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
             'time' => Arr::get($item, 'time') ?: null,
-            'observed_by_id' => $this->getObserverId($item),
+            # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
             'license' => $this->getLicense($item),
-            'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
+            'rid' => Arr::get($item, 'rid') ?: null,
+            'fid' => Arr::get($item, 'fid') ?: null,
         ];
     }
 
@@ -379,21 +447,22 @@ class FieldObservationImport extends BaseImport
     {
         $latitude = $this->getLatitude($item);
         $longitude = $this->getLongitude($item);
-        $taxon = $this->getTaxon($item);
+        $taxon = $this->getTaxonBySPID($item);
+        $atlasCode = Arr::get($item, 'atlas_code');
 
         return [
             'taxon_id' => $taxon ? $taxon->id : null,
-            'year' => Arr::get($item, 'year'),
-            'month' => Arr::get($item, 'month') ?: null,
-            'day' => Arr::get($item, 'day') ?: null,
-            'location' => Arr::get($item, 'location') ?: null,
             'latitude' => $latitude,
             'longitude' => $longitude,
+            'day' => Arr::get($item, 'day') ?: null,
+            'month' => Arr::get($item, 'month') ?: null,
+            'year' => Arr::get($item, 'year'),
+            'location' => Arr::get($item, 'location') ?: null,
             'mgrs10k' => mgrs10k($latitude, $longitude),
             'accuracy' => Arr::get($item, 'accuracy') ?: null,
             'elevation' => $this->getElevation($item),
             'created_by_id' => $this->model()->for_user_id ?: $this->model()->user_id,
-            'observer' => $this->getObserver($item),
+            # 'observer' => $this->getObserver($item),
             'identifier' => $this->getIdentifier($item),
             'sex' => Sex::getValueFromLabel(Arr::get($item, 'sex', '')),
             'number' => Arr::get($item, 'number') ?: null,
@@ -402,9 +471,17 @@ class FieldObservationImport extends BaseImport
             'habitat' => Arr::get($item, 'habitat') ?: null,
             'found_on' => Arr::get($item, 'found_on') ?: null,
             'stage_id' => $this->getStageId($item),
-            'original_identification' => Arr::get($item, 'original_identification', Arr::get($item, 'taxon')),
+            # 'original_identification' => Arr::get($item, 'original_identification', Arr::get($item, 'taxon')),
+            'original_identification' => Arr::get($item, 'taxon'),
             'dataset' => Arr::get($item, 'dataset') ?? Dataset::default(),
             'approved_at' => $this->getApprovedAt($taxon),
+            #'number_of' => Arr::get($item, 'number_of') ?: null,
+            'number_of' => NumberOf::getValueFromLabel(Arr::get($item, 'number_of', '')),
+            'comment' => Arr::get($item, 'comment') ?: null,
+            'data_provider' => Arr::get($item, 'data_provider') ?: null,
+            'data_limit' => Arr::get($item, 'data_limit') ?: null,
+            'description' => Arr::get($item, 'description') ?: null,
+            'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
         ];
     }
 
@@ -412,11 +489,22 @@ class FieldObservationImport extends BaseImport
      * Get ID of taxon using it's name.
      *
      * @param  array  $data
-     * @return \App\Taxon|null
+     * @return Taxon|null
      */
     protected function getTaxon(array $data)
     {
         return Taxon::findByName(Arr::get($data, 'taxon'));
+    }
+
+    /**
+     * Get ID of taxon using it's name.
+     *
+     * @param  array  $data
+     * @return Taxon|null
+     */
+    protected function getTaxonBySPID(array $data)
+    {
+        return Taxon::findBySPID(Arr::get($data, 'spid'));
     }
 
     /**
@@ -444,8 +532,8 @@ class FieldObservationImport extends BaseImport
     /**
      * Get elevation.
      *
-     * @param  array  $data
-     * @return |int|null
+     * @param array $data
+     * @return int|string|null
      */
     protected function getElevation(array $data)
     {
@@ -476,6 +564,35 @@ class FieldObservationImport extends BaseImport
         }
 
         return Arr::get($data, 'observer') ?: $this->model()->user->full_name;
+    }
+
+    /**
+     * Get observers full names.
+     *
+     * @param  array  $data
+     * @return array $observer_ids
+     */
+    protected function getObservers(array $data): ?array
+    {
+        $observers = Arr::get($data, 'observers');
+        $observer_ids = array();
+        if (!$observers) return null;
+        foreach (explode('; ', $observers) as $observer){
+            $ob = explode(' ', $observer);
+            if (count($ob) < 2 || count($ob) > 3)
+                break;
+            $firstName = $ob[0];
+            $lastName = $ob[1];
+            if (count($ob) > 2)
+                $lastName .= ' '.$ob[2];
+            $obs = Observer::firstOrCreate([
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+            ]);
+            $obs->save();
+            $observer_ids[] = $obs->id;
+        }
+        return $observer_ids;
     }
 
     /**
@@ -617,7 +734,7 @@ class FieldObservationImport extends BaseImport
     /**
      * Get `approved_at` attribute for the observation.
      *
-     * @param \App\Taxon|null $taxon
+     * @param Taxon|null $taxon
      * @return \Carbon\Carbon|null
      */
     protected function getApprovedAt($taxon)
@@ -628,7 +745,7 @@ class FieldObservationImport extends BaseImport
     /**
      * Check if we should automatically approve observation of given taxon.
      *
-     * @param \App\Taxon|null $taxon
+     * @param Taxon|null $taxon
      * @return bool
      */
     protected function shouldApprove($taxon)

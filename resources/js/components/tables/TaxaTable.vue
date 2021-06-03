@@ -2,7 +2,7 @@
   <div class="taxa-table">
     <div class="level">
       <div class="level-left">
-        <div class="level-item" v-if="1 !== 1">
+        <div class="level-item">
           <button
               type="button"
               class="button is-touch-full"
@@ -44,18 +44,6 @@
     <b-collapse :open="showFilter" class="mt-4">
       <form @submit.prevent="applyFilter">
         <div class="columns">
-          <b-field :label="trans('labels.taxa.rank')" class="column is-half">
-            <b-select v-model="newFilter.rank" expanded>
-              <option value=""></option>
-              <option
-                v-for="(rank, index) in ranks"
-                :value="rank.value"
-                :key="index"
-                v-text="rank.label"
-              />
-            </b-select>
-          </b-field>
-
           <div class="column is half">
             <nz-taxon-autocomplete
               @select="onTaxonSelect"
@@ -64,7 +52,6 @@
               :label="trans('labels.taxa.name')"
               placeholder=""
             />
-            <b-checkbox v-model="newFilter.includeChildTaxa">{{ trans('labels.taxa.include_lower_taxa') }}</b-checkbox>
           </div>
         </div>
 
@@ -191,6 +178,7 @@ import FilterableTableMixin from '@/mixins/FilterableTableMixin'
 import PersistentTableMixin from '@/mixins/PersistentTableMixin'
 import ExportDownloadModal from '@/components/exports/ExportDownloadModal'
 import NzTaxonAutocomplete from '@/components/inputs/TaxonAutocomplete'
+import NzSpidAutocomplete from '@/components/inputs/SpidAutocomplete'
 import NzPerPageSelect from '@/components/table/PerPageSelect'
 import NzSortableColumnHeader from '@/components/table/SortableColumnHeader'
 import NzExportModal from '@/components/exports/ExportModal'
@@ -220,7 +208,6 @@ export default {
       type: String,
       default: 'Nothing here.'
     },
-    ranks: Array,
     showActivityLog: Boolean,
     exportColumns: Array,
     exportUrl: String
@@ -277,7 +264,6 @@ export default {
       this.checkedRows = []
 
       const { selectedTaxon, ...filter } = this.filter
-      console.log(this.listRoute);
       return axios.get(route(this.listRoute).withQuery({
         ...filter,
         sort_by: this.sortBy,
@@ -410,7 +396,7 @@ export default {
       this.perPage = this.perPage || this.perPageOptions[0]
       this.sortField = this.sortField || 'id'
       this.sortOrder = this.sortOrder || 'desc'
-    }
+    },
   }
 }
 </script>

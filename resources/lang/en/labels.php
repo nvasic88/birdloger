@@ -14,6 +14,14 @@ return [
         'female' => 'Female',
     ],
 
+    'number_of' => [
+        'individual' => 'Individual',
+        'couple' => 'Couple',
+        'singing_male' => 'Singing male',
+        'active_nest' => 'Active nest',
+        'family_with_cubs' => 'Family with cubs'
+    ],
+
     'transfer' => [
         'available' => 'Available',
         'chosen' => 'Chosen',
@@ -52,33 +60,33 @@ return [
         'last_name' => 'Last Name',
         'institution' => 'Institution',
         'roles' => 'Roles',
-        'curated_taxa' => 'Curated Bird',
+        'curated_taxa' => 'Curated species',
         'email' => 'Email',
         'search' => 'Search',
     ],
 
     'taxa' => [
         'rank' => 'Rank',
-        'name' => 'Name',
+        'name' => 'Species name',
         'parent' => 'Parent',
         'author' => 'Author',
         'native_name' => 'Native Name',
         'description' => 'Description',
         'fe_old_id' => '(old) FaunaEuropea ID',
         'fe_id' => 'FaunaEuropea ID',
-        'restricted' => 'Bird data is restricted',
-        'allochthonous' => 'Bird is allochthonous',
-        'invasive' => 'Bird is invasive',
+        'restricted' => 'Species data is restricted',
+        'allochthonous' => 'Species is allochthonous',
+        'invasive' => 'Species is invasive',
         'stages' => 'Stages',
         'conservation_legislations' => 'Conservation Legislations',
         'conservation_documents' => 'Other Conservation Documents',
         'red_lists' => 'Red Lists',
         'add_red_list' => 'Add red list',
-        'search_for_taxon' => 'Search for birds...',
+        'search_for_taxon' => 'Search for species...',
         'yes' => 'Yes',
         'no' => 'No',
 
-        'include_lower_taxa' => 'Include lower birds',
+        'include_lower_taxa' => 'Include lower species',
 
         'atlas_codes' => 'Atlas Codes',
         'uses_atlas_codes' => 'Uses Atlas Codes',
@@ -109,9 +117,10 @@ return [
     ],
 
     'field_observations' => [
-        'taxon' => 'Bird',
+        'taxon' => 'Species name',
+        'taxon_id' => 'Species ID',
         'original_identification' => 'Original Identification',
-        'search_for_taxon' => 'Search for birds...',
+        'search_for_taxon' => 'Search for species...',
         'date' => 'Date',
         'year' => 'Year',
         'month' => 'Month',
@@ -154,7 +163,6 @@ return [
         'types_placeholder' => 'Select Observation Type',
         'dataset' => 'Dataset',
         'mgrs10k' => 'MGRS 10K',
-        'atlas_code' => 'Atlas Code',
         'number_of' => 'Number of',
         'description' => 'Detailed description',
         'comment' => 'Comment',
@@ -168,30 +176,31 @@ return [
         'save_tooltip' => 'Saves current observation and returns you to the list of your records. You can also use keyboard shortcut: Ctrl+Enter.',
         'save_more_tooltip' => 'Saves current observations, but allows you to enter more data from the same place. You can also use keyboard shortcut: Ctrl+Shift+Enter.',
 
-        'include_lower_taxa' => 'Include lower birds',
+        'include_lower_taxa' => 'Include lower species',
         'submitted_using' => 'Submitted Using',
     ],
 
     'observations' => [
         'observers' => 'Observers',
-        'number_label' => 'No.',
         'firstName' => 'First Name',
         'lastName' => 'Last Name',
-        'nickName' => 'Nickname',
-        'city' => 'City',
         'fid' => 'Feature ID',
         'rid' => 'RID',
         'data_limit' => 'Data limit',
         'data_provider' => 'Data provider',
+        'add_observer' => 'Add observer',
+        'remove_observer_tooltip' => 'Remove observer',
+        'id_tooltip' => 'Species name must be selected with autocomplete function, id will be automatically selected.',
+        'atlas_code' => 'Atlas Code',
     ],
 
     'view_groups' => [
         'name' => 'Name',
         'parent' => 'Parent',
         'description' => 'Description',
-        'taxa' => 'Taxa',
+        'taxa' => 'Species name',
         'image' => 'Image',
-        'only_observed_taxa' => 'Only observed birds',
+        'only_observed_taxa' => 'Only observed species',
     ],
 
     'exports' => [
@@ -206,11 +215,12 @@ return [
             'custom' => 'Custom',
             'darwin_core' => 'Darwin Core',
         ],
+        'observers' => 'Observers',
     ],
 
     'imports' => [
         'choose_columns' => 'Choose Columns',
-        'select_csv_file' => 'Select CSV file',
+        'select_csv_file' => 'Select XLSX file',
         'available' => 'Available',
         'chosen' => 'Chosen',
         'import' => 'Import',
@@ -264,8 +274,8 @@ return [
         'citation' => 'Citation',
         'cited_publication' => 'Cited Publication',
         'search_for_publication' => 'Search for publication',
-        'taxon' => 'Birds',
-        'search_for_taxon' => 'Search for birds',
+        'taxon' => 'Species name',
+        'search_for_taxon' => 'Search for species',
         'date' => 'Date',
         'year' => 'Year',
         'month' => 'Month',
@@ -328,10 +338,10 @@ return [
         'save_tooltip' => 'Saves current observation and returns you to the list of records. You can also use keyboard shortcut: Ctrl+Enter.',
         'save_more_tooltip' => 'Saves current observations, but allows you to enter more data from the same place. You can also use keyboard shortcut: Ctrl+Shift+Enter.',
 
-        'save_more_same_taxon' => 'Save (more, same bird)',
-        'save_more_same_taxon_tooltip' => 'Saves current observations, but allows you to enter more data from the same place and for the same bird.',
+        'save_more_same_taxon' => 'Save (more, same species)',
+        'save_more_same_taxon_tooltip' => 'Saves current observations, but allows you to enter more data from the same place and for the same species.',
 
-        'include_lower_taxa' => 'Include lower birds',
+        'include_lower_taxa' => 'Include lower species',
     ],
 
     'preferences' => [

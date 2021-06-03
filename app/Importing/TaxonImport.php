@@ -2,13 +2,18 @@
 
 namespace App\Importing;
 
+use App\Annex;
 use App\DEM\Reader as DEMReader;
-use App\Stage;
-use App\Support\Dataset;
+use App\Family;
+use App\Order;
+use App\Support\Localization;
+use App\Synonym;
 use App\Taxon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class TaxonImport extends BaseImport
 {
@@ -16,11 +21,6 @@ class TaxonImport extends BaseImport
      * @var \App\DEM\Reader
      */
     protected $demReader;
-
-    /**
-     * @var \Illuminate\Database\Eloquent\Collection|\App\Stage[]|null
-     */
-    protected $stages;
 
     /**
      * Create new importer instance.
@@ -57,61 +57,77 @@ class TaxonImport extends BaseImport
      */
     public static function columns($user = null)
     {
+        $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
         return collect([
+            [
+                'label' => trans('labels.id'),
+                'value' => 'id',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.type'),
+                'value' => 'type',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.taxa.spid'),
+                'value' => 'spid',
+                'required' => true,
+            ],
             [
                 'label' => trans('labels.taxa.name'),
                 'value' => 'name',
                 'required' => true,
             ],
             [
-                'label' => trans('taxonomy.rank'),
-                'value' => 'rank',
+                'label' => trans('taxonomy.order'),
+                'value' => 'order',
                 'required' => true,
             ],
             [
                 'label' => trans('taxonomy.family'),
                 'value' => 'family',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.author'),
-                'value' => 'author',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.annex'),
-                'value' => 'annex',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.restrictive'),
-                'value' => 'restrictive',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.allochthonous'),
-                'value' => 'allochthonous',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.invasive'),
-                'value' => 'accuracy',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.refer'),
-                'value' => 'refer',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.prior'),
-                'value' => 'prior',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.spid'),
-                'value' => 'spid',
                 'required' => true,
+            ],
+            [
+                'label' => trans('labels.taxa.synonyms'),
+                'value' => 'synonyms',
+                'required' => false,
+            ],
+        ])->concat($locales->map(function ($locale, $localeCode) {
+            $nativeName = trans('labels.taxa.native_name');
+            $localeTranslation = trans('languages.'.$locale['name']);
+
+            return [
+                'label' => "{$nativeName} - {$localeTranslation}",
+                'value' => 'native_name_'.Str::snake($localeCode),
+                'required' => false,
+            ];
+        }))->concat([
+            [
+                'label' => trans('labels.taxa.strictly_protected'),
+                'value' => 'strictly_protected',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.strictly_note'),
+                'value' => 'strictly_note',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.protected'),
+                'value' => 'protected',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.protected_note'),
+                'value' => 'protected_note',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.iucn_cat'),
+                'value' => 'iucn_cat',
+                'required' => false,
             ],
             [
                 'label' => trans('labels.taxa.birdlife_seq'),
@@ -149,6 +165,26 @@ class TaxonImport extends BaseImport
                 'required' => false,
             ],
             [
+                'label' => trans('labels.taxa.refer'),
+                'value' => 'refer',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.prior'),
+                'value' => 'prior',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.annex'),
+                'value' => 'annexes',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.taxa.gn_status'),
+                'value' => 'gn_status',
+                'required' => false,
+            ],
+            [
                 'label' => trans('labels.taxa.bioras_sci_name'),
                 'value' => 'bioras_sci_name',
                 'required' => false,
@@ -159,154 +195,93 @@ class TaxonImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.taxa.gn_status'),
-                'value' => 'gn_status',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.iucn_cat'),
-                'value' => 'iucn_cat',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.type'),
-                'value' => 'type',
-                'required' => true,
-            ],
-            [
-                'label' => trans('labels.taxa.strictly_protected'),
-                'value' => 'strictly_protected',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.strictly_note'),
-                'value' => 'strictly_note',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.protected'),
-                'value' => 'protected',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.protected_note'),
-                'value' => 'protected_note',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.synonyms'),
-                'value' => 'synonyms',
+                'label' => trans('labels.taxa.author'),
+                'value' => 'author',
                 'required' => false,
             ],
         ])->pipe(function ($columns) use ($user) {
             if (! $user || optional($user)->hasAnyRole(['admin', 'curator'])) {
                 return $columns;
             }
-
-            return $columns->filter(function ($column) {
-                return ! in_array($column['value'], ['identifier', 'observer']);
-            })->values();
         });
-    }
-
-    /**
-     * Get validation rules specific for import type.
-     *
-     * @return array
-     */
-    public static function specificValidationRules()
-    {
-        return [
-            'options.approve_curated' => ['nullable', 'boolean'],
-        ];
     }
 
     public function generateErrorsRoute()
     {
-        return route('api.field-observation-imports.errors', $this->model());
+        return route('api.taxon-imports.errors', $this->model());
     }
 
     /**
      * Make validator instance.
      *
      * @param  array  $data
-     * @return \Illuminate\Validation\Validator
+
      */
     protected function makeValidator(array $data)
     {
+        $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
         return Validator::make($data, [
-            'taxon' => [
+            'type' => [
                 'required',
-                Rule::exists('taxa', 'name'),
+                Rule::in(['RS', 'WP']),
             ],
-            'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
-            'month' => [
-                'bail',
-                'nullable',
-                'numeric',
-                new Month(Arr::get($data, 'year')),
-            ],
-            'day' => [
-                'bail',
-                'nullable',
-                'numeric',
-                new Day(Arr::get($data, 'year'), Arr::get($data, 'month')),
-            ],
-            'latitude' => ['required', new Decimal(['min' => -90, 'max' => 90])],
-            'longitude' => ['required', new Decimal(['min' => -180, 'max' => 180])],
-            'elevation' => ['nullable', 'integer', 'max:10000'],
-            'accuracy' => ['nullable', 'integer', 'max:10000'],
-            'observer' => ['nullable', 'string'],
-            'identifier' => ['nullable', 'string'],
-            'stage' => ['nullable', Rule::in($this->stagesTranslatedNames())],
-            'sex' => ['nullable', Rule::in(Sex::labels())],
-            'number' => ['nullable', 'integer', 'min:1'],
-            'found_dead' => ['nullable', 'string', Rule::in($this->yesNo())],
-            'found_dead_note' => ['nullable', 'string', 'max:1000'],
-            'time' => ['nullable', 'date_format:H:i'],
-            'project' => ['nullable', 'string', 'max:191'],
-            'habitat' => ['nullable', 'string', 'max:191'],
-            'found_on' => ['nullable', 'string', 'max:191'],
-            'note' => ['nullable', 'string'],
-            'original_identification' => ['nullable', 'string'],
-            'dataset' => ['nullable', 'string'],
-            'license' => ['nullable', 'string', Rule::in(License::allActive()->pluck('name'))],
-            'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
+            'spid' => ['required', 'string'],
+            'name' => ['required', 'string'],
+            'order' => ['required', 'string'],
+            'family' => ['required', 'string'],
+            'synonyms' => ['nullable', 'string'],
+            $locales->map(function ($locale) {
+                $nativeName = trans('labels.taxa.native_name');
+                $localeTranslation = trans('languages.' . $locale['name']);
+                return [
+                    "{$nativeName} - {$localeTranslation}" => ['nullable', 'string'],
+                ];
+            }),
+            'strictly_protected' => ['nullable', 'string', Rule::in($this->yesNo())],
+            'strictly_note' => ['nullable', 'string'],
+            'protected' => ['nullable', 'string', Rule::in($this->yesNo())],
+            'protected_note' => ['nullable', 'string'],
+            'iucn_cat' => ['nullable', 'string', Rule::in(['EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD', 'NE'])],
+            'birdlife_seq' => ['required', 'integer', 'min:1'],
+            'birdlife_id' => ['required', 'integer', 'min:1'],
+            'ebba_code' => ['nullable', 'string'],
+            'euring_code' => ['nullable', 'string'],
+            'euring_sci_name' => ['nullable', 'string'],
+            'eunis_n2000code' => ['nullable', 'string'],
+            'eunis_sci_name' => ['nullable', 'string'],
+            'bioras_sci_name' => ['nullable', 'string'],
+            'refer' => ['nullable', 'string', Rule::in($this->yesNo())],
+            'prior' => ['nullable', 'string', Rule::in($this->yesNo())],
+            'annexes' => ['nullable'],
+            'gn_status' => ['nullable', 'string', Rule::in(['I', 'IG', 'NG', 'G0', 'G', 'G*'])],
+            'full_sci_name' => ['nullable', 'string'],
+            'author' => ['nullable', 'string'],
         ], [
-            'year.date_format' => trans('validation.year'),
-            'sex.in' => __('validation.in_extended', [
-                'attribute' => __('labels.literature_observations.sex'),
-                'options' => Sex::labels()->implode(', '),
-            ]),
-            'stage.in' => __('validation.in_extended', [
-                'attribute' => __('labels.literature_observations.stage'),
-                'options' => $this->stagesTranslatedNames()->implode(', '),
-            ]),
-        ], [
-            'taxon' => trans('labels.field_observations.taxon'),
-            'year' => trans('labels.field_observations.year'),
-            'month' => trans('labels.field_observations.month'),
-            'day' => trans('labels.field_observations.day'),
-            'latitude' => trans('labels.field_observations.latitude'),
-            'longitude' => trans('labels.field_observations.longitude'),
-            'elevation' => trans('labels.field_observations.elevation'),
-            'accuracy' => trans('labels.field_observations.accuracy'),
-            'observer' => trans('labels.field_observations.observer'),
-            'identifier' => trans('labels.field_observations.identifier'),
-            'stage' => trans('labels.field_observations.stage'),
-            'sex' => trans('labels.field_observations.sex'),
-            'number' => trans('labels.field_observations.number'),
-            'found_dead' => trans('labels.field_observations.found_dead'),
-            'found_dead_note' => trans('labels.field_observations.found_dead_note'),
-            'time' => trans('labels.field_observations.time'),
-            'project' => trans('labels.field_observations.project'),
-            'habitat' => trans('labels.field_observations.habitat'),
-            'found_on' => trans('labels.field_observations.found_on'),
-            'note' => trans('labels.field_observations.note'),
-            'original_identification' => trans('labels.field_observations.original_identification'),
-            'dataset' => trans('labels.field_observations.dataset'),
-            'license' => trans('labels.field_observations.data_license'),
-            'atlas_code' => trans('labels.field_observations.atlas_code'),
+            'type' => trans('labels.taxa.type'),
+            'spid' => trans('labels.taxa.spid'),
+            'order' => trans('taxonomy.order'),
+            'family' => trans('taxonomy.family'),
+            'synonyms' => trans('labels.taxa.synonyms'),
+
+            'strictly_protected' => trans('labels.taxa.strictly_protected'),
+            'strictly_note' => trans('labels.taxa.strictly_note'),
+            'protected' => trans('labels.taxa.protected'),
+            'protected_note' => trans('labels.taxa.protected_note'),
+            'iucn_cat' => trans('labels.taxa.iucn_cat'),
+            'birdlife_seq' => trans('labels.taxa.birdlife_seq'),
+            'birdlife_id' => trans('labels.taxa.birdlife_id'),
+            'ebba_code' => trans('labels.taxa.ebba_code'),
+            'euring_code' => trans('labels.taxa.euring_code'),
+            'euring_sci_name' => trans('labels.taxa.euring_sci_name'),
+            'eunis_n2000code' => trans('labels.taxa.eunis_n2000code'),
+            'eunis_sci_name' => trans('labels.taxa.eunis_sci_name'),
+            'refer' => trans('labels.taxa.refer'),
+            'prior' => trans('labels.taxa.prior'),
+            'annex' => trans('labels.taxa.annex'),
+            'gn_status' => trans('labels.taxa.gn_status'),
+            'bioras_sci_name' => trans('labels.taxa.bioras_sci_name'),
+            'full_sci_name' => trans('labels.taxa.full_sci_name'),
+            'author' => trans('labels.taxa.author'),
         ]);
     }
 
@@ -330,46 +305,14 @@ class TaxonImport extends BaseImport
      */
     protected function storeSingleItem(array $item)
     {
-        $fieldObservation = FieldObservation::create(
-            $this->getSpecificObservationData($item)
+        $taxon = Taxon::create(
+            array_merge(
+                $this->getTaxonData($item),
+                Localization::transformTranslations($this->getLocaleData($item))
+            )
         );
-
-        $observation = $fieldObservation->observation()->save(
-            new Observation($this->getGeneralObservationData($item))
-        );
-
-        activity()->performedOn($fieldObservation)
-            ->causedBy($this->model()->user)
-            ->log('created');
-
-        if ($observation->isApproved()) {
-            activity()->performedOn($fieldObservation)
-                ->causedBy($this->model()->user)
-                ->log('approved');
-        }
-    }
-
-    /**
-     * Get observation data specific to field observation from the request.
-     *
-     * @param  array  $item
-     * @return array
-     */
-    protected function getSpecificObservationData(array $item)
-    {
-        $atlasCode = Arr::get($item, 'atlas_code');
-
-        return [
-            'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
-            'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
-            'found_dead' => $this->getFoundDead($item),
-            'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
-            'time' => Arr::get($item, 'time') ?: null,
-            'observed_by_id' => $this->getObserverId($item),
-            'identified_by_id' => $this->getIdentifierId($item),
-            'license' => $this->getLicense($item),
-            'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
-        ];
+        $this->createSynonyms($item, $taxon);
+        $taxon->annexes()->sync($this->getAnnexes($item), []);
     }
 
     /**
@@ -378,213 +321,36 @@ class TaxonImport extends BaseImport
      * @param  array  $item
      * @return array
      */
-    protected function getGeneralObservationData(array $item)
+    protected function getTaxonData(array $item)
     {
-        $latitude = $this->getLatitude($item);
-        $longitude = $this->getLongitude($item);
-        $taxon = $this->getTaxon($item);
+        $order_family = $this->createOrderFamily($item);
 
         return [
-            'taxon_id' => $taxon ? $taxon->id : null,
-            'year' => Arr::get($item, 'year'),
-            'month' => Arr::get($item, 'month') ?: null,
-            'day' => Arr::get($item, 'day') ?: null,
-            'location' => Arr::get($item, 'location') ?: null,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'mgrs10k' => mgrs10k($latitude, $longitude),
-            'accuracy' => Arr::get($item, 'accuracy') ?: null,
-            'elevation' => $this->getElevation($item),
-            'created_by_id' => $this->model()->for_user_id ?: $this->model()->user_id,
-            'observer' => $this->getObserver($item),
-            'identifier' => $this->getIdentifier($item),
-            'sex' => Sex::getValueFromLabel(Arr::get($item, 'sex', '')),
-            'number' => Arr::get($item, 'number') ?: null,
-            'note' => Arr::get($item, 'note') ?: null,
-            'project' => Arr::get($item, 'project') ?: null,
-            'habitat' => Arr::get($item, 'habitat') ?: null,
-            'found_on' => Arr::get($item, 'found_on') ?: null,
-            'stage_id' => $this->getStageId($item),
-            'original_identification' => Arr::get($item, 'original_identification', Arr::get($item, 'taxon')),
-            'dataset' => Arr::get($item, 'dataset') ?? Dataset::default(),
-            'approved_at' => $this->getApprovedAt($taxon),
+            'name' => Arr::get($item, 'name'),
+            'spid' => Arr::get($item, 'spid'),
+            'type' => Arr::get($item, 'type'),
+            'order_id' => Arr::get($order_family, 'order_id'),
+            'family_id' => Arr::get($order_family, 'family_id'),
+            'strictly_protected' => $this->getStrictlyProtected($item),
+            'strictly_note' => Arr::get($item, 'strictly_note') ?: null,
+            'protected' => $this->getProtected($item),
+            'protected_note' => Arr::get($item, 'protected_note') ?: null,
+            'iucn_cat' => Arr::get($item, 'iucn_cat') ?: null,
+            'birdlife_seq' => Arr::get($item, 'birdlife_seq'),
+            'birdlife_id' => Arr::get($item, 'birdlife_id'),
+            'ebba_code' => Arr::get($item, 'ebba_code') ?: null,
+            'euring_code' => Arr::get($item, 'euring_code') ?: null,
+            'euring_sci_name' => Arr::get($item, 'euring_sci_name') ?: null,
+            'eunis_n2000code' => Arr::get($item, 'eunis_n2000code') ?: null,
+            'eunis_sci_name' => Arr::get($item, 'eunis_sci_name') ?: null,
+            'refer' => $this->getRefer($item),
+            'prior' => $this->getPrior($item),
+            'gn_status' => Arr::get($item, 'gn_status') ?: null,
+            'bioras_sci_name' => Arr::get($item, 'bioras_sci_name') ?: null,
+            'full_sci_name' => Arr::get($item, 'full_sci_name') ?: null,
+            'author' => Arr::get($item, 'author') ?: null,
+            'rank' => 'species',
         ];
-    }
-
-    /**
-     * Get ID of taxon using it's name.
-     *
-     * @param  array  $data
-     * @return \App\Taxon|null
-     */
-    protected function getTaxon(array $data)
-    {
-        return Taxon::findByName(Arr::get($data, 'taxon'));
-    }
-
-    /**
-     * Get latitude.
-     *
-     * @param  array  $data
-     * @return float
-     */
-    protected function getLatitude(array $data)
-    {
-        return (float) str_replace(',', '.', Arr::get($data, 'latitude'));
-    }
-
-    /**
-     * Get longitude.
-     *
-     * @param  array  $data
-     * @return float
-     */
-    protected function getLongitude(array $data)
-    {
-        return (float) str_replace(',', '.', Arr::get($data, 'longitude'));
-    }
-
-    /**
-     * Get elevation.
-     *
-     * @param  array  $data
-     * @return |int|null
-     */
-    protected function getElevation(array $data)
-    {
-        $elevation = Arr::get($data, 'elevation');
-
-        if (is_numeric($elevation)) {
-            return $elevation;
-        }
-
-        if ($this->demReader) {
-            return $this->demReader->getElevation(
-                $this->getLatitude($data),
-                $this->getLongitude($data)
-            );
-        }
-    }
-
-    /**
-     * Get observer name.
-     *
-     * @param  array  $data
-     * @return string|null
-     */
-    protected function getObserver(array $data)
-    {
-        if (! $this->model()->user->hasAnyRole(['admin', 'curator'])) {
-            return $this->model()->user->full_name;
-        }
-
-        return Arr::get($data, 'observer') ?: $this->model()->user->full_name;
-    }
-
-    /**
-     * Get observer ID.
-     *
-     * @param  array  $data
-     * @return int
-     */
-    protected function getObserverId(array $data)
-    {
-        if ($this->shouldUseCurrentUserId(Arr::get($data, 'observer'))) {
-            return $this->model()->user->id;
-        }
-    }
-
-    /**
-     * Get identifier name.
-     *
-     * @param  array  $data
-     * @return string|null
-     */
-    protected function getIdentifier(array $data)
-    {
-        if (! $this->model()->user->hasAnyRole(['admin', 'curator'])) {
-            return $this->model()->user->full_name;
-        }
-
-        return Arr::get($data, 'identifier') ?: $this->model()->user->full_name;
-    }
-
-    /**
-     * Get identifier ID.
-     *
-     * @param  array  $data
-     * @return int
-     */
-    protected function getIdentifierId(array $data)
-    {
-        if ($this->shouldUseCurrentUserId(Arr::get($data, 'identifier'))) {
-            return $this->model()->user->id;
-        }
-    }
-
-    /**
-     * Check if the name matches current user.
-     *
-     * @param  string|null  $name
-     * @return bool
-     */
-    private function shouldUseCurrentUserId($name = null)
-    {
-        return ! $this->model()->user->hasAnyRole(['admin', 'curator']) || ! $name;
-    }
-
-    /**
-     * Get all the stages.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    protected function stages()
-    {
-        if (! $this->stages) {
-            $this->stages = Stage::all();
-        }
-
-        return $this->stages;
-    }
-
-    /**
-     * Get correctly translated stages' names.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    protected function stagesTranslatedNames()
-    {
-        return $this->stages()->pluck('name_translation');
-    }
-
-    /**
-     * Get stage ID.
-     *
-     * @param  array  $data
-     * @return int|null
-     */
-    protected function getStageId(array $data)
-    {
-        $translation = strtolower(Arr::get($data, 'stage', ''));
-
-        $stage = $this->stages()->first(function ($stage) use ($translation) {
-            return strtolower($stage->name_translation) === $translation;
-        });
-
-        return $stage ? $stage->id : null;
-    }
-
-    /**
-     * Get value for "Found Dead" field.
-     *
-     * @param  array  $data
-     * @return bool
-     */
-    protected function getFoundDead(array $data)
-    {
-        $value = Arr::get($data, 'found_dead', false);
-
-        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -604,50 +370,80 @@ class TaxonImport extends BaseImport
         return strtolower($yes) === strtolower($value);
     }
 
-    /**
-     * Get license for the observation.
-     *
-     * @param  array  $data
-     * @return int
-     */
-    protected function getLicense(array $data)
+    private function createOrderFamily(array $item)
     {
-        return ($license = Arr::get($data, 'license'))
-            ? License::findByName($license)->id
-            : $this->model()->user->settings()->get('data_license');
+        $order = Order::firstOrCreate(['name' => Arr::get($item, 'order')]);
+        $order->save();
+
+        $family = Family::firstOrCreate(array_merge(
+            ['name' => Arr::get($item, 'family')],
+            ['order_id' => $order->id])
+        );
+        $family->save();
+
+        return ['family_id' => $family->id, 'order_id' => $order->id];
     }
 
-    /**
-     * Get `approved_at` attribute for the observation.
-     *
-     * @param \App\Taxon|null $taxon
-     * @return \Carbon\Carbon|null
-     */
-    protected function getApprovedAt($taxon)
+    private function createSynonyms(array $item, $taxon)
     {
-        return $this->shouldApprove($taxon) ? now() : null;
+        $synonym_names = Arr::get($item, 'synonyms');
+        if (!$synonym_names) return;
+
+        foreach (explode('; ', $synonym_names) as $name){
+            $synonym = Synonym::firstOrCreate([
+                'name' => $name,
+                'taxon_id' => $taxon->id,
+            ]);
+            $synonym->save();
+        }
     }
 
-    /**
-     * Check if we should automatically approve observation of given taxon.
-     *
-     * @param \App\Taxon|null $taxon
-     * @return bool
-     */
-    protected function shouldApprove($taxon)
+    private function getLocaleData($item)
     {
-        return $this->shouldApproveCurated() &&
-            $this->model()->user->hasRole('curator') &&
-            $taxon && $taxon->canBeApprovedBy($this->model()->user);
+        $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
+        $localesData['native_name'] = array();
+        foreach ($locales as $localeCode => $locale) {
+            $localesData['native_name'][$localeCode] = Arr::get($item, 'native_name_'.Str::snake($localeCode));
+        }
+        return $localesData;
     }
 
-    /**
-     * Check if option to verify observations of curated taxa is selected.
-     *
-     * @return bool
-     */
-    protected function shouldApproveCurated()
+    private function getAnnexes(array $item)
     {
-        return $this->model()->options['approve_curated'] ?? false;
+        $annexes = Arr::get($item, 'annexes');
+        $annexes_ids = array();
+        if (!$annexes) return null;
+        foreach (explode('; ', $annexes) as $annex){
+            $annexes_ids[] = Annex::where('name', $annex)->first()->id;
+        }
+        return $annexes_ids;
+    }
+
+    private function getStrictlyProtected(array $item)
+    {
+        $value = Arr::get($item, 'strictly_protected', false);
+
+        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    private function getProtected(array $item)
+    {
+        $value = Arr::get($item, 'protected', false);
+
+        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    private function getRefer(array $item)
+    {
+        $value = Arr::get($item, 'refer', false);
+
+        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    private function getPrior(array $item)
+    {
+        $value = Arr::get($item, 'prior', false);
+
+        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 }

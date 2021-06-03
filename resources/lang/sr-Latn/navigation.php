@@ -40,6 +40,7 @@ return [
     'synonyms' => 'Katalog sinonima',
     'public_field_observations' => 'Javni terenski nalazi',
     'field_observations_import' => 'Uvoz terenskih nalaza',
+    'taxa_import' => 'Uvoz kataloga ptica',
     'import' => 'Uvoz',
     'my' => 'Moje',
     'public' => 'Javno',

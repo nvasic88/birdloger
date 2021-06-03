@@ -129,7 +129,7 @@ return [
         'types_placeholder' => 'Одаберите тип налаза',
         'dataset' => 'Сет података',
         'mgrs10k' => 'MGRS 10K',
-        'atlas_code' => 'Атлас код',
+
 
         'statuses' => [
             'approved' => 'Одобрено',
@@ -143,6 +143,10 @@ return [
         'include_lower_taxa' => 'Укључујући ниже таксоне',
 
         'submitted_using' => 'Послато преко',
+    ],
+
+    'observations' => [
+        'atlas_code' => 'Атлас код',
     ],
 
     'view_groups' => [
@@ -166,6 +170,7 @@ return [
             'custom' => 'Прилагођено',
             'darwin_core' => 'Darwin Core',
         ],
+        'observers' => 'Posmatrač/i',
     ],
 
     'imports' => [

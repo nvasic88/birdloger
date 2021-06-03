@@ -16,11 +16,11 @@ class AlterObservationsTable extends Migration
         Schema::table('observations', function (Blueprint $table) {
             $table->enum('number_of', [
                 null,
-                'jedinka',
-                'par',
-                'pevajući mužjak',
-                'aktivno gnezdo',
-                'porodica sa mladuncima',
+                'individual',
+                'couple',
+                'singing_male',
+                'active_nest',
+                'family_with_cubs',
             ])->after('number')->nullable();
             $table->text('description')->nullable();
             $table->text('comment')->nullable();

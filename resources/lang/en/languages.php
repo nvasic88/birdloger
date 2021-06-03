@@ -3,7 +3,7 @@
 return [
     'Bosnian' => 'Bosanski',
     'English' => 'English',
-    'Serbian (Latin)' => 'Serbian (Latin)',
+    'Serbian (Latin)' => 'Serbian',
     'Serbian (Cyrillic)' => 'Serbian (Cyrillic)',
     'Croatian' => 'Croatian',
 ];

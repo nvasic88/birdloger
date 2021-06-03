@@ -136,7 +136,7 @@ abstract class BaseImport
     abstract public function generateErrorsRoute();
 
     /**
-     * Parse the uploaded CSV into JSON collection.
+     * Parse the uploaded XLSX into JSON collection.
      *
      * @return $this
      */
@@ -186,7 +186,7 @@ abstract class BaseImport
     }
 
     /**
-     * Read uploaded CSV and parse the row.
+     * Read uploaded XLSX and parse the row.
      *
      * @param  callable  $callback
      * @return void
@@ -207,7 +207,7 @@ abstract class BaseImport
      */
     private function makeImportReader()
     {
-        $reader = ReaderFactory::create(Type::CSV);
+        $reader = ReaderFactory::create(Type::XLSX);
 
         $reader->open($this->import->absolutePath());
 
@@ -434,7 +434,7 @@ abstract class BaseImport
     }
 
     /**
-     * Store data from single CSV row.
+     * Store data from single XLSX row.
      *
      * @param  array  $item
      * @return void

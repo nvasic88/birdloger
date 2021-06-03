@@ -59,7 +59,7 @@ abstract class BaseImportController
                 'file' => [
                     'bail',
                     'required',
-                    'mimes:csv,txt',
+                    'mimes:xlsx',
                     'max:'.config('biologer.max_upload_size'),
                     new ImportFile($request->input('has_heading', false)),
                     new NoImportsInProgress(),

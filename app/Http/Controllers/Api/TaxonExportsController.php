@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Exports\Taxa\CustomTaxaExport;
 use App\Exports\Taxa\TaxaExportFactory;
+use App\Http\Controllers\Controller;
 use App\Jobs\PerformExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class TaxonExportsController
+class TaxonExportsController extends Controller
 {
     /**
-     * @var \App\Exports\CustomTaxaExport
+     * @var \App\Exports\Taxa\CustomTaxaExport
      */
     protected $taxaExport;
 

@@ -70,7 +70,7 @@
       </b-tabs>
     </b-field>
 
-    <b-field :label="trans('labels.taxa.description')">
+    <b-field :label="trans('labels.taxa.description')" v-if="1 !== 1">
       <b-tabs
         size="is-small"
         class="block"
@@ -90,45 +90,9 @@
     </b-field>
 
     <hr>
-    <div>
-      <b-field :label="trans('labels.taxa.annex')">
-        <div class="block">
-          <b-checkbox
-            v-for="annex in annexes"
-            :key="annex.id"
-            v-model="form.annexes_ids"
-            :native-value="annex.id"
-          >
-            {{ annex.name }}
-          </b-checkbox>
-        </div>
-      </b-field>
-    </div>
+
 
     <div class="columns">
-      <div class="column">
-        <b-field :label="trans('labels.taxa.restricted')">
-          <div class="field">
-            <b-switch v-model="form.restricted">
-              {{ form.restricted ? trans("Yes") : trans("No") }}
-            </b-switch>
-          </div>
-        </b-field>
-      </div>
-      <div class="column">
-        <b-field :label="trans('labels.taxa.allochthonous')">
-          <b-switch v-model="form.allochthonous">
-            {{ form.allochthonous ? trans("Yes") : trans("No") }}
-          </b-switch>
-        </b-field>
-      </div>
-      <div class="column">
-        <b-field :label="trans('labels.taxa.invasive')">
-          <b-switch v-model="form.invasive">
-            {{ form.invasive ? trans("Yes") : trans("No") }}
-          </b-switch>
-        </b-field>
-      </div>
       <div class="column">
         <b-field :label="trans('labels.taxa.refer')">
           <b-switch v-model="form.refer">
@@ -143,6 +107,44 @@
           </b-switch>
         </b-field>
       </div>
+      <div class="column">
+        <b-field :label="trans('labels.taxa.restricted')" v-if="1 !== 1">
+          <div class="field">
+            <b-switch v-model="form.restricted">
+              {{ form.restricted ? trans("Yes") : trans("No") }}
+            </b-switch>
+          </div>
+        </b-field>
+      </div>
+      <div class="column">
+        <b-field :label="trans('labels.taxa.allochthonous')" v-if="1 !== 1">
+          <b-switch v-model="form.allochthonous">
+            {{ form.allochthonous ? trans("Yes") : trans("No") }}
+          </b-switch>
+        </b-field>
+      </div>
+      <div class="column">
+        <b-field :label="trans('labels.taxa.invasive')" v-if="1 !== 1">
+          <b-switch v-model="form.invasive">
+            {{ form.invasive ? trans("Yes") : trans("No") }}
+          </b-switch>
+        </b-field>
+      </div>
+    </div>
+
+    <div>
+      <b-field :label="trans('labels.taxa.annex')">
+        <div class="block">
+          <b-checkbox
+            v-for="annex in annexes"
+            :key="annex.id"
+            v-model="form.annexes_ids"
+            :native-value="annex.id"
+          >
+            {{ annex.name }}
+          </b-checkbox>
+        </div>
+      </b-field>
     </div>
 
     <hr />
@@ -482,14 +484,15 @@ export default {
           stages: [],
           synonyms: [],
           annexes: [],
+          uses_atlas_codes: true,
           restricted: false,
           allochthonous: false,
           invasive: false,
           refer: false,
-          uses_atlas_codes: true,
+          prior: false,
           strictly_protected: false,
-          strictly_note: null,
           protected: false,
+          strictly_note: null,
           protected_note: null,
           spid: null,
           birdlife_seq: null,
@@ -500,7 +503,6 @@ export default {
           eunis_n2000code: null,
           eunis_sci_name: null,
           bioras_sci_name: null,
-          prior: null,
           gn_status: null,
           type: "RS",
           iucn_cat: null,
@@ -722,11 +724,9 @@ export default {
     }
   },
   loadSynonyms: function() {
-    console.log(this.taxon.synonyms);
     if (!this.taxon.synonyms) return [];
     let names = [];
     this.taxon.synonyms.forEach(item => names.push(item.name));
-    console.log(names);
     return names;
   }
 };

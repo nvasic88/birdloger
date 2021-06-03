@@ -22,24 +22,12 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'id',
             ],
             [
-                'label' => trans('labels.field_observations.taxon'),
-                'value' => 'taxon',
+                'label' => trans('labels.observations.rid'),
+                'value' => 'rid',
             ],
             [
-                'label' => trans('labels.field_observations.year'),
-                'value' => 'year',
-            ],
-            [
-                'label' => trans('labels.field_observations.month'),
-                'value' => 'month',
-            ],
-            [
-                'label' => trans('labels.field_observations.day'),
-                'value' => 'day',
-            ],
-            [
-                'label' => trans('labels.field_observations.time'),
-                'value' => 'time',
+                'label' => trans('labels.observations.fid'),
+                'value' => 'fid',
             ],
             [
                 'label' => trans('labels.field_observations.latitude'),
@@ -49,6 +37,64 @@ class CustomFieldObservationsExport extends BaseExport
                 'label' => trans('labels.field_observations.longitude'),
                 'value' => 'longitude',
             ],
+            [
+                'label' => trans('labels.field_observations.day'),
+                'value' => 'day',
+            ],
+            [
+                'label' => trans('labels.field_observations.month'),
+                'value' => 'month',
+            ],
+            [
+                'label' => trans('labels.field_observations.year'),
+                'value' => 'year',
+            ],
+            [
+                'label' => trans('labels.field_observations.time'),
+                'value' => 'time',
+            ],
+            [
+                'label' => trans('labels.field_observations.taxon'),
+                'value' => 'taxon',
+            ],
+            [
+                'label' => trans('labels.taxa.spid'),
+                'value' => 'spid',
+            ],
+            [
+                'label' => trans('labels.observations.atlas_code'),
+                'value' => 'atlas_code',
+            ],
+            [
+                'label' => trans('labels.field_observations.number'),
+                'value' => 'number',
+            ],
+            [
+                'label' => trans('labels.field_observations.number_of'),
+                'value' => 'number_of',
+            ],
+            [
+                'label' => trans('labels.observations.data_provider'),
+                'value' => 'data_provider',
+            ],
+            [
+                'label' => trans('labels.observations.data_limit'),
+                'value' => 'data_limit',
+            ],
+            [
+                'label' => trans('labels.field_observations.comment'),
+                'value' => 'comment',
+            ],
+            [
+                'label' => trans('labels.field_observations.identifier'),
+                'value' => 'identifier',
+            ],
+            [
+                'label' => trans('labels.exports.observers'),
+                'value' => 'observers',
+            ],
+
+            # TODO: Check if needed
             [
                 'label' => trans('labels.field_observations.location'),
                 'value' => 'location',
@@ -70,14 +116,6 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'sex',
             ],
             [
-                'label' => trans('labels.field_observations.observer'),
-                'value' => 'observer',
-            ],
-            [
-                'label' => trans('labels.field_observations.identifier'),
-                'value' => 'identifier',
-            ],
-            [
                 'label' => trans('labels.field_observations.stage'),
                 'value' => 'stage',
             ],
@@ -86,12 +124,12 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'license',
             ],
             [
-                'label' => trans('labels.field_observations.number'),
-                'value' => 'number',
-            ],
-            [
                 'label' => trans('labels.field_observations.note'),
                 'value' => 'note',
+            ],
+            [
+                'label' => trans('labels.field_observations.description'),
+                'value' => 'description',
             ],
             [
                 'label' => trans('labels.field_observations.project'),
@@ -118,13 +156,11 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'status',
             ],
             [
-                'label' => trans('labels.field_observations.types'),
-                'value' => 'types',
+                'label' => trans('labels.field_observations.dataset'),
+                'value' => 'dataset',
             ],
-            [
-                'label' => trans('labels.field_observations.atlas_code'),
-                'value' => 'atlas_code',
-            ],
+
+
         ]);
     }
 
@@ -174,32 +210,45 @@ class CustomFieldObservationsExport extends BaseExport
 
         return [
             'id' => $item->id,
-            'taxon' => $taxon->name,
-            'year' => $item->observation->year,
-            'month' => $item->observation->month,
-            'day' => $item->observation->day,
-            'time' => optional($item->time)->format('H:i'),
+            'rid' => $item->rid,
+            'fid' => $item->fid,
             'latitude' => $item->observation->latitude,
             'longitude' => $item->observation->longitude,
+            'day' => $item->observation->day,
+            'month' => $item->observation->month,
+            'year' => $item->observation->year,
+            'time' => optional($item->time)->format('H:i'),
+            'taxon' => $taxon->name,
+            'spid' => $taxon->spid,
+            'atlas_code' => $item->observation->atlas_code,
+            'number' => $item->observation->number,
+            'number_of' => $item->observation->number_of_translation,
+            'data_provider' => $item->observation->data_provider,
+            'data_limit' => $item->observation->data_limit,
+            'comment' => $item->observation->comment,
+            'identifier' => $item->identifier,
+            'observers' => $item->observation->observers->map(function ($observer) {
+                return "{$observer->firstName} {$observer->lastName}";
+            })->implode('; '),
+
             'location' => $item->observation->location,
             'mgrs10k' => $item->observation->mgrs10k,
             'accuracy' => $item->observation->accuracy,
             'elevation' => $item->observation->elevation,
             'sex' => $item->observation->sex_translation,
-            'observer' => $item->observer,
-            'identifier' => $item->identifier,
             'stage' => optional($item->observation->stage)->name_translation,
             'license' => $item->license_translation,
-            'number' => $item->observation->number,
             'note' => $item->observation->note,
+            'description' => $item->observation->description,
             'project' => $item->observation->project,
             'habitat' => $item->observation->habitat,
             'found_on' => $item->observation->found_on,
             'found_dead' => $item->found_dead ? __('Yes') : __('No'),
             'found_dead_note' => $item->found_dead_note,
             'status' => $item->status_translation,
-            'types' => $item->observation->types->pluck('name')->implode(', '),
-            'atlas_code' => $taxon->uses_atlas_codes ? $item->atlas_code : null,
+            'dataset' => $item->observation->dataset,
+            #'types' => $item->observation->types->pluck('name')->implode(', '),
+
         ];
     }
 }

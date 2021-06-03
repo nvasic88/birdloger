@@ -14,6 +14,14 @@ return [
         'female' => 'Ženka',
     ],
 
+    'number_of' => [
+        'individual' => 'Jedinka',
+        'couple' => 'Par',
+        'singing_male' => 'Pevajući mužjak',
+        'active_nest' => 'Aktivno gnezdo',
+        'family_with_cubs' => 'Porodica sa mladuncima'
+    ],
+
     'transfer' => [
         'available' => 'Dostupne',
         'chosen' => 'Odabrane',
@@ -52,33 +60,33 @@ return [
         'last_name' => 'Prezime',
         'institution' => 'Institucija',
         'roles' => 'Uloge',
-        'curated_taxa' => 'Ptice koje uređuje',
+        'curated_taxa' => 'Vrste koje uređuje',
         'email' => 'E-pošta',
         'search' => 'Traži',
     ],
 
     'taxa' => [
         'rank' => 'Kategorija',
-        'name' => 'Naziv',
-        'parent' => 'Roditeljski ptica',
+        'name' => 'Naziv vrste',
+        'parent' => 'Roditeljska vrsta',
         'author' => 'Autor',
         'native_name' => 'Narodni naziv',
         'description' => 'Opis',
         'fe_old_id' => '(stara) FaunaEuropea ID',
         'fe_id' => 'FaunaEuropea ID',
-        'restricted' => 'Ptica sa ograničenim podacima',
-        'allochthonous' => 'Ptica je alohtona',
-        'invasive' => 'Ptica je invazivna',
+        'restricted' => 'Vrsta sa ograničenim podacima',
+        'allochthonous' => 'Vrsta je alohtona',
+        'invasive' => 'Vrsta je invazivna',
         'stages' => 'Stadijumi',
         'conservation_legislations' => 'Zakonska zaštita',
         'conservation_documents' => 'Ostala dokumenta',
         'red_lists' => 'Crvene liste',
         'add_red_list' => 'Dodaj crvenu listu',
-        'search_for_taxon' => 'Traži takson...',
+        'search_for_taxon' => 'Traži vrstu...',
         'yes' => 'Da',
         'no' => 'Ne',
 
-        'include_lower_taxa' => 'Uključujući niže ptice',
+        'include_lower_taxa' => 'Uključujući niže vrste',
 
         'atlas_codes' => 'Atlas kodovi',
         'uses_atlas_codes' => 'Koristi Atlas kodove',
@@ -111,10 +119,10 @@ return [
     ],
 
     'field_observations' => [
-        'taxon' => 'Ptica',
-        'taxon_id' => 'ID Ptice',
+        'taxon' => 'Naziv vrste',
+        'taxon_id' => 'ID vrste',
         'original_identification' => 'Originalna identifikacija',
-        'search_for_taxon' => 'Traži pticu...',
+        'search_for_taxon' => 'Traži vrstu...',
         'date' => 'Datum',
         'year' => 'Godina',
         'month' => 'Mesec',
@@ -158,7 +166,6 @@ return [
         'types_placeholder' => 'Odaberite tip nalaza',
         'dataset' => 'Set podataka',
         'mgrs10k' => 'MGRS 10K',
-        'atlas_code' => 'Atlas kod',
         'number_of' => 'Broj čega',
         'description' => 'Detaljan opis',
         'comment' => 'Komentar',
@@ -172,33 +179,31 @@ return [
         'save_tooltip' => 'Čuva trenutni nalaz i vraća vas u listu nalaza. Možete koristiti i prečicu Ctrl+Enter na tastaturi.',
         'save_more_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta. Možete koristiti i prečicu Ctrl+Shift+Enter na tastaturi.',
 
-        'include_lower_taxa' => 'Uključujući niže ptice',
+        'include_lower_taxa' => 'Uključujući niže vrste',
         'submitted_using' => 'Poslato preko',
     ],
 
     'observations' => [
         'observers' => 'Posmatrači',
-        'number_label' => 'RBr',
         'firstName' => 'Ime',
         'lastName' => 'Prezime',
-        'nickName' => 'Nadimak',
-        'city' => 'Grad',
         'fid' => 'Feature ID',
         'rid' => 'RID',
         'data_limit' => 'Data limit',
         'data_provider' => 'Data provider',
         'add_observer' => 'Dodaj posmatrača',
         'remove_observer_tooltip' => 'Ukloni posmatrača',
-        'id_tooltip' => 'Naziv ptice mora biti izabran preko pretrage, ID se automatski popunjava',
+        'id_tooltip' => 'Naziv vrste mora biti izabran preko pretrage, ID se automatski popunjava',
+        'atlas_code' => 'Atlas kod',
     ],
 
     'view_groups' => [
         'name' => 'Naziv',
         'parent' => 'Viša grupa',
         'description' => 'Opis',
-        'taxa' => 'Ptice',
+        'taxa' => 'Naziv vrste',
         'image' => 'Slika',
-        'only_observed_taxa' => 'Samo opaženi ptice',
+        'only_observed_taxa' => 'Samo opažene vrste',
     ],
 
     'exports' => [
@@ -213,11 +218,12 @@ return [
             'custom' => 'Prilagođeno',
             'darwin_core' => 'Darwin Core',
         ],
+        'observers' => 'Posmatrač/i',
     ],
 
     'imports' => [
         'choose_columns' => 'Odaberi kolone',
-        'select_csv_file' => 'Odaberi CSV datoteku',
+        'select_csv_file' => 'Odaberi XLSX datoteku',
         'available' => 'Dostupne',
         'chosen' => 'Odabrane',
         'import' => 'Uvezi',
@@ -226,7 +232,7 @@ return [
         'has_heading' => 'Prvi red sadrži nazive kolona',
         'columns' => 'Kolone',
         'user' => 'Za korisnika',
-        'approve_curated' => 'Potvrdi nalaze za pticama koje uređujem',
+        'approve_curated' => 'Potvrdi nalaze za vrstama koje uređujem',
     ],
 
     'announcements' => [
@@ -271,8 +277,8 @@ return [
         'citation' => 'Citiranje',
         'cited_publication' => 'Citirana publikacija',
         'search_for_publication' => 'Traži publikaciju',
-        'taxon' => 'Ptica',
-        'search_for_taxon' => 'Traži pticu',
+        'taxon' => 'Naziv vrste',
+        'search_for_taxon' => 'Traži vrstu',
         'date' => 'Datum',
         'year' => 'Godina',
         'month' => 'Mesec',
@@ -335,10 +341,10 @@ return [
         'save_tooltip' => 'Čuva trenutni nalaz i vraća vas u listu nalaza. Možete koristiti i prečicu Ctrl+Enter na tastaturi.',
         'save_more_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta. Možete koristiti i prečicu Ctrl+Shift+Enter na tastaturi.',
 
-        'save_more_same_taxon' => 'Save (još, ista ptica)',
-        'save_more_same_taxon_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta i za isti taskon.',
+        'save_more_same_taxon' => 'Save (još, ista vrsta)',
+        'save_more_same_taxon_tooltip' => 'Čuva trenutni nalaz, ali vam omogućava da unesete još podataka sa istog mesta i za istu vrstu.',
 
-        'include_lower_taxa' => 'Uključujući niže ptice',
+        'include_lower_taxa' => 'Uključujući niže vrste',
     ],
 
     'preferences' => [

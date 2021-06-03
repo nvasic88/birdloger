@@ -10,6 +10,10 @@ class Observation extends Model
         'male', 'female',
     ];
 
+    const NUMBER_OF_OPTIONS = [
+        'individual', 'couple', 'singing_male', 'active_nest', 'family_with_cubs'
+    ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -25,6 +29,7 @@ class Observation extends Model
         'day' => 'integer',
         'number' => 'integer',
         'stage_id' => 'integer',
+        'atlas_code' => 'integer',
     ];
 
     /**
@@ -245,6 +250,16 @@ class Observation extends Model
     public function getSexTranslationAttribute()
     {
         return $this->sex ? trans('labels.sexes.' . $this->sex) : null;
+    }
+
+    /**
+     * Get number of translation.
+     *
+     * @return string
+     */
+    public function getNumberOfTranslationAttribute()
+    {
+        return $this->number_of ? trans('labels.number_of.' . $this->number_of) : null;
     }
 
     /**

@@ -21,7 +21,7 @@ return [
     'infraorder' => 'Infrared',
     'superfamily' => 'Nadfamilija',
     'epifamily' => 'Epifamilija',
-    'family' => 'Familija',
+    'family' => 'Porodica',
     'subfamily' => 'Podfamilija',
     'supertribe' => 'Nadpleme',
     'tribe' => 'Pleme',

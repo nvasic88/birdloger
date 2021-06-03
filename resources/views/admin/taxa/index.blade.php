@@ -8,7 +8,6 @@
             delete-route="api.taxa.destroy"
             export-url="{{ route('api.taxon-exports.store') }}"
             :export-columns="{{ $exportColumns }}"
-            :ranks="{{ $ranks }}"
             empty="{{ __('No data...') }}"
             show-activity-log
         />
@@ -28,5 +27,9 @@
     <a href="{{ route('admin.taxa.create') }}" class="button is-secondary is-outlined">
         @include('components.icon', ['icon' => 'plus'])
         <span>{{ __('navigation.add') }}</span>
+    </a>
+    <a href="{{ route('admin.taxa-import.index') }}" class="button is-secondary is-outlined ml-2">
+        @include('components.icon', ['icon' => 'upload'])
+        <span>{{ __('navigation.import') }}</span>
     </a>
 @endsection

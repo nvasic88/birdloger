@@ -94,7 +94,7 @@ export default {
     },
     types: {
       type: Array,
-      default: () => ['custom', 'darwin_core'],
+      default: () => ['custom'],
       validator: value => value.length > 0
     },
     sort: String
@@ -107,7 +107,7 @@ export default {
       processing: false,
       currentExport: null,
       selectedColumns: [],
-      withHeader: false,
+      withHeader: true,
       type: this.types[0],
       form: new Form(),
     }

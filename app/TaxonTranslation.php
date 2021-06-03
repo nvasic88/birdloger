@@ -15,4 +15,14 @@ class TaxonTranslation extends Model
     {
         return Purify::clean($value);
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'locale' => $this->locale,
+            'native_name' => $this->native_name,
+            'description' => $this->description,
+        ];
+    }
 }

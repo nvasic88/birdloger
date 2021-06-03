@@ -184,6 +184,17 @@ class Taxon extends Model
     }
 
     /**
+     * Find taxon by spid.
+     *
+     * @param  string  $spid
+     * @return \App\Taxon
+     */
+    public static function findBySPID($spid)
+    {
+        return static::where('spid', $spid)->first();
+    }
+
+    /**
      * Observations relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -314,7 +325,8 @@ class Taxon extends Model
     }
 
     public function order(){
-        return $this->hasOneThrough(Order::class, Family::class);
+        # return $this->hasOneThrough(Order::class, Family::class);
+        return $this->family->order();
     }
 
     /**

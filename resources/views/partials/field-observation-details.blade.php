@@ -93,6 +93,31 @@
         </tr>
 
         <tr>
+            <td><b>{{ __('labels.field_observations.number_of') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->number_of_translation }}</td>
+        </tr>
+
+        <tr>
+            <td><b>{{ __('labels.observations.data_provider') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->data_provider }}</td>
+        </tr>
+
+        <tr>
+            <td><b>{{ __('labels.observations.data_limit') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->data_limit }}</td>
+        </tr>
+
+        <tr>
+            <td><b>{{ __('labels.observations.fid') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->fid }}</td>
+        </tr>
+
+        <tr>
+            <td><b>{{ __('labels.observations.rid') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->rid }}</td>
+        </tr>
+
+        <tr>
             <td><b>{{ __('labels.field_observations.note') }}</b></td>
             <td class="is-fullwidth">{{ $fieldObservation->observation->note }}</td>
         </tr>
@@ -103,13 +128,18 @@
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.found_on') }}</b></td>
-            <td class="is-fullwidth">{{ $fieldObservation->observation->found_on }}</td>
+            <td><b>{{ __('labels.field_observations.time') }}</b></td>
+            <td class="is-fullwidth">{{ optional($fieldObservation->time)->format('H:i') }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.time') }}</b></td>
-            <td class="is-fullwidth">{{ optional($fieldObservation->time)->format('H:i') }}</td>
+            <td><b>{{ __('labels.field_observations.description') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->description }}</td>
+        </tr>
+
+        <tr>
+            <td><b>{{ __('labels.field_observations.comment') }}</b></td>
+            <td class="is-fullwidth">{{ $fieldObservation->observation->comment }}</td>
         </tr>
 
         <tr>
@@ -136,9 +166,8 @@
 
         <tr>
             <td><b>{{ __('labels.field_observations.observers') }}</b></td>
-            <td class="is-fullwidth">{{ $fieldObservation->observer}}
+            <td class="is-fullwidth">
                 @foreach ($fieldObservation->observation->observers as $observer)
-                    @if($loop->first){{";"}}@endif
                     {{$observer->firstName}} {{$observer->lastName}}
                     @if(!$loop->last)
                         {{";"}}

@@ -101,7 +101,7 @@
                         {{-- For some reason checking empty on accessor result returns true even when there is a string --}}
                         {{-- This solves it --}}
                         @if (empty($description = $species->description))
-                            {{ __('Text is not available in English yet.') }}
+
                         @else
                             {{-- It was sanitized in accessor method, so don't worry ;) --}}
                             {!! $description !!}
@@ -170,7 +170,7 @@
                     {!! app('map.mgrs10k.basic')->render($species->mgrs10k()) !!}
 
                     <table class="is-sr-only">
-                        <caption>{{ __('pages.taxa.number_of_observations_per_mgrs10k_field') }} }}</caption>
+                        <caption>{{ __('pages.taxa.number_of_observations_per_mgrs10k_field') }}</caption>
 
                         <thead>
                             <tr>

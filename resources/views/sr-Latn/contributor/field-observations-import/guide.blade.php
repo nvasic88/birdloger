@@ -6,10 +6,10 @@
 
         <div class="message mt-8">
             <div class="message-body">
-                Uvoz podataka iz tablice u Biologer je kompleksan proces. Tom prilikom
+                Uvoz podataka iz tablice u Birdloger je kompleksan proces. Tom prilikom
                 mogu da se potkradu greške koje nije jednostavno ispraviti. Unos podataka
                 na ovaj način je opravdan ukoliko se radi o velikom setu podataka, koji nije
-                jednostavno prekucati unutar veb okruženja Biologera. Ipak, pre nego što se
+                jednostavno prekucati unutar veb okruženja Birdloger. Ipak, pre nego što se
                 odlučite za uvoz podataka iz tabele razmislite o drugim mogućnostima i dobro
                 proučite ovo uputstvo kako bi izbegli neželjene komplikacije.
             </div>
@@ -18,24 +18,18 @@
         <h2>Format tabele</h2>
 
         <p>
-            Biologer radi sa tablicama koje su sačuvane u „.CSV“ formatu (tekstualna datoteka
-            u kojoj su kolone razdvojene zarezom, a svaki red teksta je zaseban red u tablici).
-            Bilo koju tablicu možete sačuvati kao CSV datoteku, pošto većina programa za rad sa tabelama,
-            statističkih paketa i GIS alata koristi ovaj format. Primera radi iz programa LibreOffice
-            dovoljno je da odete u meni Datoteka → Sačuvaj kao i izaberete „Text CSV (.csv)“. Takođe
-            možete jednostavno naznačiti ekstenziju na kraju naziva datoteke (npr. „za_uvoz.csv“) i
-            LibreOffice će automatski shvatiti kako želite da sačuvate tablicu.
+            Birdloger radi sa excel tabelama koje su sačuvane u „.XLSX“ formatu.
         </p>
 
         <h2>Sadržaj tabele</h2>
 
         <p>
-            Pre nego što uvezete podatke iz tablice morate pravilno formatirati njena
-            polja kako bi Biologer prepoznao podatke. Prilikom uvoza podataka Biologer
-            čita vrednosti iz redova i kolona tablice, sprovodi osnovnu proveru podataka
+            Pre nego što uvezete podatke iz tabele morate pravilno formatirati njena
+            polja kako bi Birdloger prepoznao podatke. Prilikom uvoza podataka Birdloger
+            čita vrednosti iz redova i kolona tabele, sprovodi osnovnu proveru podataka
             i smešta podatke u odgovarajuća polja unutar baze podataka. Ukoliko ne formatirate
-            polje kako treba, Biologer će vam prijaviti grešku i ukazati u kom redu tablice
-            se greška nalazi. U najgorem slučaju Biologer neće prepoznati grešku već će
+            polje kako treba, Birdloger će vam prijaviti grešku i ukazati u kom redu tablice
+            se greška nalazi. U najgorem slučaju Birdloger neće prepoznati grešku već će
             podatak iz tablice smestiti na pogrešno mesto, nakon čega će biti neophodna
             intervencija našeg Projektnog tima.
         </p>
@@ -44,9 +38,9 @@
 
         <ol>
             <li>
-                Naučni naziv taksona je potrebno uskladiti tako da odgovara nazivima
-                taksona u Biologer bazi podataka. Ukoliko takson ne postoji u bazi podataka,
-                morate najpre zatražiti od Urednika taksonomske grupe da ga doda.
+                Naziv vrste je potrebno uskladiti tako da odgovara nazivima
+                vrsta u Birdloger bazi podataka. Ukoliko vrsta ne postoji u bazi podataka,
+                morate najpre zatražiti od Urednika vrste da ga doda.
             </li>
 
             <li>
@@ -63,62 +57,57 @@
             </li>
 
             <li>
-                Sve promenljive koje se daju uz nalaz treba upisati koristeći engleske izraze iz Biologera.
-                Na primer za kolonu u kojoj upisujete pol jedinke dozvoljene su vrednosti „male“
-                (mužjak) i „female“ (ženka). Isto važi i za vrednosti kolona u kojima definišete
-                licence podataka i razvojne stadijume jedinki.
-            </li>
-
-            <li>
                 Nadmorska visina i preciznost koordinate se uvek daju u metrima,
                 pa je brojčane vrednosti u kilometrima potrebno pretvoriti u metre.
             </li>
+
+            <li>
+                Svaki posmatrač mora imati upisano ime i prezime. Ukoliko postoji više posmatrača neophodno je da
+                budu odvojeni znakom <b>;</b> i praznim razmakom <b>&#9251;</b> npr. "Ivan Ivić; Miša Mišić".
+            </li>
+
+            <li>
+                Vrednosti za polje Broj čega moraju biti sledeće: Jedinka, Par, Pevajući mužjak, Aktivno gnezdo ili
+                Porodica sa mladuncima
+            </li>
         </ol>
 
-        <p>Primer jedne proste tablice</p>
+        <p>Primer jedne proste tabele</p>
 
         <table>
             <thead>
                 <tr>
-                    <th>Vrsta</th>
+                    <th>SPID Vrste</th>
                     <th>X</th>
                     <th>Y</th>
                     <th>Godina</th>
-                    <th>Našao</th>
-                    <th>Identifikovao</th>
-                    <th>Licenca</th>
+                    <th>Posmatrač/i</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr>
-                    <td>Papilio machaon</td>
+                    <td>ANAPLAT</td>
                     <td>20,210</td>
                     <td>45,400</td>
                     <td>2014</td>
                     <td>Ivan Ivić</td>
-                    <td>Miša Mišić</td>
-                    <td>CC BY-SA 4.0</td>
                 </tr>
 
                 <tr>
-                    <td>Aglais io</td>
+                    <td>MARSTRE</td>
                     <td>20,210</td>
                     <td>45,400</td>
                     <td>2000</td>
-                    <td>Ivan Ivić</td>
-                    <td>Miša Mišić</td>
-                    <td>Closed</td>
+                    <td>Ivan Ivić; Miša Mišić</td>
                 </tr>
 
                 <tr>
-                    <td>Pyrgus malvae</td>
+                    <td>ASIOTUS</td>
                     <td>20,210</td>
                     <td>45,400</td>
                     <td>2015</td>
-                    <td>Miša Mišić</td>
-                    <td>Rade Radić</td>
-                    <td>Partially open</td>
+                    <td>Miša Mišić; Rade Radić</td>
                 </tr>
             </tbody>
         </table>
@@ -127,22 +116,21 @@
 
         <p>
             Prilikom uvoza podataka, od korisnika se traži minimalan set podataka:
-            naziv vrste, geografske koordinate, godina nalaza i licenca podataka.
-            Iako nije obavezno, preporuka je da pored ovih polja upišete ko je našao i identifikovao vrstu.
+            SPID vrste, geografske koordinate i godina nalaza.
         </p>
 
-        <h2>Od tablice do baze</h2>
+        <h2>Od tabele do baze</h2>
 
         <p>
             Ma koliko se trudili da ujednačimo naše tablice, ni jedna tablica sa
-            podacima nikada neće biti ista. Zbog toga je neophodno reći Biologeru
-            kako izgleda svaka tablica ponaosob! To se vrši jednostavnim izborom
+            podacima nikada neće biti ista. Zbog toga je neophodno reći Birdlogeru
+            kako izgleda svaka tabela ponaosob! To se vrši jednostavnim izborom
             kolona i njihovog redosleda.
         </p>
 
         <p>
-            Kliknite na dugme „Odaberi CSV datoteku“ i odaberite ranije pripremljenu
-            tablicu sa vašeg računara. Ukoliko prvi red tablice sadrži nazive kolona,
+            Kliknite na dugme „Odaberi XLSX datoteku“ i odaberite ranije pripremljenu
+            tabelu sa vašeg računara. Ukoliko prvi red tablele sadrži nazive kolona,
             kao u našem primeru, potrebno je da čekirate polje „Prvi red sadrži nazive kolona“.
             Nakon toga kliknite na dugme „Odaberi kolone“. Primetićete da je spisak kolona
             nešto duži od onog koji sadrži vaša tablica, te da je pet kolona automatski
@@ -150,13 +138,13 @@
         </p>
 
         <p>
-            Ukoliko želimo da uvezemo podatke iz tablice koju smo dali kao primer,
-            moraćemo da označimo još dve kolone: Uočio i Identifikovao. Jednostavno
-            čekirajte još ove dve kolone sa spiska i one će biti označene za uvoz iz tablice.
-            Pošto Biologer ne može da zna redosled kolona u vašoj tablici (s leva na desno),
-            moraćemo još da premestimo kolone u Biologeru (odozgo na dole) tako da odgovaraju tablici.
+            Ukoliko želimo da uvezemo podatke iz tabele koju smo dali kao primer,
+            moraćemo da označimo još jednu kolonu: Posmatrač/i. Jednostavno
+            čekirajte još ovu kolonu sa spiska i ona će biti označena za uvoz iz tabele.
+            Pošto Birdloger ne može da zna redosled kolona u vašoj tablici (s leva na desno),
+            moraćemo još da premestimo kolone u Birdlogeru (odozgo na dole) tako da odgovaraju tabeli.
             To možete uraditi jednostavnim prevlačenjem naziva kolona. U našem primeru moramo rasporediti
-            kolone sledećim redosledom: Takson, Geografska dužina, Geografska širina, Godina, Uočio, Identifikovao, Licenca.
+            kolone sledećim redosledom: SPID vrste, Geografska dužina, Geografska širina, Godina, Posmatrač/i.
         </p>
 
         <p>

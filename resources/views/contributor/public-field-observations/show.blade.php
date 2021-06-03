@@ -5,7 +5,7 @@
         <table class="table is-bordered is-narrow">
             <tbody>
                 <tr>
-                    <td><b>{{ __('labels.field_observations.status') }}</b></td>
+                    <td><b>A{{ __('labels.field_observations.status') }}</b></td>
                     <td class="is-fullwidth">{{ $fieldObservation->status_translation }}</td>
                 </tr>
 
@@ -77,9 +77,47 @@
                     <td class="is-fullwidth">{{ $fieldObservation->observation->types->pluck('name')->filter()->implode(', ') }}</td>
                 </tr>
 
+                @if (optional($fieldObservation->observation->taxon)->uses_atlas_codes)
+                    @php
+                        $atlasCode = optional($fieldObservation->atlasCode())
+                    @endphp
+                    <tr>
+                        <td><b>{{ __('labels.field_observations.atlas_code') }}</b></td>
+                        <td class="is-fullwidth">
+                            <div>{{ $atlasCode->name() }}</div>
+                            <div>{{ $atlasCode->description() }}</div>
+                        </td>
+                    </tr>
+                @endif
+
                 <tr>
                     <td><b>{{ __('labels.field_observations.number') }}</b></td>
                     <td class="is-fullwidth">{{ $fieldObservation->observation->number }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>{{ __('labels.field_observations.number_of') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observation->number_of_translation }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>{{ __('labels.observations.data_provider') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observation->data_provider }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>{{ __('labels.observations.data_limit') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observation->data_limit }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>{{ __('labels.observations.fid') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->fid }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>{{ __('labels.observations.rid') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->rid }}</td>
                 </tr>
 
                 <tr>
@@ -93,13 +131,18 @@
                 </tr>
 
                 <tr>
-                    <td><b>{{ __('labels.field_observations.found_on') }}</b></td>
-                    <td class="is-fullwidth">{{ $fieldObservation->observation->found_on }}</td>
+                    <td><b>{{ __('labels.field_observations.time') }}</b></td>
+                    <td class="is-fullwidth">{{ optional($fieldObservation->time)->format('H:i') }}</td>
                 </tr>
 
                 <tr>
-                    <td><b>{{ __('labels.field_observations.time') }}</b></td>
-                    <td class="is-fullwidth">{{ optional($fieldObservation->time)->format('H:i') }}</td>
+                    <td><b>{{ __('labels.field_observations.description') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observation->description }}</td>
+                </tr>
+
+                <tr>
+                    <td><b>{{ __('labels.field_observations.comment') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observation->comment }}</td>
                 </tr>
 
                 <tr>
@@ -125,10 +168,9 @@
                 @endif
 
                 <tr>
-                    <td><b>{{ __('labels.field_observations.observer')}}</b></td>
-                    <td class="is-fullwidth">{{ $fieldObservation->observer}}
+                    <td><b>{{ __('labels.observations.observers')}}</b></td>
+                    <td class="is-fullwidth">
                         @foreach ($fieldObservation->observation->observers as $observer)
-                            @if($loop->first){{";"}}@endif
                             {{$observer->firstName}} {{$observer->lastName}}
                             @if(!$loop->last)
                                     {{";"}}

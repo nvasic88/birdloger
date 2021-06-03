@@ -147,7 +147,6 @@ class UpdateFieldObservation extends FormRequest
                 ? Taxon::find($this->input('taxon_id'))->name
                 : $this->input('taxon_suggestion'),
             'time' => $this->input('time'),
-            'atlas_code' => $this->input('atlas_code'),
             'fid' => $this->input('fid'),
             'rid' => $this->input('rid'),
         ];
@@ -194,6 +193,7 @@ class UpdateFieldObservation extends FormRequest
             'comment' => $this->input('comment'),
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
+            'atlas_code' => $this->input('atlas_code'),
         ];
 
         if ($this->user()->hasAnyRole(['admin', 'curator'])) {

@@ -46,7 +46,7 @@ class ImportFile implements Rule
      */
     private function makeReader($value)
     {
-        $reader = ReaderFactory::create(Type::CSV); // for CSV files
+        $reader = ReaderFactory::create(Type::XLSX); // for XLSX files
 
         $reader->open($value->getPathname());
 
@@ -86,6 +86,6 @@ class ImportFile implements Rule
      */
     public function message()
     {
-        return trans('validate.csv_row_count');
+        return trans('validate.xlsx_row_count');
     }
 }

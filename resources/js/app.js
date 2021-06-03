@@ -67,6 +67,7 @@ Vue.component('NzTaxonActivityLog', () => import('./components/activity/TaxonAct
 
 Vue.component('NzFieldObservationsImport', () => import('./components/imports/FieldObservationsImport'))
 Vue.component('NzLiteratureObservationsImport', () => import('./components/imports/LiteratureObservationsImport'))
+Vue.component('NzTaxaImport', () => import('./components/imports/TaxonImport'))
 
 Vue.component('NzFieldObservationApproval', () => import('./components/FieldObservationApproval'))
 

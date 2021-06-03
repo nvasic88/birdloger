@@ -44,7 +44,6 @@ class FieldObservation extends Model implements FlatArrayable
         'license' => 'integer',
         'unidentifiable' => 'boolean',
         'approved_at' => 'datetime',
-        'atlas_code' => 'integer',
     ];
 
     protected function filters()
@@ -622,7 +621,7 @@ class FieldObservation extends Model implements FlatArrayable
             'identified_by_id' => $this->identified_by_id,
             'identified_by' => $this->identifiedBy,
             'dataset' => $this->observation->dataset,
-            'atlas_code' => $this->atlas_code,
+            'atlas_code' => $this->observation->atlas_code,
             'observers' => $this->observation->observers,
             'description' => $this->observation->description,
             'comment' => $this->observation->comment,
@@ -678,7 +677,7 @@ class FieldObservation extends Model implements FlatArrayable
             'identified_by_id' => $this->identified_by_id,
             'identified_by' => $this->identifiedBy,
             'dataset' => $this->observation->dataset,
-            'atlas_code' => $this->atlas_code,
+            'atlas_code' => $this->observation->atlas_code,
             'observers' => $this->observation->observers,
             'description' => $this->observation->description,
             'comment' => $this->observation->comment,
@@ -717,6 +716,6 @@ class FieldObservation extends Model implements FlatArrayable
 
     public function atlasCode()
     {
-        return AtlasCode::findByCode($this->atlas_code);
+        return AtlasCode::findByCode($this->observation->atlas_code);
     }
 }

@@ -17,8 +17,6 @@ class CreateObserversTable extends Migration
             $table->increments('id');
             $table->string('firstName', 50);
             $table->string('lastName', 50);
-            $table->string('city', 30)->nullable();
-            $table->string('nickname', 30)->nullable();
             $table->timestamps();
         });
     }

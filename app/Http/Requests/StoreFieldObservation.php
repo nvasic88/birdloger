@@ -145,7 +145,6 @@ class StoreFieldObservation extends FormRequest
             'time' => $this->input('time'),
             'observed_by_id' => $this->getObservedBy(),
             'identified_by_id' => $this->getIdentifedBy(),
-            'atlas_code' => $this->input('atlas_code'),
             'fid' => $this->input('fid'),
             'rid' => $this->input('rid'),
         ];
@@ -190,6 +189,7 @@ class StoreFieldObservation extends FormRequest
             'comment' => $this->input('comment'),
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
+            'atlas_code' => $this->input('atlas_code'),
         ];
     }
 

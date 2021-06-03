@@ -174,7 +174,7 @@
       </b-field>
 
       <b-field
-        :label="trans('labels.field_observations.atlas_code')"
+        :label="trans('labels.observations.atlas_code')"
         label-for="atlas-code"
         :type="form.errors.has('atlas_code') ? 'is-danger' : null"
         :message="form.errors.has('atlas_code') ? form.errors.first('atlas_code') : null"
@@ -207,11 +207,11 @@
           >
             <b-select v-model="form.number_of" expanded>
               <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
-              <option value="jedinka" >Jedinka</option>
-              <option value="par">Par</option>
-              <option value="pevajući mužjak">Pevajući mužjak</option>
-              <option value="aktivno gnezdo">Aktivno gnezdo</option>
-              <option value="porodica sa mladuncima">Porodica sa mladuncima</option>
+              <option value="individual">{{trans('labels.number_of.individual')}}</option>
+              <option value="couple">{{trans('labels.number_of.couple')}}</option>
+              <option value="singing_male">{{trans('labels.number_of.singing_male')}}</option>
+              <option value="active_nest">{{trans('labels.number_of.active_nest')}}</option>
+              <option value="family_with_cubs">{{trans('labels.number_of.family_with_cubs')}}</option>
             </b-select>
           </b-field>
         </div>
@@ -393,20 +393,16 @@
     <div class="columns">
         <div class="column is-2"><b>{{ trans('labels.observations.firstName') }}</b></div>
         <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
-        <div class="column is-2"><b>{{ trans('labels.observations.nickName') }}</b></div>
-        <div class="column is-2"><b>{{ trans('labels.observations.city') }}</b></div>
         <div class="column is-1"></div>
     </div>
     <div class="columns" v-for="(observer, index) in observers" :key="index">
         <div class="column is-2">{{observer.firstName}}</div>
         <div class="column is-2">{{observer.lastName}}</div>
-        <div class="column is-2">{{observer.nickname}}</div>
-        <div class="column is-2">{{observer.city}}</div>
         <div class="column is-1">
           <button type="button"
                   class="button has-text-danger"
                   @click="removeObserver(index)"
-                  v-tooltip="{content: trans('labels.observervation.remove_observer_tooltip')}">
+                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
             &times;
           </button>
         </div>
@@ -414,8 +410,6 @@
     <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
       <div class="column is-2">{{observer.firstName}}</div>
       <div class="column is-2">{{observer.lastName}}</div>
-      <div class="column is-2">{{observer.nickname}}</div>
-      <div class="column is-2">{{observer.city}}</div>
       <div class="column is-1"><button type="button" class="button has-text-danger" @click="removeObserver(index)">&times;
       </button></div>
     </div>
@@ -435,16 +429,8 @@
             :message="observerErrors.observerLastName ? observerErrors.observerLastName : null"
           >
             <b-input id="observerLastName" maxlength="50" v-model="observerLastName" ref="observerLastName"
-                     v-on:keydown.native.enter.prevent="$refs.observerNickname.focus"/>
+                     v-on:keydown.native.enter.prevent="addObserver"/>
           </b-field>
-        </div>
-        <div class="column is-2">
-          <b-input maxlength="30" v-model="observerNickname" ref="observerNickname"
-                   v-on:keydown.native.enter.prevent="$refs.observerCity.focus"/>
-        </div>
-        <div class="column is-2">
-          <b-input maxlength="30" v-model="observerCity" ref="observerCity"
-                   v-on:keydown.native.enter.prevent="addObserver"/>
         </div>
         <div class="column is-1">
           <button type="button" class="button is-primary" @click="addObserver">{{trans('labels.observations.add_observer')}}</button>
@@ -535,7 +521,7 @@ export default {
           note: '',
           sex: null,
           number: null,
-          number_of: 'jedinka',
+          number_of: 'individual',
           project: null,
           habitat: null,
           found_on: null,
@@ -606,8 +592,6 @@ export default {
       observers: this.observation.observers,
       observerFirstName: '',
       observerLastName: '',
-      observerNickname: '',
-      observerCity: '',
       observerErrors: {
         type: Array,
         default: () => []
@@ -652,9 +636,6 @@ export default {
         this.form.taxon_suggestion !== this.observation.taxon_suggestion
     },
 
-    usesAtlasCodes() {
-      return this.form.taxon ? this.form.taxon.uses_atlas_codes : false;
-    }
   },
 
   created() {
@@ -697,16 +678,11 @@ export default {
         this.fieldObservers.push({
           'firstName': this.observerFirstName,
           'lastName': this.observerLastName,
-          'nickname': this.observerNickname,
-          'city': this.observerCity,
         })
         this.observerFirstName = null;
         this.observerLastName = null;
-        this.observerNickname = null;
-        this.observerCity = null;
         this.observerErrors = [];
       } else {
-
         if (!this.observerFirstName) {
           this.observerErrors.observerFirstName = "This field is required";
           this.$forceUpdate();
@@ -716,7 +692,6 @@ export default {
           this.$forceUpdate();
         }
       }
-
     },
 
     removeObserver(index) {
@@ -756,10 +731,6 @@ export default {
       const invalidStage = this.lastStageId && !_find(this.stages, stage => stage.id === this.lastStageId)
 
       this.form.stage_id = invalidStage ? null : this.lastStageId
-
-      if (!this.usesAtlasCodes) {
-        this.form.atlas_code = null;
-      }
 
       this.updateIdentifier()
     },

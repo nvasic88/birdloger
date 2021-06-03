@@ -17,53 +17,35 @@ class CustomTaxaExport extends BaseExport
      */
     public static function columnData()
     {
-        $locales = collect(LaravelLocalization::getSupportedLocales());
-
-        return collect(array_keys(Taxon::RANKS))->map(function ($rank) {
-            return [
-                'label' => trans("taxonomy.{$rank}"),
-                'value' => $rank,
-            ];
-        })->concat([
+        $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
+        return collect()->concat([
             [
                 'label' => trans('labels.id'),
                 'value' => 'id',
             ],
             [
-                'label' => trans('labels.taxa.author'),
-                'value' => 'author',
+                'label' => trans('labels.taxa.type'),
+                'value' => 'type',
             ],
             [
-                'label' => trans('labels.taxa.restricted'),
-                'value' => 'restricted',
+                'label' => trans('labels.taxa.spid'),
+                'value' => 'spid',
             ],
             [
-                'label' => trans('labels.taxa.allochthonous'),
-                'value' => 'allochthonous',
+                'label' => trans('labels.taxa.name'),
+                'value' => 'name',
             ],
             [
-                'label' => trans('labels.taxa.invasive'),
-                'value' => 'invasive',
+                'label' => trans('taxonomy.order'),
+                'value' => 'order',
             ],
             [
-                'label' => trans('labels.taxa.fe_id'),
-                'value' => 'fe_id',
+                'label' => trans('taxonomy.family'),
+                'value' => 'family',
             ],
             [
-                'label' => trans('labels.taxa.stages'),
-                'value' => 'stages',
-            ],
-            [
-                'label' => trans('labels.taxa.conservation_legislations'),
-                'value' => 'conservation_legislations',
-            ],
-            [
-                'label' => trans('labels.taxa.red_lists'),
-                'value' => 'red_lists',
-            ],
-            [
-                'label' => trans('labels.taxa.uses_atlas_codes'),
-                'value' => 'uses_atlas_codes',
+                'label' => trans('labels.taxa.synonyms'),
+                'value' => 'synonyms',
             ],
         ])->concat($locales->map(function ($locale, $localeCode) {
             $nativeName = trans('labels.taxa.native_name');
@@ -73,15 +55,84 @@ class CustomTaxaExport extends BaseExport
                 'label' => "{$nativeName} - {$localeTranslation}",
                 'value' => 'native_name_'.Str::snake($localeCode),
             ];
-        }))->concat($locales->map(function ($locale, $localeCode) {
-            $description = trans('labels.taxa.description');
-            $localeTranslation = trans('languages.'.$locale['name']);
-
-            return [
-                'label' => "{$description} - {$localeTranslation}",
-                'value' => 'description_'.Str::snake($localeCode),
-            ];
-        }));
+        }))->concat([
+            [
+                'label' => trans('labels.taxa.strictly_protected'),
+                'value' => 'strictly_protected',
+            ],
+            [
+                'label' => trans('labels.taxa.strictly_note'),
+                'value' => 'strictly_note',
+            ],
+            [
+                'label' => trans('labels.taxa.protected'),
+                'value' => 'protected',
+            ],
+            [
+                'label' => trans('labels.taxa.protected_note'),
+                'value' => 'protected_note',
+            ],
+            [
+                'label' => trans('labels.taxa.iucn_cat'),
+                'value' => 'iucn_cat',
+            ],
+            [
+                'label' => trans('labels.taxa.birdlife_seq'),
+                'value' => 'birdlife_seq',
+            ],
+            [
+                'label' => trans('labels.taxa.birdlife_id'),
+                'value' => 'birdlife_id',
+            ],
+            [
+                'label' => trans('labels.taxa.ebba_code'),
+                'value' => 'ebba_code',
+            ],
+            [
+                'label' => trans('labels.taxa.euring_code'),
+                'value' => 'euring_code',
+            ],
+            [
+                'label' => trans('labels.taxa.euring_sci_name'),
+                'value' => 'euring_sci_name',
+            ],
+            [
+                'label' => trans('labels.taxa.eunis_n2000code'),
+                'value' => 'eunis_n2000code',
+            ],
+            [
+                'label' => trans('labels.taxa.eunis_sci_name'),
+                'value' => 'eunis_sci_name',
+            ],
+            [
+                'label' => trans('labels.taxa.refer'),
+                'value' => 'refer',
+            ],
+            [
+                'label' => trans('labels.taxa.prior'),
+                'value' => 'prior',
+            ],
+            [
+                'label' => trans('labels.taxa.annex'),
+                'value' => 'annexes',
+            ],
+            [
+                'label' => trans('labels.taxa.gn_status'),
+                'value' => 'gn_status',
+            ],
+            [
+                'label' => trans('labels.taxa.bioras_sci_name'),
+                'value' => 'bioras_sci_name',
+            ],
+            [
+                'label' => trans('labels.taxa.full_sci_name'),
+                'value' => 'full_sci_name',
+            ],
+            [
+                'label' => trans('labels.taxa.author'),
+                'value' => 'author',
+            ],
+        ]);
     }
 
     /**
@@ -105,31 +156,40 @@ class CustomTaxaExport extends BaseExport
     {
         $transformed = [
             'id' => $item->id,
-            $item->rank => $item->name,
+            'type' => $item->type,
+            'spid' => $item->spid,
+            'name' => $item->name,
+            'order' => $item->order->name,
+            'family' => $item->family->name,
+            'synonyms' => $item->synonyms->map->name->implode('; '),
+            'strictly_protected' => $item->strictly_protected ? __('Yes') : __('No'),
+            'strictly_note' => $item->strictly_note,
+            'protected' => $item->protected ? __('Yes') : __('No'),
+            'protected_note' => $item->protected_note,
+            'iucn_cat' => $item->iucn_cat,
+            'birdlife_seq' => $item->birdlife_seq,
+            'birdlife_id' => $item->birdlife_id,
+            'ebba_code' => $item->ebba_code,
+            'euring_code' => $item->euring_code,
+            'euring_sci_name' => $item->euring_sci_name,
+            'eunis_n2000code' => $item->eunis_n2000code,
+            'eunis_sci_name' => $item->eunis_sci_name,
+            'refer' => $item->refer ? __('Yes') : __('No'),
+            'prior' => $item->prior ? __('Yes') : __('No'),
+            'annexes' => $item->annexes->map->name->implode('; '),
+            'gn_status' => $item->gn_status,
+            'bioras_sci_name' => $item->bioras_sci_name,
+            'full_sci_name' => $item->full_sci_name,
             'author' => $item->author,
-            'restricted' => $item->restricted ? __('Yes') : __('No'),
-            'allochthonous' => $item->allochthonous ? __('Yes') : __('No'),
-            'invasive' => $item->invasive ? __('Yes') : __('No'),
-            'fe_old_id' => $item->fe_old_id,
-            'fe_id' => $item->fe_id,
-            'stages' => $item->stages->map->name_translation->implode(', '),
-            'conservation_legislations' => $item->conservationLegislations->map->name->implode(', '),
-            'conservation_documents' => $item->conservationDocuments->map->name->implode(', '),
-            'red_lists' => $item->redLists->map(function ($redList) {
-                return "{$redList->name} ({$redList->pivot->category})";
-            })->implode(', '),
-            'uses_atlas_codes' => $item->uses_atlas_codes ? __('Yes') : __('No'),
-        ];
 
-        foreach ($item->ancestors as $ancestor) {
-            $transformed[$ancestor->rank] = $ancestor->name;
-        }
+            # 'restricted' => $item->restricted ? __('Yes') : __('No'),
+            # 'allochthonous' => $item->allochthonous ? __('Yes') : __('No'),
+            # 'invasive' => $item->invasive ? __('Yes') : __('No'),
+        ];
 
         foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $locale) {
             $translation = $item->translateOrNew($localeCode);
-
             $transformed['native_name_'.Str::snake($localeCode)] = $translation->native_name;
-            $transformed['description_'.Str::snake($localeCode)] = $translation->description;
         }
 
         return $transformed;

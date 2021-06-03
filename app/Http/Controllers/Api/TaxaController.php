@@ -15,7 +15,7 @@ class TaxaController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return TaxonCollectionResource
      */
     public function index(Request $request)
     {

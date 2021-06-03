@@ -88,7 +88,6 @@
               :label="trans('labels.field_observations.taxon')"
               :placeholder="trans('labels.field_observations.search_for_taxon')"
             />
-            <b-checkbox v-model="newFilter.includeChildTaxa">{{ trans('labels.field_observations.include_lower_taxa') }}</b-checkbox>
           </div>
 
           <b-field :label="trans('labels.field_observations.date')" class="column is-half">
@@ -221,6 +220,18 @@
         </template>
       </b-table-column>
 
+      <b-table-column field="taxon_spid" :label="trans('labels.taxa.spid')" sortable>
+        <template #default="{ row }">
+          <div :class="{'has-text-grey': !row.taxon}">
+            <span>{{ row.taxon ? row.taxon.spid : null }}</span>
+            <b-icon v-if="!row.taxon" icon="question" size="is-small"></b-icon>
+          </div>
+        </template>
+        <template #header="{ column }">
+          <nz-sortable-column-header :column="column" :sort="{ field: sortField, order: sortOrder }" />
+        </template>
+      </b-table-column>
+
       <b-table-column field="year" :label="trans('labels.field_observations.year')" numeric sortable>
         <template #default="{ row }">
           {{ row.year }}
@@ -248,9 +259,9 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="observer" :label="trans('labels.field_observations.observer')" sortable v-if="showObserver">
+      <b-table-column field="observer" :label="trans('labels.observations.first_observer')" sortable v-if="showObserver">
         <template #default="{ row }">
-          {{ row.observer }}
+          {{ row.observers[0].firstName }} {{ row.observers[0].lastName }}
         </template>
         <template #header="{ column }">
           <nz-sortable-column-header :column="column" :sort="{ field: sortField, order: sortOrder }" />
@@ -396,7 +407,7 @@ export default {
       movableToPending: Boolean,
       showStatus: Boolean,
       showActivityLog: Boolean,
-      showObserver: Boolean,
+      // showObserver: Boolean,
       exportUrl: String,
       exportColumns: {
         type: Array,
@@ -421,7 +432,8 @@ export default {
           markingAsUnidentifiable: false,
           movingToPending: false,
           activityLog: [],
-          showExportModal: false
+          showExportModal: false,
+          showObserver: false,
       }
   },
 
