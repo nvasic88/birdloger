@@ -78,4 +78,10 @@ return [
     'biodiversity_data' => 'Biodiversity Data',
     'development_supporters' => 'Development Supporters',
     'stats' => 'Stats',
+    'electrocution_observations' => 'Electrocution observations',
+    'poaching_observations' => 'Poaching observations',
+    'my_electrocution_observations' => 'My electrocution observations',
+    'my_poaching_observations' => 'My poaching observations',
+    'all_electrocution_observations' => 'All electrocution observations',
+    'all_poaching_observations' => 'All poaching observations',
 ];

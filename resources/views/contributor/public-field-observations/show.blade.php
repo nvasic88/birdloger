@@ -156,14 +156,14 @@
                 </tr>
 
                 <tr>
-                    <td><b>{{ __('labels.field_observations.found_dead') }}</b></td>
-                    <td class="is-fullwidth">{{ $fieldObservation->found_dead ? __('Yes') : __('No') }}</td>
+                    <td><b>{{ __('labels.observations.found_dead') }}</b></td>
+                    <td class="is-fullwidth">{{ $fieldObservation->observation->found_dead ? __('Yes') : __('No') }}</td>
                 </tr>
 
-                @if ($fieldObservation->found_dead)
+                @if ($fieldObservation->observation->found_dead)
                     <tr>
-                        <td><b>{{ __('labels.field_observations.found_dead_note') }}</b></td>
-                        <td class="is-fullwidth">{{ $fieldObservation->found_dead_note }}</td>
+                        <td><b>{{ __('labels.observations.found_dead_note') }}</b></td>
+                        <td class="is-fullwidth">{{ $fieldObservation->observation->found_dead_note }}</td>
                     </tr>
                 @endif
 
@@ -173,7 +173,7 @@
                         @foreach ($fieldObservation->observation->observers as $observer)
                             {{$observer->firstName}} {{$observer->lastName}}
                             @if(!$loop->last)
-                                    {{";"}}
+                                {{";"}}
                             @endif
                         @endforeach
                     </td>

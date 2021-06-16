@@ -1,6 +1,5 @@
 <?php
 
-use App\Exports\Taxa\NewTaxaExport;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -113,6 +112,46 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::delete('field-observations/{fieldObservation}', 'FieldObservationsController@destroy')
         ->middleware('can:delete,fieldObservation')
         ->name('api.field-observations.destroy');
+
+    // Poaching observations
+    Route::get('poaching-observations', 'PoachingObservationsController@index')
+        ->middleware('can:list,App\PoachingObservation')
+        ->name('api.poaching-observations.index');
+
+    Route::post('poaching-observations', 'PoachingObservationsController@store')
+        ->name('api.poaching-observations.store');
+
+    Route::get('poaching-observations/{poachingObservation}', 'PoachingObservationsController@show')
+        ->middleware('can:view,poachingObservation')
+        ->name('api.poaching-observations.show');
+
+    Route::put('poaching-observations/{poachingObservation}', 'PoachingObservationsController@update')
+        ->middleware('can:update,poachingObservation')
+        ->name('api.poaching-observations.update');
+
+    Route::delete('poaching-observations/{poachingObservation}', 'PoachingObservationsController@destroy')
+        ->middleware('can:delete,poachingObservation')
+        ->name('api.poaching-observations.destroy');
+
+    // Electrocution observations
+    Route::get('electrocution-observations', 'ElectrocutionObservationsController@index')
+        ->middleware('can:list,App\ElectrocutionObservation')
+        ->name('api.electrocution-observations.index');
+
+    Route::post('electrocution-observations', 'ElectrocutionObservationsController@store')
+        ->name('api.electrocution-observations.store');
+
+    Route::get('electrocution-observations/{electrocutionObservation}', 'ElectrocutionObservationsController@show')
+        ->middleware('can:view,electrocutionObservation')
+        ->name('api.electrocution-observations.show');
+
+    Route::put('electrocution-observations/{electrocutionObservation}', 'ElectrocutionObservationsController@update')
+        ->middleware('can:update,electrocutionObservation')
+        ->name('api.electrocution-observations.update');
+
+    Route::delete('electrocution-observations/{electrocutionObservation}', 'ElectrocutionObservationsController@destroy')
+        ->middleware('can:delete,electrocutionObservation')
+        ->name('api.electrocution-observations.destroy');
 
     // Field observation exports
     Route::post('field-observation-exports', 'FieldObservationExportsController@store')
@@ -287,10 +326,23 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get('literature-observation-imports/{import}/errors', 'LiteratureObservationImportsController@errors')
         ->name('api.literature-observation-imports.errors');
 
+    // Sources
+    Route::post('sources', 'SourcesController@store')
+        ->name('api.sources.create');
+
+    Route::delete('sources/{source}', 'SourcesController@destroy')
+        ->name('api.sources.destroy');
+
     // My
     Route::prefix('my')->namespace('My')->group(function () {
         Route::get('field-observations', 'FieldObservationsController@index')
             ->name('api.my.field-observations.index');
+
+        Route::get('poaching-observations', 'PoachingObservationsController@index')
+            ->name('api.my.poaching-observations.index');
+
+        Route::get('electrocution-observations', 'ElectrocutionObservationsController@index')
+            ->name('api.my.electrocution-observations.index');
 
         Route::post('field-observations/export', 'FieldObservationExportsController@store')
             ->name('api.my.field-observation-exports.store');

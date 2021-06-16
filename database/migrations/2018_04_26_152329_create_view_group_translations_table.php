@@ -23,8 +23,8 @@ class CreateViewGroupTranslationsTable extends Migration
             $table->unique(['view_group_id', 'locale']);
 
             $table->foreign('view_group_id')
-                  ->references('id')
-                  ->on('view_group')
+                ->references('id')
+                ->on('view_groups')
                   ->onDelete('cascade');
         });
     }

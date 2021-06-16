@@ -140,8 +140,6 @@ class StoreFieldObservation extends FormRequest
         return [
             'license' => $this->input('data_license') ?: $this->user()->settings()->get('data_license'),
             'taxon_suggestion' => $this->getTaxonName(),
-            'found_dead' => $this->input('found_dead', false),
-            'found_dead_note' => $this->input('found_dead', false) ? $this->input('found_dead_note') : null,
             'time' => $this->input('time'),
             'observed_by_id' => $this->getObservedBy(),
             'identified_by_id' => $this->getIdentifedBy(),
@@ -190,6 +188,8 @@ class StoreFieldObservation extends FormRequest
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
             'atlas_code' => $this->input('atlas_code'),
+            'found_dead' => $this->input('found_dead', false),
+            'found_dead_note' => $this->input('found_dead', false) ? $this->input('found_dead_note') : null,
         ];
     }
 
@@ -354,8 +354,6 @@ class StoreFieldObservation extends FormRequest
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
                 'lastName' => $observer['lastName'],
-                'nickname' => $observer['nickname'],
-                'city' => $observer['city'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;

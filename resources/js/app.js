@@ -3,8 +3,8 @@ import Vue from 'vue'
 import Buefy from './buefy'
 import dayjs from './dayjs'
 import * as VueGoogleMaps from 'vue2-google-maps'
-import { VTooltip } from 'v-tooltip'
-import { setTooltipOptions } from './tooltip'
+import {VTooltip} from 'v-tooltip'
+import {setTooltipOptions} from './tooltip'
 import VueLazyload from 'vue-lazyload'
 import _eachRight from 'lodash/eachRight'
 import _replace from 'lodash/replace'
@@ -48,12 +48,16 @@ Vue.component('NzSynonymsTable', () => import('./components/tables/SynonymsTable
 Vue.component('NzFieldObservationsTable', () => import('./components/tables/FieldObservationsTable'))
 Vue.component('NzLiteratureObservationsTable', () => import('./components/tables/LiteratureObservationsTable'))
 Vue.component('NzPublicationsTable', () => import('./components/tables/PublicationsTable'))
+Vue.component('NzElectrocutionObservationsTable', () => import('./components/tables/ElectrocutionObservationsTable'))
+Vue.component('NzPoachingObservationsTable', () => import('./components/tables/PoachingObservationsTable'))
 
 Vue.component('NzRegistrationForm', () => import('./components/forms/RegistrationForm'))
 Vue.component('NzUserForm', () => import('./components/forms/UserForm'))
 Vue.component('NzTaxonForm', () => import('./components/forms/TaxonForm'))
 Vue.component('NzFieldObservationForm', () => import('./components/forms/FieldObservationForm'))
 Vue.component('NzLiteratureObservationForm', () => import('./components/forms/LiteratureObservationForm'))
+Vue.component('NzElectrocutionObservationForm', () => import('./components/forms/ElectrocutionObservationForm'))
+Vue.component('NzPoachingObservationForm', () => import('./components/forms/PoachingObservationForm'))
 
 Vue.component('NzSynonymForm', () => import('./components/forms/SynonymForm'))
 

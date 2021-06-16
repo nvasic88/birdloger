@@ -30,6 +30,7 @@ class Observation extends Model
         'number' => 'integer',
         'stage_id' => 'integer',
         'atlas_code' => 'integer',
+        'found_dead' => 'boolean',
     ];
 
     /**

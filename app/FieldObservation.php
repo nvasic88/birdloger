@@ -40,7 +40,6 @@ class FieldObservation extends Model implements FlatArrayable
      * @var array
      */
     protected $casts = [
-        'found_dead' => 'boolean',
         'license' => 'integer',
         'unidentifiable' => 'boolean',
         'approved_at' => 'datetime',
@@ -609,8 +608,8 @@ class FieldObservation extends Model implements FlatArrayable
             'project' => $this->observation->project,
             'habitat' => $this->observation->habitat,
             'found_on' => $this->observation->found_on,
-            'found_dead' => $this->found_dead,
-            'found_dead_note' => $this->found_dead_note,
+            'found_dead' => $this->observation->found_dead,
+            'found_dead_note' => $this->observation->found_dead_note,
             'data_license' => $this->license,
             'time' => optional($this->time)->format('H:i'),
             'status' => $this->status,
@@ -665,8 +664,8 @@ class FieldObservation extends Model implements FlatArrayable
             'project' => $this->observation->project,
             'habitat' => $this->observation->habitat,
             'found_on' => $this->observation->found_on,
-            'found_dead' => $this->found_dead,
-            'found_dead_note' => $this->found_dead_note,
+            'found_dead' => $this->observation->found_dead,
+            'found_dead_note' => $this->observation->found_dead_note,
             'data_license' => $this->license,
             'time' => optional($this->time)->format('H:i'),
             'status' => $this->status,

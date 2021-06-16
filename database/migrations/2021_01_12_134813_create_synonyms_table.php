@@ -20,7 +20,7 @@ class CreateSynonymsTable extends Migration
             $table->foreign('taxon_id')
                 ->references('id')
                 ->on('taxa')
-                ->onDelete('set null');
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

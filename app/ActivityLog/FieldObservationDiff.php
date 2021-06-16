@@ -86,8 +86,8 @@ class FieldObservationDiff
             },
             'found_dead' => function ($fieldObservation) {
                 return [
-                    'value' => $fieldObservation->found_dead,
-                    'label' => $fieldObservation->found_dead ? 'Yes' : 'No',
+                    'value' => $fieldObservation->observation->found_dead,
+                    'label' => $fieldObservation->observation->found_dead ? 'Yes' : 'No',
                 ];
             },
             'photos' => function ($fieldObservation) {

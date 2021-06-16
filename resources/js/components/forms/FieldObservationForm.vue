@@ -348,17 +348,75 @@
         </div>
       </div>
 
-      <b-checkbox v-model="form.found_dead">{{ trans('labels.field_observations.found_dead') }}</b-checkbox>
+      <b-checkbox v-model="form.found_dead">{{ trans('labels.observations.found_dead') }}</b-checkbox>
 
       <b-field
-        :label="trans('labels.field_observations.found_dead_note')"
+        :label="trans('labels.observations.found_dead_note')"
         label-for="found_dead_note"
         v-if="form.found_dead"
         :error="form.errors.has('found_dead_note')"
         :message="form.errors.has('found_dead_note') ? form.errors.first('found_dead_note') : null"
       >
-        <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note" />
+        <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note"/>
       </b-field>
+
+      <hr>
+
+      <div><b>{{ trans('labels.observations.observers') }}</b></div>
+      <div class="columns">
+        <div class="column is-2"><b>{{ trans('labels.observations.firstName') }}</b></div>
+        <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
+        <div class="column is-1"></div>
+      </div>
+      <div class="columns" v-for="(observer, index) in observers" :key="index">
+        <div class="column is-2">{{ observer.firstName }}</div>
+        <div class="column is-2">{{ observer.lastName }}</div>
+        <div class="column is-1">
+          <button type="button" class="delete" @click="removeObserver(index)"
+                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
+          </button>
+        </div>
+      </div>
+      <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
+        <div class="column is-2">{{ observer.firstName }}</div>
+        <div class="column is-2">{{ observer.lastName }}</div>
+        <div class="column is-1">
+          <button type="button" class="delete" @click="removeObserver(index)"
+                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
+          </button>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-2">
+          <b-field
+            :type="observerErrors.observerFirstName ? 'is-danger' : null"
+            :message="observerErrors.observerFirstName ? observerErrors.observerFirstName : null"
+          >
+            <b-input id="observerFirstName" maxlength="50" v-model="observerFirstName"
+                     :placeholder="trans('labels.observations.insert_first_name')"
+                     v-on:keydown.native.enter.prevent="$refs.observerLastName.focus"
+            />
+          </b-field>
+        </div>
+        <div class="column is-2">
+          <b-field
+            :type="observerErrors.observerLastName ? 'is-danger' : null"
+            :message="observerErrors.observerLastName ? observerErrors.observerLastName : null"
+          >
+            <b-input id="observerLastName" maxlength="50" v-model="observerLastName" ref="observerLastName"
+                     :placeholder="trans('labels.observations.insert_last_name')"
+                     v-on:keydown.native.enter.prevent="addObserver"
+            />
+          </b-field>
+        </div>
+        <div class="column is-1">
+          <button type="button" class="button is-primary" @click="addObserver">
+            {{ trans('labels.observations.add_observer') }}
+          </button>
+        </div>
+      </div>
+
+      <hr>
 
       <template v-if="showObserverIdentifier">
         <nz-user-autocomplete
@@ -388,55 +446,7 @@
         </div>
       </div>
 
-    <hr>
-    <div><b>{{ trans('labels.observations.observers') }}</b></div>
-    <div class="columns">
-        <div class="column is-2"><b>{{ trans('labels.observations.firstName') }}</b></div>
-        <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
-        <div class="column is-1"></div>
-    </div>
-    <div class="columns" v-for="(observer, index) in observers" :key="index">
-        <div class="column is-2">{{observer.firstName}}</div>
-        <div class="column is-2">{{observer.lastName}}</div>
-        <div class="column is-1">
-          <button type="button"
-                  class="button has-text-danger"
-                  @click="removeObserver(index)"
-                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-            &times;
-          </button>
-        </div>
-    </div>
-    <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
-      <div class="column is-2">{{observer.firstName}}</div>
-      <div class="column is-2">{{observer.lastName}}</div>
-      <div class="column is-1"><button type="button" class="button has-text-danger" @click="removeObserver(index)">&times;
-      </button></div>
-    </div>
-    <div class="columns">
-        <div class="column is-2">
-          <b-field
-            :type="observerErrors.observerFirstName ? 'is-danger' : null"
-            :message="observerErrors.observerFirstName ? observerErrors.observerFirstName : null"
-          >
-            <b-input id="observerFirstName" maxlength="50" v-model="observerFirstName"
-                     v-on:keydown.native.enter.prevent="$refs.observerLastName.focus"/>
-          </b-field>
-        </div>
-        <div class="column is-2">
-          <b-field
-            :type="observerErrors.observerLastName ? 'is-danger' : null"
-            :message="observerErrors.observerLastName ? observerErrors.observerLastName : null"
-          >
-            <b-input id="observerLastName" maxlength="50" v-model="observerLastName" ref="observerLastName"
-                     v-on:keydown.native.enter.prevent="addObserver"/>
-          </b-field>
-        </div>
-        <div class="column is-1">
-          <button type="button" class="button is-primary" @click="addObserver">{{trans('labels.observations.add_observer')}}</button>
-        </div>
-    </div>
-    <hr>
+      <hr>
     </div>
 
     <button

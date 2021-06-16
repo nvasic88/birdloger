@@ -22,10 +22,10 @@ class AlterObservationsTable extends Migration
                 'active_nest',
                 'family_with_cubs',
             ])->after('number')->nullable();
-            $table->text('description')->nullable();
-            $table->text('comment')->nullable();
-            $table->string('data_provider', 100)->after('number_of')->nullable();
-            $table->string('data_limit', 100)->nullable();
+            $table->string('data_limit', 100)->after('dataset')->nullable();
+            $table->string('data_provider', 100)->after('dataset')->nullable();
+            $table->text('comment')->after('dataset')->nullable();
+            $table->text('description')->after('dataset')->nullable();
         });
     }
 
