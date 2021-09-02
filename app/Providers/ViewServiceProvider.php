@@ -114,10 +114,6 @@ class ViewServiceProvider extends ServiceProvider
                             ['list', \App\Taxon::class],
                             'admin.taxa.index',
                             trans('navigation.taxa')
-                        )->routeIf(
-                            auth()->user()->hasRole('admin'),
-                            'admin.synonyms.index',
-                            trans('navigation.synonyms')
                         )->routeIfCan(
                             ['list', \App\User::class],
                             'admin.users.index',

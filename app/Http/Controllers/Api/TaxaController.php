@@ -8,6 +8,8 @@ use App\Http\Resources\TaxonCollectionResource;
 use App\Http\Resources\TaxonResource;
 use App\Synonym;
 use App\Taxon;
+use App\Family;
+use App\Order;
 use Illuminate\Http\Request;
 
 class TaxaController
@@ -70,10 +72,6 @@ class TaxaController
      */
     public function destroy(Taxon $taxon)
     {
-        $synonyms = Synonym::where('taxon_id', $taxon->id);
-        $synonyms->each(function ($synonym){
-            $synonym->delete();
-        });
         $taxon->delete();
 
         return response()->json(null, 204);

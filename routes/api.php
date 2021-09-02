@@ -48,14 +48,8 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         ->name('api.taxa.destroy');
 
     // Synonyms
-    Route::get('synonyms', 'SynonymsController@index')
-        ->name('api.synonyms.index');
-
     Route::post('synonyms', 'SynonymsController@store')
         ->name('api.synonyms.create');
-
-    Route::get('synonyms/{synonym}', 'SynonymsController@show')
-        ->name('api.synonyms.show');
 
     Route::put('synonyms/{synonym}', 'SynonymsController@update')
         ->name('api.synonyms.update');

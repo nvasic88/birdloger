@@ -317,6 +317,11 @@ class Taxon extends Model
         return $this->belongsTo(Family::class);
     }
 
+    /**
+     * Taxon belong to one order
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function order(){
         return $this->family->order();
     }
@@ -665,6 +670,9 @@ class Taxon extends Model
 
         static::deleting(function ($model) {
             $model->activity()->delete();
+            $model->synonyms()->delete();
+            $model->order()->delete();
+            $model->family()->delete();
         });
     }
 }

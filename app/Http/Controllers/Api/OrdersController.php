@@ -16,20 +16,18 @@ class OrdersController
 
     public function check(Request $request)
     {
-        $order = Order::where('firstName', $request->firstName)->where('lastName', $request->lastName)->firstOrFail();
+        $order = Order::where('name', $request->name)->firstOrFail();
         return response()->json($order);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'firstName' => 'required',
-            'lastName' => 'required',
+            'name' => 'required',
         ]);
 
         $order = Order::find($id);
-        $order->firstName = $request->get('firstName');
-        $order->lastName = $request->get('lastName');
+        $order->name = $request->get('name');
         $order->save();
     }
 }

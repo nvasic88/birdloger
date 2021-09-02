@@ -240,19 +240,6 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
             Route::view('taxa/import/guide', 'admin.taxon-import.guide')
                 ->name('taxa-import.guide');
 
-            Route::get('synonyms', 'SynonymsController@index')
-                ->middleware('role:admin')
-                ->name('synonyms.index');
-
-            Route::get('synonyms/new', 'SynonymsController@create')
-                ->name('synonyms.create');
-
-            Route::get('synonyms/{synonym}/edit', 'SynonymsController@edit')
-                ->name('synonyms.edit');
-
-            Route::delete('synonyms/{synonym}', 'SynonymsController@destroy')
-                ->name('synonyms.destroy');
-
             Route::get('users', 'UsersController@index')
                 ->middleware('can:list,App\User')
                 ->name('users.index');
