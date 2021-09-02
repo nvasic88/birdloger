@@ -14,7 +14,7 @@ class AddAtlasCodeColumnToObservationsTable extends Migration
     public function up()
     {
         Schema::table('observations', function (Blueprint $table) {
-            $table->tinyInteger('atlas_code')->before('created_at')->nullable();
+            $table->tinyInteger('atlas_code')->after('dataset')->nullable();
         });
     }
 

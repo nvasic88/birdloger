@@ -426,8 +426,6 @@ class FieldObservationImport extends BaseImport
         return [
             'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
-            'found_dead' => $this->getFoundDead($item),
-            'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
             'time' => Arr::get($item, 'time') ?: null,
             # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
@@ -481,7 +479,9 @@ class FieldObservationImport extends BaseImport
             'data_provider' => Arr::get($item, 'data_provider') ?: null,
             'data_limit' => Arr::get($item, 'data_limit') ?: null,
             'description' => Arr::get($item, 'description') ?: null,
-            'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
+            'atlas_code' => $atlasCode === '' ? null : (int)$atlasCode,
+            'found_dead' => $this->getFoundDead($item),
+            'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
         ];
     }
 

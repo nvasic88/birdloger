@@ -4,9 +4,7 @@
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-Birdloger is a tool for collecting data on birds distribution with the help of community. 
-
-It started as an effort to collect data on reptiles, amphibians and butterflies in Serbia, but this clone is used only for birds.
+Birdloger is a tool for collecting data on birds distribution with the help of community.
 
 You my run the application on your own servers but please note that we offer no support.
 
@@ -38,7 +36,7 @@ You can check if requirements are installed on your server by opening `requireme
 Download the master branch
 
 ```bash
-git clone https://github.com/Biologer/Biologer.git
+git clone https://github.com/nvasic88/birdloger.git
 ```
 
 Install the composer dependencies
@@ -92,7 +90,7 @@ Code ships with assets built for production present in `public` directory by def
 
 #### DEM
 
-Birdloger allows users to import large sets of observations. If some of those are missing elevation, Biologer will try to get it by searching DEM with latitude and longitude. Files holding such information are not distributed with Biologer and need to be downloaded separately from [http://srtm.csi.cgiar.org/](http://srtm.csi.cgiar.org/).
+Birdloger allows users to import large sets of observations. If some of those are missing elevation, Birdloger will try to get it by searching DEM with latitude and longitude. Files holding such information are not distributed with Birdloger and need to be downloaded separately from [http://srtm.csi.cgiar.org/](http://srtm.csi.cgiar.org/).
 
 After downloading files for needed areas, place them in a single location without changing the names of the files. Default location for that is `resources/srtm`, but any other path can be used. In case you use a different path, you need to set `SRTM_PATH` in the `.env` file with that path.
 
@@ -103,3 +101,8 @@ To add a new territory, add it to configuration in `config/biologer.php` using e
 ## License
 
 Birdloger is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+### TODO
+- Rework GroupViews
+- Rework Unit/Feature Tests
+- Fix removing Observation and its Observers

@@ -140,8 +140,6 @@ class UpdateFieldObservation extends FormRequest
     protected function getSpecificObservationData()
     {
         $data = [
-            'found_dead' => $this->input('found_dead', false),
-            'found_dead_note' => $this->input('found_dead', false) ? $this->input('found_dead_note') : null,
             'license' => $this->input('data_license') ?: $this->user()->settings()->get('data_license'),
             'taxon_suggestion' => $this->input('taxon_id')
                 ? Taxon::find($this->input('taxon_id'))->name
@@ -194,6 +192,8 @@ class UpdateFieldObservation extends FormRequest
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
             'atlas_code' => $this->input('atlas_code'),
+            'found_dead' => $this->input('found_dead', false),
+            'found_dead_note' => $this->input('found_dead', false) ? $this->input('found_dead_note') : null,
         ];
 
         if ($this->user()->hasAnyRole(['admin', 'curator'])) {
@@ -285,8 +285,6 @@ class UpdateFieldObservation extends FormRequest
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
                 'lastName' => $observer['lastName'],
-                'nickname' => $observer['nickname'],
-                'city' => $observer['city'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;

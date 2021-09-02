@@ -5,14 +5,14 @@ namespace App\Http\Requests;
 use App\Annex;
 use App\ConservationDocument;
 use App\ConservationLegislation;
+use App\Family;
+use App\Order;
 use App\RedList;
 use App\Rules\UniqueTaxonName;
 use App\Stage;
-use App\Synonym;
 use App\Support\Localization;
+use App\Synonym;
 use App\Taxon;
-use App\Order;
-use App\Family;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -42,10 +42,6 @@ class StoreTaxon extends FormRequest
             'parent_id' => ['nullable', 'exists:taxa,id'],
             'rank' => ['required', Rule::in(array_keys(Taxon::RANKS))],
             'author' => ['nullable', 'string'],
-            'fe_id' => ['nullable'],
-            'restricted' => ['boolean'],
-            'allochthonous' => ['boolean'],
-            'invasive' => ['boolean'],
             'stages_ids' => ['nullable', 'array'],
             'stages_ids.*' => ['required', Rule::in(Stage::pluck('id'))],
             'annexes_ids' => ['nullable', 'array'],
@@ -117,7 +113,7 @@ class StoreTaxon extends FormRequest
     {
         return Taxon::create(array_merge(array_map('trim', $this->only(['name', 'rank'])),
             $this->createOrGetFamilyArray(), $this->only([
-                'parent_id', 'author', 'restricted', 'allochthonous', 'invasive', 'uses_atlas_codes',
+                'parent_id', 'author', 'uses_atlas_codes',
                 'spid', 'birdlife_seq', 'birdlife_id', 'ebba_code', 'euring_code',
                 'euring_sci_name', 'eunis_n2000code', 'eunis_sci_name', 'bioras_sci_name',
                 'refer', 'prior', 'gn_status', 'type', 'strictly_protected', 'strictly_note',
@@ -157,7 +153,11 @@ class StoreTaxon extends FormRequest
         $taxon->annexes()->sync($this->input('annexes_ids', []));
     }
 
-    protected function createOrGetFamilyArray(){
+    /**
+     * @return array
+     */
+    protected function createOrGetFamilyArray()
+    {
         $orderTrim = array_map('trim', $this->only('order_name'));
         $orderName['name'] = $orderTrim['order_name'];
         $order = Order::firstOrCreate($orderName);

@@ -6,7 +6,6 @@ use App\Filters\Filterable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\DB;
-
 use Spatie\Activitylog\Models\Activity;
 
 class Taxon extends Model
@@ -63,9 +62,6 @@ class Taxon extends Model
      * @var array
      */
     protected $attributes = [
-        'allochthonous' => false,
-        'invasive' => false,
-        'restricted' => false,
         'refer' => false,
         'prior' => false,
         'strictly_protected' => false,
@@ -102,11 +98,8 @@ class Taxon extends Model
      */
     protected $casts = [
         'parent_id' => 'integer',
-        'allochthonous' => 'boolean',
-        'invasive' => 'boolean',
         'rank_level' => 'integer',
         'elevation' => 'integer',
-        'restricted' => 'boolean',
         'uses_atlas_codes' => 'boolean',
         'refer' => 'boolean',
         'prior' => 'boolean',
@@ -324,8 +317,12 @@ class Taxon extends Model
         return $this->belongsTo(Family::class);
     }
 
+    /**
+     * Taxon belong to one order
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function order(){
-        # return $this->hasOneThrough(Order::class, Family::class);
         return $this->family->order();
     }
 
@@ -673,6 +670,9 @@ class Taxon extends Model
 
         static::deleting(function ($model) {
             $model->activity()->delete();
+            $model->synonyms()->delete();
+            $model->order()->delete();
+            $model->family()->delete();
         });
     }
 }

@@ -45,9 +45,6 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
     Route::get('announcements', 'AnnouncementsController@index')->name('announcements.index');
     Route::get('announcements/{announcement}', 'AnnouncementsController@show')->name('announcements.show');
 
-    // Synonyms page
-    Route::get('synonyms/{synonym}', 'SynonymsController@show')->name('synonyms.show');
-
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::redirect('/preferences', '/preferences/general')->name('preferences.index');
 
@@ -144,6 +141,50 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
                 ->name('unidentifiable-observations.show');
         });
 
+        Route::prefix('poaching')->namespace('Poaching')->name('poaching.')->group(function () {
+            Route::get('/', 'PoachingObservationsController@index')
+                ->middleware('role:poaching,admin')
+                ->name('index');
+
+            Route::get('observations/new', 'PoachingObservationsController@create')
+                ->name('observations.create');
+
+            Route::get('observations', 'PoachingObservationsController@index')
+                ->middleware('role:poaching,admin')
+                ->name('observations.index');
+
+            Route::get('observations/{poachingObservation}/edit', 'PoachingObservationsController@edit')
+                ->middleware('role:poaching,admin')
+                ->name('observations.edit');
+
+            Route::get('observations/{poachingObservation}', 'PoachingObservationsController@show')
+                ->middleware('role:poaching,admin')
+                ->name('observations.show');
+        });
+
+        Route::prefix('electrocution')->namespace('Electrocution')->name('electrocution.')->group(function () {
+            Route::get('/', 'ElectrocutionObservationsController@index')
+                ->middleware('role:electrocution, admin')
+                ->name('index');
+
+            Route::get('observations/new', 'ElectrocutionObservationsController@create')
+                ->middleware('role:electrocution,admin')
+                ->name('observations.create');
+
+            Route::get('observations', 'ElectrocutionObservationsController@index')
+                ->middleware('role:electrocution,admin')
+                ->name('observations.index');
+
+            Route::get('observations/{electrocutionObservation}/edit', 'ElectrocutionObservationsController@edit')
+                ->middleware('role:electrocution,admin')
+                ->name('observations.edit');
+
+            Route::get('observations/{electrocutionObservation}', 'ElectrocutionObservationsController@show')
+                ->middleware('role:electrocution,admin')
+                ->name('observations.show');
+
+        });
+
         Route::prefix('admin')->namespace('Admin')->name('admin.')->group(function () {
             Route::get('field-observations', 'FieldObservationsController@index')
                 ->middleware('role:admin')
@@ -156,6 +197,30 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
             Route::get('field-observations/{fieldObservation}', 'FieldObservationsController@show')
                 ->middleware('role:admin')
                 ->name('field-observations.show');
+
+            Route::get('poaching-observations', 'PoachingObservationsController@index')
+                ->middleware('role:admin')
+                ->name('poaching-observations.index');
+
+            Route::get('poaching-observations/{poachingObservation}/edit', 'PoachingObservationsController@edit')
+                ->middleware('role:admin')
+                ->name('poaching-observations.edit');
+
+            Route::get('poaching-observations/{poachingObservation}', 'PoachingObservationsController@show')
+                ->middleware('role:admin')
+                ->name('poaching-observations.show');
+
+            Route::get('electrocution-observations', 'ElectrocutionObservationsController@index')
+                ->middleware('role:admin')
+                ->name('electrocution-observations.index');
+
+            Route::get('electrocution-observations/{electrocutionObservation}/edit', 'ElectrocutionObservationsController@edit')
+                ->middleware('role:admin')
+                ->name('electrocution-observations.edit');
+
+            Route::get('electrocution-observations/{electrocutionObservation}', 'ElectrocutionObservationsController@show')
+                ->middleware('role:admin')
+                ->name('electrocution-observations.show');
 
             Route::get('taxa', 'TaxaController@index')
                 ->middleware('role:admin,curator')
@@ -174,19 +239,6 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
 
             Route::view('taxa/import/guide', 'admin.taxon-import.guide')
                 ->name('taxa-import.guide');
-
-            Route::get('synonyms', 'SynonymsController@index')
-                ->middleware('role:admin')
-                ->name('synonyms.index');
-
-            Route::get('synonyms/new', 'SynonymsController@create')
-                ->name('synonyms.create');
-
-            Route::get('synonyms/{synonym}/edit', 'SynonymsController@edit')
-                ->name('synonyms.edit');
-
-            Route::delete('synonyms/{synonym}', 'SynonymsController@destroy')
-                ->name('synonyms.destroy');
 
             Route::get('users', 'UsersController@index')
                 ->middleware('can:list,App\User')

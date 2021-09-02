@@ -132,34 +132,6 @@
             :label="trans('labels.field_observations.observer')"
             placeholder=""
           />
-
-          <b-field :label="trans('labels.field_observations.project')" class="column is-half">
-            <b-input v-model="newFilter.project" expanded />
-          </b-field>
-
-          <b-field :label="trans('labels.id')" class="column is-one-third">
-            <b-input v-model="newFilter.id" expanded />
-          </b-field>
-
-          <b-field :label="trans('labels.field_observations.status')" class="column is-one-third" v-if="showStatus">
-            <b-select v-model="newFilter.status" expanded>
-              <option :value="null"></option>
-              <option
-                v-for="(status, index) in ['approved', 'unidentifiable', 'pending']"
-                :value="status"
-                :key="index"
-                v-text="trans(`labels.field_observations.statuses.${status}`)">
-              </option>
-            </b-select>
-          </b-field>
-
-          <b-field :label="trans('labels.field_observations.photos')" class="column is-one-third">
-            <b-select v-model="newFilter.photos" expanded>
-              <option :value="null"></option>
-              <option value="yes">{{ trans('Yes') }}</option>
-              <option value="no">{{ trans('No') }}</option>
-            </b-select>
-          </b-field>
         </div>
 
         <button type="submit" class="button is-primary is-outlined">{{ trans('buttons.apply') }}</button>

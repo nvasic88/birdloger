@@ -43,10 +43,6 @@ class UpdateTaxon extends FormRequest
             'parent_id' => ['nullable', 'exists:taxa,id'],
             'rank' => ['required', Rule::in(array_keys(Taxon::RANKS))],
             'author' => ['nullable', 'string'],
-            'fe_id' => ['nullable'],
-            'restricted' => ['boolean'],
-            'allochthonous' => ['boolean'],
-            'invasive' => ['boolean'],
             'stages_ids' => ['nullable', 'array'],
             'stages_ids.*' => ['required', Rule::in(Stage::pluck('id')->all())],
             'annexes_ids' => ['nullable', 'array'],
@@ -126,7 +122,7 @@ class UpdateTaxon extends FormRequest
             Order::whereId($taxon->order_id)->update(['name' => $this->input('order_name')]);
 
             $taxon->update(array_merge(array_map('trim', $this->only(['name', 'rank'])), $this->only([
-                'parent_id', 'author', 'restricted', 'allochthonous', 'invasive', 'uses_atlas_codes',
+                'parent_id', 'author', 'uses_atlas_codes',
                 'spid', 'birdlife_seq', 'birdlife_id', 'ebba_code', 'euring_code',
                 'euring_sci_name', 'eunis_n2000code', 'eunis_sci_name', 'bioras_sci_name',
                 'refer', 'prior', 'gn_status', 'type', 'family_id', 'strictly_protected', 'strictly_note',

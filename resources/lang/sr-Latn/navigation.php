@@ -77,4 +77,11 @@ return [
     'biodiversity_data' => 'Podaci o biodiverzitetu',
     'development_supporters' => 'Razvoj podržali',
     'stats' => 'Statistika',
+    'electrocution_observations' => 'Elektrokucioni nalazi',
+    'poaching_observations' => 'Nalazi krivolova',
+    'my_electrocution_observations' => 'Moji elektrokucioni nalazi',
+    'my_poaching_observations' => 'Moji nalazi krivolova',
+    'all_electrocution_observations' => 'Svi elektrokucioni nalazi',
+    'all_poaching_observations' => 'Svi nalazi krivolova',
+
 ];

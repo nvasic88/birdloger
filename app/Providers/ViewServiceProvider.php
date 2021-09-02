@@ -55,18 +55,18 @@ class ViewServiceProvider extends ServiceProvider
                         ->setActiveFromRequest()
                 )->add(
                     Menu::new()
-                        ->prepend('<p class="menu-label">'.trans('navigation.my').'</p>')
+                        ->prepend('<p class="menu-label">' . trans('navigation.my') . '</p>')
                         ->addClass('menu-list')
                         ->route('contributor.field-observations.index', trans('navigation.field_observations'))
-                        /*->routeIf(
-                            auth()->user()->hasAnyRole(['admin', 'electrocution']),
-                            'contributor.electrocution-observations.index',
-                            trans('navigation.electrocution_observations')
+                        ->routeIf(
+                            auth()->user()->hasAnyRole(['poaching']),
+                            'poaching.observations.index',
+                            trans('navigation.poaching_observations')
                         )->routeIf(
-                            auth()->user()->hasAnyRole(['admin', 'crime']),
-                            'contributor.crime-observations.index',
-                            trans('navigation.crime_observations')
-                        )*/
+                            auth()->user()->hasAnyRole(['electrocution']),
+                            'electrocution.observations.index',
+                            trans('navigation.electrocution_observations')
+                        )
                         ->setActiveClass('is-active')
                         ->setActiveClassOnLink()
                         ->setActiveFromRequest()
@@ -91,14 +91,22 @@ class ViewServiceProvider extends ServiceProvider
                         ->setActiveClassOnLink()
                         ->setActiveFromRequest()
                 )->addIf(
-                    optional(auth()->user())->hasAnyRole(['admin', 'curator']),
+                    optional(auth()->user())->hasAnyRole(['admin', 'curator', 'poaching', 'electrocution']),
                     Menu::new()
-                        ->prepend('<p class="menu-label">'.trans('navigation.admin').'</p>')
+                        ->prepend('<p class="menu-label">' . trans('navigation.admin') . '</p>')
                         ->addClass('menu-list')
                         ->routeIf(
                             auth()->user()->hasRole('admin'),
                             'admin.field-observations.index',
                             trans('navigation.all_field_observations')
+                        )->routeIf(
+                            auth()->user()->hasAnyRole(['admin']),
+                            'admin.electrocution-observations.index',
+                            trans('navigation.electrocution_observations')
+                        )->routeIf(
+                            auth()->user()->hasAnyRole(['admin']),
+                            'admin.poaching-observations.index',
+                            trans('navigation.poaching_observations')
                         )->route(
                             'admin.literature-observations.index',
                             trans('navigation.literature_observations')
@@ -106,10 +114,6 @@ class ViewServiceProvider extends ServiceProvider
                             ['list', \App\Taxon::class],
                             'admin.taxa.index',
                             trans('navigation.taxa')
-                        )->routeIf(
-                            auth()->user()->hasRole('admin'),
-                            'admin.synonyms.index',
-                            trans('navigation.synonyms')
                         )->routeIfCan(
                             ['list', \App\User::class],
                             'admin.users.index',

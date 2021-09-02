@@ -225,7 +225,7 @@ class TaxonImport extends BaseImport
                 'required',
                 Rule::in(['RS', 'WP']),
             ],
-            'spid' => ['required', 'string'],
+            'spid' => ['required', 'string', Rule::unique('taxa', 'spid')],
             'name' => ['required', 'string'],
             'order' => ['required', 'string'],
             'family' => ['required', 'string'],
@@ -244,8 +244,8 @@ class TaxonImport extends BaseImport
             'iucn_cat' => ['nullable', 'string', Rule::in(['EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD', 'NE'])],
             'birdlife_seq' => ['required', 'integer', 'min:1'],
             'birdlife_id' => ['required', 'integer', 'min:1'],
-            'ebba_code' => ['nullable', 'string'],
-            'euring_code' => ['nullable', 'string'],
+            'ebba_code' => ['nullable'],
+            'euring_code' => ['nullable'],
             'euring_sci_name' => ['nullable', 'string'],
             'eunis_n2000code' => ['nullable', 'string'],
             'eunis_sci_name' => ['nullable', 'string'],
@@ -324,6 +324,7 @@ class TaxonImport extends BaseImport
     protected function getTaxonData(array $item)
     {
         $order_family = $this->createOrderFamily($item);
+        $author = $this->getAuthorOnly($item);
 
         return [
             'name' => Arr::get($item, 'name'),
@@ -348,7 +349,7 @@ class TaxonImport extends BaseImport
             'gn_status' => Arr::get($item, 'gn_status') ?: null,
             'bioras_sci_name' => Arr::get($item, 'bioras_sci_name') ?: null,
             'full_sci_name' => Arr::get($item, 'full_sci_name') ?: null,
-            'author' => Arr::get($item, 'author') ?: null,
+            'author' => $author,
             'rank' => 'species',
         ];
     }
@@ -445,5 +446,14 @@ class TaxonImport extends BaseImport
         $value = Arr::get($item, 'prior', false);
 
         return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    private function getAuthorOnly(array $item)
+    {
+        // trimming year after comma if exists
+        $author = Arr::get($item, 'author');
+        if (!$author) return null;
+        $author = explode(', ', $author);
+        return $author[0];
     }
 }

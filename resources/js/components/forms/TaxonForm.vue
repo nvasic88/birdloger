@@ -369,11 +369,10 @@
             </div>
             <div class="column">
               <button
-                type="button"
-                class="button has-text-danger"
+                class="delete"
                 @click="removeSynonym(index)"
+                v-tooltip='"Remove"'
               >
-                &times;
               </button>
             </div>
           </div>
@@ -387,11 +386,10 @@
         </div>
         <div class="column">
           <button
-            type="button"
-            class="button has-text-danger"
+            class="delete"
             @click="removeSynonymName(index)"
+            v-tooltip='"Remove"'
           >
-            &times;
           </button>
         </div>
       </div>

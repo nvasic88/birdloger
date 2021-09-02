@@ -5,5 +5,5 @@ return [
     'curator' => 'Curator',
     'contributor' => 'Contributor',
     'electrocution' => 'Electrocution',
-    'crime' => 'Poaching',
+    'poaching' => 'Poaching',
 ];

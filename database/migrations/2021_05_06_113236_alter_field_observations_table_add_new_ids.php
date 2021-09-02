@@ -16,7 +16,6 @@ class AlterFieldObservationsTableAddNewIds extends Migration
         Schema::table('field_observations', function (Blueprint $table) {
             $table->string('fid', 101)->nullable()->after('taxon_suggestion');
             $table->integer('rid')->nullable()->after('taxon_suggestion');
-            $table->integer('rbr')->nullable()->after('taxon_suggestion');
         });
     }
 
@@ -29,7 +28,6 @@ class AlterFieldObservationsTableAddNewIds extends Migration
     {
 
         Schema::table('field_observations', function (Blueprint $table) {
-            $table->dropColumn('rbr');
             $table->dropColumn('rid');
             $table->dropColumn('fid');
         });
