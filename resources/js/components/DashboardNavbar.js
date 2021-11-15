@@ -28,8 +28,5 @@ export default {
         this.showSidebar = !this.showSidebar;
     },
 
-    updateNotificationStatus(status) {
-      this.hasUnreadNotifications = status;
-    }
   }
 }

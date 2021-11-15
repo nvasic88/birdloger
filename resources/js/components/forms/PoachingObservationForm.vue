@@ -603,9 +603,9 @@
       >
         <b-select v-model="form.cites" expanded>
           <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
-          <option value="I">{{ trans("labels.cites.appendix_I") }}</option>
-          <option value="II">{{ trans("labels.cites.appendix_II") }}</option>
-          <option value="III">{{ trans("labels.cites.appendix_III") }}</option>
+          <option value="1">{{ trans("labels.cites.appendix_I") }}</option>
+          <option value="2">{{ trans("labels.cites.appendix_II") }}</option>
+          <option value="3">{{ trans("labels.cites.appendix_III") }}</option>
         </b-select>
       </b-field>
 

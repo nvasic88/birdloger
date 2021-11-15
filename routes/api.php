@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('register', 'RegisterController@store');
+
 Route::get('groups/{group}/taxa', 'GroupTaxaController@index')
     ->name('api.groups.taxa.index');
 
@@ -31,12 +33,14 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
 
     // Taxa
     Route::get('taxa', 'TaxaController@index')
+        ->withoutMiddleware('verified')
         ->name('api.taxa.index');
 
     Route::post('taxa', 'TaxaController@store')
         ->name('api.taxa.store');
 
     Route::get('taxa/{taxon}', 'TaxaController@show')
+        ->withoutMiddleware('verified')
         ->name('api.taxa.show');
 
     Route::put('taxa/{taxon}', 'TaxaController@update')
@@ -85,6 +89,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         ->name('api.families.check')->where('name', '[A-Za-z]+');
 
     Route::get('observation-types', 'ObservationTypesController@index')
+        ->withoutMiddleware('verified')
         ->name('api.observation-types.index');
 
     // Field observations
@@ -203,6 +208,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
 
     // Taxa
     Route::get('view-groups', 'ViewGroupsController@index')
+        ->withoutMiddleware('verified')
         ->name('api.view-groups.index');
 
     Route::post('view-groups', 'ViewGroupsController@store')
@@ -210,6 +216,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         ->name('api.view-groups.store');
 
     Route::get('view-groups/{group}', 'ViewGroupsController@show')
+        ->withoutMiddleware('verified')
         ->name('api.view-groups.show');
 
     Route::put('view-groups/{group}', 'ViewGroupsController@update')
@@ -240,9 +247,11 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
 
     // Announcements
     Route::get('announcements', 'AnnouncementsController@index')
+        ->withoutMiddleware('verified')
         ->name('api.announcements.index');
 
     Route::get('announcements/{announcement}', 'AnnouncementsController@show')
+        ->withoutMiddleware('verified')
         ->name('api.announcements.show');
 
     Route::post('announcements', 'AnnouncementsController@store')
@@ -258,6 +267,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         ->name('api.announcements.destroy');
 
     Route::post('read-announcements', 'ReadAnnouncementsController@store')
+        ->withoutMiddleware('verified')
         ->name('api.read-announcements.store');
 
     // Publication
@@ -342,10 +352,16 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
             ->name('api.my.field-observation-exports.store');
 
         Route::get('profile', 'ProfileController@show')
+            ->withoutMiddleware('verified')
             ->name('api.my.profile.show');
 
         Route::post('read-notifications/batch', 'ReadNotificationsBatchController@store')
+            ->withoutMiddleware('verified')
             ->name('api.my.read-notifications-batch.store');
+
+        Route::get('unread-notifications', 'UnreadNotificationsController@index')
+            ->withoutMiddleware('verified')
+            ->name('api.my.unread-notifications.index');
     });
 
     Route::prefix('curator')->namespace('Curator')->group(function () {
