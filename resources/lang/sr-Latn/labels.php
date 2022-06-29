@@ -431,6 +431,19 @@ return [
         'include_lower_taxa' => 'Uključujući niže vrste',
     ],
 
+    'iucn' => [
+        'EX' => '(EX) Iščezla',
+        'EW' => '(EW) Iščezla u divljini',
+        'CR' => '(CR) Krajnje ugrožena',
+        'EN' => '(EN) Ugrožena',
+        'VU' => '(VU) Osetljiva',
+        'NT' => '(NT) Potencijalno ugrožena',
+        'LC' => '(LC) Mala zabrinutost',
+        'DD' => '(DD) Nedostatak podataka',
+        'NE' => '(NE) Neocenjena',
+        'NR' => '(NR) Neprepoznata',
+    ],
+
     'preferences' => [
         'account' => [
             'delete_account' => 'Obriši nalog',

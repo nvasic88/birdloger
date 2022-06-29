@@ -288,15 +288,16 @@
         >
           <b-select v-model="form.iucn_cat" expanded>
             <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
-            <option value="EX" >Extinct</option>
-            <option value="EW">Extinct in the wild</option>
-            <option value="CR">Critically endangered</option>
-            <option value="EN">Endangered</option>
-            <option value="VU">Vulnerable</option>
-            <option value="NT">Near threatened</option>
-            <option value="LC">Least concern</option>
-            <option value="DD">Data deficient</option>
-            <option value="NE">Not evaluated</option>
+            <option value="EX">{{ trans('labels.iucn.EX') }}</option>
+            <option value="EW">{{ trans('labels.iucn.EW') }}</option>
+            <option value="CR">{{ trans('labels.iucn.CR') }}</option>
+            <option value="EN">{{ trans('labels.iucn.EN') }}</option>
+            <option value="VU">{{ trans('labels.iucn.VU') }}</option>
+            <option value="NT">{{ trans('labels.iucn.NT') }}</option>
+            <option value="LC">{{ trans('labels.iucn.LC') }}</option>
+            <option value="DD">{{ trans('labels.iucn.DD') }}</option>
+            <option value="NE">{{ trans('labels.iucn.NE') }}</option>
+            <option value="NR">{{ trans('labels.iucn.NR') }}</option>
           </b-select>
         </b-field>
       </div>

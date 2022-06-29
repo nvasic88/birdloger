@@ -428,6 +428,19 @@ return [
         'include_lower_taxa' => 'Include lower species',
     ],
 
+    'iucn' => [
+        'EX' => 'Extinct',
+        'EW' => 'Extinct in the wild',
+        'CR' => 'Critically endangered',
+        'EN' => 'Endangered',
+        'VU' => 'Vulnerable',
+        'NT' => 'Near threatened',
+        'LC' => 'Least concern',
+        'DD' => 'Data deficient',
+        'NE' => 'Not evaluated',
+        'NR' => 'Not recognised',
+    ],
+
     'preferences' => [
         'general' => [
             'locale' => 'Preferred locale',

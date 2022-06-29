@@ -241,7 +241,7 @@ class TaxonImport extends BaseImport
             'strictly_note' => ['nullable', 'string'],
             'protected' => ['nullable', 'string', Rule::in($this->yesNo())],
             'protected_note' => ['nullable', 'string'],
-            'iucn_cat' => ['nullable', 'string', Rule::in(['EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD', 'NE'])],
+            'iucn_cat' => ['nullable', 'string', Rule::in(['EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD', 'NE', 'NR'])],
             'birdlife_seq' => ['required', 'integer', 'min:1'],
             'birdlife_id' => ['required', 'integer', 'min:1'],
             'ebba_code' => ['nullable'],
