@@ -3,8 +3,7 @@
 namespace App\Exports;
 
 use App\Export;
-use Box\Spout\Common\Type;
-use Box\Spout\Writer\WriterFactory;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\WriterInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -106,12 +105,13 @@ abstract class BaseExport
     /**
      * Get XLSX writer instance.
      *
-     * @param  string  $path
+     * @param string $path
      * @return \Box\Spout\Writer\WriterInterface
+     * @throws \Box\Spout\Common\Exception\IOException
      */
     private function makeWriter($path)
     {
-        return WriterFactory::create(Type::XLSX)->openToFile($path);
+        return WriterEntityFactory::createXLSXWriter()->openToFile($path);
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class BaseExport
      * Get header labels for given columns in the order of columns.
      *
      * @param  array  $columns
-     * @return array
+     * @return \Box\Spout\Common\Entity\Row
      */
     private function getHeaderForColumns(array $columns)
     {
@@ -174,9 +174,9 @@ abstract class BaseExport
             return [$column['value'] => $column['label']];
         });
 
-        return array_map(function ($column) use ($columnLabels) {
+        return WriterEntityFactory::createRowFromArray(array_map(function ($column) use ($columnLabels) {
             return $columnLabels->get($column);
-        }, $columns);
+        }, $columns));
     }
 
     /**
@@ -190,10 +190,11 @@ abstract class BaseExport
     {
         $this->query($export)->chunk(300, function ($items) use ($export, $writer) {
             $items->each(function ($item) use ($export, $writer) {
-                $writer->addRow($this->takeColumns(
+                $row = WriterEntityFactory::createRowFromArray($this->takeColumns(
                     $this->transformItem($item),
                     $export->columns
                 ));
+                $writer->addRow($row);
             });
         });
     }

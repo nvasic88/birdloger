@@ -20,7 +20,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "astrotomic/laravel-translatable": "^11.9.1",
-        "box/spout": "^2.7.3",
+        "box/spout": "^v3.3.0",
         "doctrine/dbal": "^2.13.1",
         "fideloper/proxy": "^4.4.1",
         "fruitcake/laravel-cors": "^1.0.6",

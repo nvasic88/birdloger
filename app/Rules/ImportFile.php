@@ -3,7 +3,7 @@
 namespace App\Rules;
 
 use Box\Spout\Common\Type;
-use Box\Spout\Reader\ReaderFactory;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Illuminate\Contracts\Validation\Rule;
 
 class ImportFile implements Rule
@@ -46,7 +46,7 @@ class ImportFile implements Rule
      */
     private function makeReader($value)
     {
-        $reader = ReaderFactory::create(Type::XLSX); // for XLSX files
+        $reader = ReaderEntityFactory::createXLSXReader(); // for XLSX files
 
         $reader->open($value->getPathname());
 
