@@ -4,8 +4,7 @@ namespace App\Importing;
 
 use App\Import;
 use App\Jobs\ProcessImport;
-use Box\Spout\Common\Type;
-use Box\Spout\Reader\ReaderFactory;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\ReaderInterface;
 use Box\Spout\Reader\SheetInterface;
 use Illuminate\Support\Facades\DB;
@@ -207,7 +206,7 @@ abstract class BaseImport
      */
     private function makeImportReader()
     {
-        $reader = ReaderFactory::create(Type::XLSX);
+        $reader = ReaderEntityFactory::createXLSXReader();
 
         $reader->open($this->import->absolutePath());
 
@@ -261,7 +260,7 @@ abstract class BaseImport
                 continue;
             }
 
-            $callback($mapper->map($row));
+            $callback($mapper->map($row->toArray()));
         }
     }
 
