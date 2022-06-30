@@ -79,9 +79,11 @@ return [
     'stats' => 'Statistika',
     'electrocution_observations' => 'Elektrokucioni nalazi',
     'poaching_observations' => 'Nalazi krivolova',
-    'my_electrocution_observations' => 'Moji elektrokucioni nalazi',
+    'my_electrocution_observations' => 'Moji nalazi elektrokucije',
     'my_poaching_observations' => 'Moji nalazi krivolova',
-    'all_electrocution_observations' => 'Svi elektrokucioni nalazi',
+    'all_electrocution_observations' => 'Svi nalazi elektrokucije',
     'all_poaching_observations' => 'Svi nalazi krivolova',
+    'new_electrocution_observation' => 'Novi unos elektrokucije',
+    'new_poaching_observation' => 'Novi unos krivolova',
 
 ];
