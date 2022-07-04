@@ -26,7 +26,7 @@ class Annex extends Model
     }
 
     /**
-     * Serialize field observation to a flat array.
+     * Serialize annex to a flat array.
      * Mostly used for the frontend and diffing.
      *
      * @return array
