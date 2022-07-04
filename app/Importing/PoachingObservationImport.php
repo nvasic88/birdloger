@@ -1,0 +1,832 @@
+<?php
+
+namespace App\Importing;
+
+use App\AtlasCode;
+use App\DEM\Reader as DEMReader;
+use App\FieldObservation;
+use App\License;
+use App\NumberOf;
+use App\Observation;
+use App\Observer;
+use App\OffenceCase;
+use App\Rules\Day;
+use App\Rules\Decimal;
+use App\Rules\Month;
+use App\Sex;
+use App\Stage;
+use App\Support\Dataset;
+use App\Taxon;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
+class PoachingObservationImport extends BaseImport
+{
+    /**
+     * @var \App\DEM\Reader
+     */
+    protected $demReader;
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection|\App\Stage[]|null
+     */
+    protected $stages;
+
+    /**
+     * Create new importer instance.
+     *
+     * @param  \App\Import  $import
+     * @param  \App\DEM\Reader  $demReader
+     * @return void
+     */
+    public function __construct($import, DEMReader $demReader)
+    {
+        parent::__construct($import);
+
+        $this->setDEMReader($demReader);
+    }
+
+    /**
+     * Set DEM reader instance to get missing elevation.
+     *
+     * @param  \App\DEM\Reader  $demReader
+     * @return self
+     */
+    public function setDEMReader(DEMReader $demReader)
+    {
+        $this->demReader = $demReader;
+
+        return $this;
+    }
+
+    /**
+     * Definition of all calumns with their labels.
+     *
+     * @param  \App\User|null  $user
+     * @return \Illuminate\Support\Collection
+     */
+    public static function columns($user = null)
+    {
+        $offence_cases = collect(OffenceCase::labels());
+        return collect([
+            [
+                'label' => trans('labels.poaching_observations.data_id'),
+                'value' => 'data_id',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.folder_id'),
+                'value' => 'folder_id',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.file'),
+                'value' => 'file',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.in_report'),
+                'value' => 'in_report',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.place'),
+                'value' => 'place',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.latitude'),
+                'value' => 'latitude',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.longitude'),
+                'value' => 'longitude',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.accuracy'),
+                'value' => 'accuracy',
+                'required' => false,
+            ],
+
+            [
+                'label' => trans('labels.field_observations.day'),
+                'value' => 'day',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.month'),
+                'value' => 'month',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.year'),
+                'value' => 'year',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.date'),
+                'value' => 'date',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.input_date'),
+                'value' => 'input_date',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.taxon'),
+                'value' => 'taxon',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.indigenous'),
+                'value' => 'indigenous',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.total'),
+                'value' => 'total',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.dead_from_total'),
+                'value' => 'dead_from_total',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.alive_from_total'),
+                'value' => 'alive_from_total',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.exact_number'),
+                'value' => 'exact_number',
+                'required' => false,
+            ],
+            # TODO: OffenceCases...
+        ])->concat($offence_cases->map(function ($name) {
+            return [
+                'label' => "{$name}",
+                'value' => "{$name}",
+                'required' => false,
+            ];
+        }))->concat([
+            [
+                'label' => trans('labels.poaching_observations.offence_details'),
+                'value' => 'offence_details',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.offences'),
+                'value' => 'offences',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.case_reported'),
+                'value' => 'case_reported',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.case_reported_by'),
+                'value' => 'case_reported_by',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.verdict'),
+                'value' => 'verdict',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.verdict_date'),
+                'value' => 'verdict_date',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.proceeding'),
+                'value' => 'proceeding',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.sanction_rsd'),
+                'value' => 'sanction_rsd',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.sanction_eur'),
+                'value' => 'sanction_eur',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.community_sentence'),
+                'value' => 'community_sentence',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.opportunity'),
+                'value' => 'opportunity',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.annotation'),
+                'value' => 'annotation',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.suspect_name'),
+                'value' => 'suspect_name',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.suspect_place'),
+                'value' => 'suspect_place',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.suspect_profile'),
+                'value' => 'suspect_profile',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.suspects_number'),
+                'value' => 'suspects_number',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.annotation'),
+                'value' => 'annotation1',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.sources'),
+                'value' => 'sources',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.facebook'),
+                'value' => 'facebook',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.youtube'),
+                'value' => 'youtube',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.media_social_media'),
+                'value' => 'social_media',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.ads'),
+                'value' => 'ads',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.institutions'),
+                'value' => 'institutions',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.associates'),
+                'value' => 'associates',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.cites'),
+                'value' => 'cites',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.origin_of_individuals'),
+                'value' => 'origin_of_individuals',
+                'required' => false,
+            ],
+
+        ])->pipe(function ($columns) use ($user) {
+            if (! $user || optional($user)->hasAnyRole(['admin', 'curator'])) {
+                return $columns;
+            }
+
+            return $columns->filter(function ($column) {
+                return ! in_array($column['value'], ['identifier', 'observers']);
+            })->values();
+
+        });
+    }
+
+    /**
+     * Get validation rules specific for import type.
+     *
+     * @return array
+     */
+    public static function specificValidationRules()
+    {
+        return [
+            'options.approve_curated' => ['nullable', 'boolean'],
+        ];
+    }
+
+    public function generateErrorsRoute()
+    {
+        return route('api.field-observation-imports.errors', $this->model());
+    }
+
+    /**
+     * Make validator instance.
+     *
+     * @param array $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function makeValidator(array $data)
+    {
+        return Validator::make($data, [
+            'taxon' => [
+                'nullable',
+                'string'
+            ],
+            'spid' => [
+                'required',
+                Rule::exists('taxa', 'spid'),
+            ],
+            'year' => ['bail', 'date_format:Y', 'required', 'before_or_equal:now'],
+            'month' => [
+                'bail',
+                'nullable',
+                'numeric',
+                new Month(Arr::get($data, 'year')),
+            ],
+            'day' => [
+                'bail',
+                'nullable',
+                'numeric',
+                new Day(Arr::get($data, 'year'), Arr::get($data, 'month')),
+            ],
+            'latitude' => ['required', new Decimal(['min' => -90, 'max' => 90])],
+            'longitude' => ['required', new Decimal(['min' => -180, 'max' => 180])],
+            'elevation' => ['nullable', 'integer', 'max:10000'],
+            'accuracy' => ['nullable', 'integer', 'max:50000'],
+            'observers' => ['nullable', 'string'],
+            'identifier' => ['nullable', 'string'],
+            'sex' => ['nullable', Rule::in(Sex::options())],
+            'number' => ['nullable', 'integer', 'min:1'],
+            'number_of' => ['nullable', 'string',
+                Rule::in(NumberOf::options())],
+            'found_dead' => ['nullable', 'string', Rule::in($this->yesNo())],
+            'found_dead_note' => ['nullable', 'string', 'max:1000'],
+            'time' => ['nullable', 'date_format:H:i'],
+            'project' => ['nullable', 'string', 'max:191'],
+            'habitat' => ['nullable', 'string', 'max:191'],
+            'found_on' => ['nullable', 'string', 'max:191'],
+            'note' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'original_identification' => ['nullable', 'string'],
+            'dataset' => ['nullable', 'string'],
+            'rid' => ['nullable', 'integer', 'min:1'],
+            'fid' => ['nullable', 'string'],
+            'data_provider' => ['nullable', 'string'],
+            'data_limit' => ['nullable', 'string'],
+            'comment' => ['nullable', 'string'],
+            'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
+        ], [
+            'year.date_format' => trans('validation.year'),
+            'sex.in' => __('validation.in_extended', [
+                'attribute' => __('labels.literature_observations.sex'),
+                'options' => Sex::labels()->implode('; '),
+            ]),
+            'stage.in' => __('validation.in_extended', [
+                'attribute' => __('labels.literature_observations.stage'),
+                'options' => $this->stagesTranslatedNames()->implode('; '),
+            ]),
+        ], [
+            'rid' => trans('labels.observations.rid'),
+            'fid' => trans('labels.observations.fid'),
+            'latitude' => trans('labels.field_observations.latitude'),
+            'longitude' => trans('labels.field_observations.longitude'),
+            'day' => trans('labels.field_observations.day'),
+            'month' => trans('labels.field_observations.month'),
+            'year' => trans('labels.field_observations.year'),
+            'time' => trans('labels.field_observations.time'),
+            'taxon' => trans('labels.field_observations.taxon'),
+            'spid' => trans('labels.taxa.spid'),
+            'atlas_code' => trans('labels.observations.atlas_code'),
+            'number' => trans('labels.field_observations.number'),
+            'number_of' => trans('labels.field_observations.number_of'),
+            'data_provider' => trans('labels.observations.data_provider'),
+            'data_limit' => trans('labels.observations.data_limit'),
+            'comment' => trans('labels.field_observations.comment'),
+            'identifier' => trans('labels.field_observations.identifier'),
+            'observers' => trans('labels.observations.observers'),
+            'location' => trans('labels.field_observations.location'),
+            'accuracy' => trans('labels.field_observations.accuracy'),
+            'elevation' => trans('labels.field_observations.elevation'),
+            'sex' => trans('labels.field_observations.sex'),
+            'stage' => trans('labels.field_observations.stage'),
+            'license' => trans('labels.field_observations.data_license'),
+            'note' => trans('labels.field_observations.note'),
+            'project' => trans('labels.field_observations.project'),
+            'habitat' => trans('labels.field_observations.habitat'),
+            'found_on' => trans('labels.field_observations.found_on'),
+            'found_dead' => trans('labels.field_observations.found_dead'),
+            'found_dead_note' => trans('labels.field_observations.found_dead_note'),
+            # 'status' => trans('labels.field_observations.status'),
+            # 'types' => trans('labels.field_observations.types'),
+            'original_identification' => trans('labels.field_observations.original_identification'),
+            'dataset' => trans('labels.field_observations.dataset'),
+            'description' => trans('labels.field_observations.description')
+        ]);
+    }
+
+    /**
+     * "Yes" and "No" options translated in language the import is using.
+     *
+     * @return array
+     */
+    protected function yesNo()
+    {
+        $lang = $this->model()->lang;
+
+        return [__('Yes', [], $lang), __('No', [], $lang)];
+    }
+
+    /**
+     * Store data from single XLSX row.
+     *
+     * @param  array  $item
+     * @return void
+     */
+    protected function storeSingleItem(array $item)
+    {
+        $fieldObservation = FieldObservation::create(
+            $this->getSpecificObservationData($item)
+        );
+
+        $observation = $fieldObservation->observation()->save(
+            new Observation($this->getGeneralObservationData($item))
+        );
+
+        $fieldObservation->observation->observers()->sync($this->getObservers($item), []);
+
+        activity()->performedOn($fieldObservation)
+            ->causedBy($this->model()->user)
+            ->log('created');
+
+        if ($observation->isApproved()) {
+            activity()->performedOn($fieldObservation)
+                ->causedBy($this->model()->user)
+                ->log('approved');
+        }
+    }
+
+    /**
+     * Get observation data specific to field observation from the request.
+     *
+     * @param  array  $item
+     * @return array
+     */
+    protected function getSpecificObservationData(array $item)
+    {
+        return [
+            'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
+            'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
+            'time' => Arr::get($item, 'time') ?: null,
+            # 'observed_by_id' => $this->getObserverId($item),
+            'identified_by_id' => $this->getIdentifierId($item),
+            'license' => $this->getLicense($item),
+            'rid' => Arr::get($item, 'rid') ?: null,
+            'fid' => Arr::get($item, 'fid') ?: null,
+        ];
+    }
+
+    /**
+     * Get general observation data from the request.
+     *
+     * @param  array  $item
+     * @return array
+     */
+    protected function getGeneralObservationData(array $item)
+    {
+        $latitude = $this->getLatitude($item);
+        $longitude = $this->getLongitude($item);
+        $taxon = $this->getTaxonBySPID($item);
+        $atlasCode = Arr::get($item, 'atlas_code');
+
+        return [
+            'taxon_id' => $taxon ? $taxon->id : null,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'day' => Arr::get($item, 'day') ?: null,
+            'month' => Arr::get($item, 'month') ?: null,
+            'year' => Arr::get($item, 'year'),
+            'location' => Arr::get($item, 'location') ?: null,
+            'mgrs10k' => mgrs10k($latitude, $longitude),
+            'accuracy' => Arr::get($item, 'accuracy') ?: null,
+            'elevation' => $this->getElevation($item),
+            'created_by_id' => $this->model()->for_user_id ?: $this->model()->user_id,
+            # 'observer' => $this->getObserver($item),
+            'identifier' => $this->getIdentifier($item),
+            'sex' => Sex::getValueFromLabel(Arr::get($item, 'sex', '')),
+            'number' => Arr::get($item, 'number') ?: null,
+            'note' => Arr::get($item, 'note') ?: null,
+            'project' => Arr::get($item, 'project') ?: null,
+            'habitat' => Arr::get($item, 'habitat') ?: null,
+            'found_on' => Arr::get($item, 'found_on') ?: null,
+            'stage_id' => $this->getStageId($item),
+            # 'original_identification' => Arr::get($item, 'original_identification', Arr::get($item, 'taxon')),
+            'original_identification' => Arr::get($item, 'taxon'),
+            'dataset' => Arr::get($item, 'dataset') ?? Dataset::default(),
+            'approved_at' => $this->getApprovedAt($taxon),
+            #'number_of' => Arr::get($item, 'number_of') ?: null,
+            'number_of' => NumberOf::getValueFromLabel(Arr::get($item, 'number_of', '')),
+            'comment' => Arr::get($item, 'comment') ?: null,
+            'data_provider' => Arr::get($item, 'data_provider') ?: null,
+            'data_limit' => Arr::get($item, 'data_limit') ?: null,
+            'description' => Arr::get($item, 'description') ?: null,
+            'atlas_code' => $atlasCode === '' ? null : (int)$atlasCode,
+            'found_dead' => $this->getFoundDead($item),
+            'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
+        ];
+    }
+
+    /**
+     * Get ID of taxon using it's name.
+     *
+     * @param  array  $data
+     * @return Taxon|null
+     */
+    protected function getTaxon(array $data)
+    {
+        return Taxon::findByName(Arr::get($data, 'taxon'));
+    }
+
+    /**
+     * Get ID of taxon using it's name.
+     *
+     * @param  array  $data
+     * @return Taxon|null
+     */
+    protected function getTaxonBySPID(array $data)
+    {
+        return Taxon::findBySPID(Arr::get($data, 'spid'));
+    }
+
+    /**
+     * Get latitude.
+     *
+     * @param  array  $data
+     * @return float
+     */
+    protected function getLatitude(array $data)
+    {
+        return (float) str_replace(',', '.', Arr::get($data, 'latitude'));
+    }
+
+    /**
+     * Get longitude.
+     *
+     * @param  array  $data
+     * @return float
+     */
+    protected function getLongitude(array $data)
+    {
+        return (float) str_replace(',', '.', Arr::get($data, 'longitude'));
+    }
+
+    /**
+     * Get elevation.
+     *
+     * @param array $data
+     * @return int|string|null
+     */
+    protected function getElevation(array $data)
+    {
+        $elevation = Arr::get($data, 'elevation');
+
+        if (is_numeric($elevation)) {
+            return $elevation;
+        }
+
+        if ($this->demReader) {
+            return $this->demReader->getElevation(
+                $this->getLatitude($data),
+                $this->getLongitude($data)
+            );
+        }
+    }
+
+    /**
+     * Get observer name.
+     *
+     * @param  array  $data
+     * @return string|null
+     */
+    protected function getObserver(array $data)
+    {
+        if (! $this->model()->user->hasAnyRole(['admin', 'curator'])) {
+            return $this->model()->user->full_name;
+        }
+
+        return Arr::get($data, 'observer') ?: $this->model()->user->full_name;
+    }
+
+    /**
+     * Get observers full names.
+     *
+     * @param  array  $data
+     * @return array $observer_ids
+     */
+    protected function getObservers(array $data): ?array
+    {
+        $observers = Arr::get($data, 'observers');
+        $observer_ids = array();
+        if (!$observers) return null;
+        foreach (explode('; ', $observers) as $observer){
+            $ob = explode(' ', $observer);
+            if (count($ob) < 2 || count($ob) > 3)
+                break;
+            $firstName = $ob[0];
+            $lastName = $ob[1];
+            if (count($ob) > 2)
+                $lastName .= ' '.$ob[2];
+            $obs = Observer::firstOrCreate([
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+            ]);
+            $obs->save();
+            $observer_ids[] = $obs->id;
+        }
+        return $observer_ids;
+    }
+
+    /**
+     * Get observer ID.
+     *
+     * @param  array  $data
+     * @return int
+     */
+    protected function getObserverId(array $data)
+    {
+        if ($this->shouldUseCurrentUserId(Arr::get($data, 'observer'))) {
+            return $this->model()->user->id;
+        }
+    }
+
+    /**
+     * Get identifier name.
+     *
+     * @param  array  $data
+     * @return string|null
+     */
+    protected function getIdentifier(array $data)
+    {
+        if (! $this->model()->user->hasAnyRole(['admin', 'curator'])) {
+            return $this->model()->user->full_name;
+        }
+
+        return Arr::get($data, 'identifier') ?: $this->model()->user->full_name;
+    }
+
+    /**
+     * Get identifier ID.
+     *
+     * @param  array  $data
+     * @return int
+     */
+    protected function getIdentifierId(array $data)
+    {
+        if ($this->shouldUseCurrentUserId(Arr::get($data, 'identifier'))) {
+            return $this->model()->user->id;
+        }
+    }
+
+    /**
+     * Check if the name matches current user.
+     *
+     * @param  string|null  $name
+     * @return bool
+     */
+    private function shouldUseCurrentUserId($name = null)
+    {
+        return ! $this->model()->user->hasAnyRole(['admin', 'curator']) || ! $name;
+    }
+
+    /**
+     * Get all the stages.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function stages()
+    {
+        if (! $this->stages) {
+            $this->stages = Stage::all();
+        }
+
+        return $this->stages;
+    }
+
+    /**
+     * Get correctly translated stages' names.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function stagesTranslatedNames()
+    {
+        return $this->stages()->pluck('name_translation');
+    }
+
+    /**
+     * Get stage ID.
+     *
+     * @param  array  $data
+     * @return int|null
+     */
+    protected function getStageId(array $data)
+    {
+        $translation = strtolower(Arr::get($data, 'stage', ''));
+
+        $stage = $this->stages()->first(function ($stage) use ($translation) {
+            return strtolower($stage->name_translation) === $translation;
+        });
+
+        return $stage ? $stage->id : null;
+    }
+
+    /**
+     * Get value for "Found Dead" field.
+     *
+     * @param  array  $data
+     * @return bool
+     */
+    protected function getFoundDead(array $data)
+    {
+        $value = Arr::get($data, 'found_dead', false);
+
+        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Check if the value matches with "Yes" translation.
+     *
+     * @param string $value
+     * @return bool
+     */
+    protected function isTranslatedYes($value)
+    {
+        if (! is_string($value)) {
+            return false;
+        }
+
+        $yes = __('Yes', [], $this->model()->lang);
+
+        return strtolower($yes) === strtolower($value);
+    }
+
+    /**
+     * Get license for the observation.
+     *
+     * @param  array  $data
+     * @return int
+     */
+    protected function getLicense(array $data)
+    {
+        return ($license = Arr::get($data, 'license'))
+            ? License::findByName($license)->id
+            : $this->model()->user->settings()->get('data_license');
+    }
+
+    /**
+     * Get `approved_at` attribute for the observation.
+     *
+     * @param Taxon|null $taxon
+     * @return \Carbon\Carbon|null
+     */
+    protected function getApprovedAt($taxon)
+    {
+        return $this->shouldApprove($taxon) ? now() : null;
+    }
+
+    /**
+     * Check if we should automatically approve observation of given taxon.
+     *
+     * @param Taxon|null $taxon
+     * @return bool
+     */
+    protected function shouldApprove($taxon)
+    {
+        return $this->shouldApproveCurated() &&
+            $this->model()->user->hasRole('curator') &&
+            $taxon && $taxon->canBeApprovedBy($this->model()->user);
+    }
+
+    /**
+     * Check if option to verify observations of curated taxa is selected.
+     *
+     * @return bool
+     */
+    protected function shouldApproveCurated()
+    {
+        return $this->model()->options['approve_curated'] ?? false;
+    }
+}

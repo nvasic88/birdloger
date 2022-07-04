@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Poaching;
+namespace App\Http\Controllers\Contributor;
 
-# use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
+use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
 use App\OffenceCase;
 use App\PoachingObservation;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class PoachingObservationsController
      */
     public function index()
     {
-        return view('poaching.observations.index', [
+        return view('contributor.poaching-observations.index', [
             # 'exportColumns' => ContributorFieldObservationsCustomExport::availableColumnData(),
         ]);
     }
@@ -32,7 +32,7 @@ class PoachingObservationsController
     {
         abort_unless($poachingObservation->isCreatedBy($request->user()), 403);
 
-        return view('poaching.observations.show', [
+        return view('contributor.poaching-observations.show', [
             'poachingObservation' => $poachingObservation->load([
                 'observation.taxon', 'activity.causer',
             ]),
@@ -46,7 +46,7 @@ class PoachingObservationsController
      */
     public function create()
     {
-        return view('poaching.observations.create');
+        return view('contributor.poaching-observations.create');
     }
 
     /**
@@ -60,7 +60,7 @@ class PoachingObservationsController
     {
         abort_unless($poachingObservation->isCreatedBy($request->user()), 403);
 
-        return view('poaching.observations.edit', [
+        return view('contributor.poaching-observations.edit', [
             'poachingObservation' => $poachingObservation->load([
                 'observation.taxon.stages', 'observedBy', 'identifiedBy',
             ]),

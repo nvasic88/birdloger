@@ -79,6 +79,30 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
             Route::view('field-observations/import/guide', 'contributor.field-observations-import.guide')
                 ->name('field-observations-import.guide');
 
+            Route::get('poaching-observations', 'PoachingObservationsController@index')
+                ->name('poaching-observations.index');
+
+            Route::get('poaching-observations/new', 'PoachingObservationsController@create')
+                ->name('poaching-observations.create');
+
+            Route::get('poaching-observations/import', 'PoachingObservationsImportController@index')
+                ->name('poaching-observations-import.index');
+
+            Route::view('poaching-observations/import/guide', 'contributor.poaching-observations-import.guide')
+                ->name('poaching-observations-import.guide');
+
+            Route::get('electrocution-observations', 'ElectrocutionObservationsController@index')
+                ->name('electrocution-observations.index');
+
+            Route::get('electrocution-observations/new', 'ElectrocutionObservationsController@create')
+                ->name('electrocution-observations.create');
+
+            Route::get('electrocution-observations/import', 'ElectrocutionObservationsImportController@index')
+                ->name('electrocution-observations-import.index');
+
+            Route::view('electrocution-observations/import/guide', 'contributor.electrocution-observations-import.guide')
+                ->name('electrocution-observations-import.guide');
+
             Route::get('field-observations/{fieldObservation}', 'FieldObservationsController@show')
                 ->middleware('can:view,fieldObservation')
                 ->name('field-observations.show');
@@ -139,50 +163,6 @@ Route::prefix(LaravelLocalization::setLocale())->middleware([
             Route::get('unidentifiable-observations/{fieldObservation}', 'UnidentifiableObservationsController@show')
                 ->middleware('role:curator,admin')
                 ->name('unidentifiable-observations.show');
-        });
-
-        Route::prefix('poaching')->namespace('Poaching')->name('poaching.')->group(function () {
-            Route::get('/', 'PoachingObservationsController@index')
-                ->middleware('role:poaching,admin')
-                ->name('index');
-
-            Route::get('observations/new', 'PoachingObservationsController@create')
-                ->name('observations.create');
-
-            Route::get('observations', 'PoachingObservationsController@index')
-                ->middleware('role:poaching,admin')
-                ->name('observations.index');
-
-            Route::get('observations/{poachingObservation}/edit', 'PoachingObservationsController@edit')
-                ->middleware('role:poaching,admin')
-                ->name('observations.edit');
-
-            Route::get('observations/{poachingObservation}', 'PoachingObservationsController@show')
-                ->middleware('role:poaching,admin')
-                ->name('observations.show');
-        });
-
-        Route::prefix('electrocution')->namespace('Electrocution')->name('electrocution.')->group(function () {
-            Route::get('/', 'ElectrocutionObservationsController@index')
-                ->middleware('role:electrocution, admin')
-                ->name('index');
-
-            Route::get('observations/new', 'ElectrocutionObservationsController@create')
-                ->middleware('role:electrocution,admin')
-                ->name('observations.create');
-
-            Route::get('observations', 'ElectrocutionObservationsController@index')
-                ->middleware('role:electrocution,admin')
-                ->name('observations.index');
-
-            Route::get('observations/{electrocutionObservation}/edit', 'ElectrocutionObservationsController@edit')
-                ->middleware('role:electrocution,admin')
-                ->name('observations.edit');
-
-            Route::get('observations/{electrocutionObservation}', 'ElectrocutionObservationsController@show')
-                ->middleware('role:electrocution,admin')
-                ->name('observations.show');
-
         });
 
         Route::prefix('admin')->namespace('Admin')->name('admin.')->group(function () {

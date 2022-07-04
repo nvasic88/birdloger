@@ -198,6 +198,7 @@ class StorePoachingObservation extends FormRequest
             'associates' => $this->input('associates'),
             'origin_of_individuals' => $this->input('origin_of_individuals'),
             'cites' => $this->input('cites'),
+            'total' => $this->input('total'),
             'dead_from_total' => $this->input('dead_from_total'),
             'alive_from_total' => $this->input('alive_from_total'),
             'suspects_number' => $this->input('suspects_number'),

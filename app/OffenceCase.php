@@ -35,7 +35,7 @@ class OffenceCase extends Model
     }
 
     /**
-     * Get labels for sexes.
+     * Get labels for cases.
      *
      * @return \Illuminate\Support\Collection
      */

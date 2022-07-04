@@ -5,8 +5,8 @@
         <nz-poaching-observation-form
             action="{{ route('api.poaching-observations.update', $poachingObservation) }}"
             method="PUT"
-            redirect-url="{{ route('poaching.observations.index') }}"
-            cancel-url="{{ route('poaching.observations.index') }}"
+            redirect-url="{{ route('contributor.poaching-observations.index') }}"
+            cancel-url="{{ route('contributor.poaching-observations.index') }}"
             :licenses="{{ json_encode(\App\License::getOptions()) }}"
             :sexes="{{ \App\Sex::options() }}"
             :observation-types="{{ App\ObservationType::all() }}"
@@ -30,11 +30,11 @@
 @section('breadcrumbs')
     <div class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li><a href="{{ route('poaching.index') }}">{{ __('navigation.dashboard') }}</a></li>
-            <li><a href="{{ route('poaching.observations.index') }}">{{ __('navigation.my_poaching_observations') }}</a>
+            <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
+            <li><a href="{{ route('contributor.poaching-observations.index') }}">{{ __('navigation.my_poaching_observations') }}</a>
             </li>
             <li>
-                <a href="{{ route('poaching.observations.show', $poachingObservation) }}">{{ $poachingObservation->id }}</a>
+                <a href="{{ route('contributor.poaching-observations.show', $poachingObservation) }}">{{ $poachingObservation->id }}</a>
             </li>
             <li class="is-active"><a>{{ __('navigation.edit') }}</a></li>
         </ul>

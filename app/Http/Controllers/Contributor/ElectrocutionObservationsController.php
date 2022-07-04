@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Electrocution;
+namespace App\Http\Controllers\Contributor;
 
-# use App\Exports\ElectrocutionObservations\ContributorElectrocutionObservationsCustomExport;
 use App\ElectrocutionObservation;
 use Illuminate\Http\Request;
 
@@ -15,7 +14,7 @@ class ElectrocutionObservationsController
      */
     public function index()
     {
-        return view('electrocution.observations.index', [
+        return view('contributor.electrocution-observations.index', [
             # 'exportColumns' => ContributorFieldObservationsCustomExport::availableColumnData(),
         ]);
     }
@@ -31,7 +30,7 @@ class ElectrocutionObservationsController
     {
         abort_unless($electrocutionObservation->isCreatedBy($request->user()), 403);
 
-        return view('electrocution.observations.show', [
+        return view('contributor.electrocution-observations.show', [
             'electrocutionObservation' => $electrocutionObservation->load([
                 'observation.taxon', 'activity.causer',
             ]),
@@ -45,7 +44,7 @@ class ElectrocutionObservationsController
      */
     public function create()
     {
-        return view('electrocution.observations.create');
+        return view('contributor.electrocution-observations.create');
     }
 
     /**
@@ -59,7 +58,7 @@ class ElectrocutionObservationsController
     {
         abort_unless($electrocutionObservation->isCreatedBy($request->user()), 403);
 
-        return view('electrocution.observations.edit', [
+        return view('contributor.electrocution-observations.edit', [
             'electrocutionObservation' => $electrocutionObservation->load([
                 'observation.taxon.stages', 'observedBy', 'identifiedBy',
             ]),

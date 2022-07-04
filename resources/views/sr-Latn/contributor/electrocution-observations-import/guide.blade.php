@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="box content">
-        <h1>Uputstvo za uvoz terenskih podataka</h1>
+        <h1>Uputstvo za uvoz podataka krivolova</h1>
 
         <div class="message mt-8">
             <div class="message-body">

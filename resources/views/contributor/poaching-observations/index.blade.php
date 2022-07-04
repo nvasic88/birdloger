@@ -21,15 +21,19 @@
 @section('breadcrumbs')
     <div class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li><a href="{{ route('poaching.index') }}">{{ __('navigation.dashboard') }}</a></li>
+            <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
             <li class="is-active"><a>{{ __('navigation.my_poaching_observations') }}</a></li>
         </ul>
     </div>
 @endsection
 
 @section('navigationActions')
-    <a href="{{ route('poaching.observations.create') }}" class="button is-secondary is-outlined">
+    <a href="{{ route('contributor.poaching-observations.create') }}" class="button is-secondary is-outlined">
         @include('components.icon', ['icon' => 'plus'])
         <span>{{ __('navigation.new_observation') }}</span>
+    </a>
+    <a href="{{ route('contributor.poaching-observations-import.index') }}" class="button is-secondary is-outlined ml-2">
+        @include('components.icon', ['icon' => 'upload'])
+        <span>{{ __('navigation.import') }}</span>
     </a>
 @endsection

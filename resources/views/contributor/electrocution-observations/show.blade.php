@@ -2,16 +2,16 @@
 
 @section('content')
     <div class="box">
-        @include('partials.field-observation-details', compact('fieldObservation'))
+        @include('partials.electrocution-observation-details', compact('electrocutionObservation'))
 
-        <a href="{{ route('contributor.field-observations.edit', $fieldObservation) }}"
+        <a href="{{ route('contributor.electrocution-observations.edit', $electrocutionObservation) }}"
            class="button is-primary is-outlined">{{ __('buttons.edit') }}</a>
 
         <hr>
 
         <h2 class="is-size-4">{{ __('Activity Log') }}</h2>
 
-        <nz-field-observation-activity-log :activities="{{ $fieldObservation->activity }}"/>
+        <nz-electrocution-observation-activity-log :activities="{{ $electrocutionObservation->activity }}"/>
     </div>
 @endsection
 
@@ -20,9 +20,9 @@
         <ul>
             <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
             <li>
-                <a href="{{ route('contributor.field-observations.index') }}">{{ __('navigation.my_field_observations') }}</a>
+                <a href="{{ route('contributor.electrocution-observations.index') }}">{{ __('navigation.my_field_observations') }}</a>
             </li>
-            <li class="is-active"><a>{{ $fieldObservation->id }}</a></li>
+            <li class="is-active"><a>{{ $electrocutionObservation->id }}</a></li>
         </ul>
     </div>
 @endsection

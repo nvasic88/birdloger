@@ -86,12 +86,9 @@ return [
         'yes' => 'Da',
         'no' => 'Ne',
         'rejected' => 'Odbačen',
-
         'include_lower_taxa' => 'Uključujući niže vrste',
-
         'atlas_codes' => 'Atlas kodovi',
         'uses_atlas_codes' => 'Koristi Atlas kodove',
-
         'spid' => 'SPID',
         'birdlife_seq' => 'BirdLife sekvenca',
         'birdlife_id' => 'BirdLife ID',
@@ -116,7 +113,6 @@ return [
         'synonyms' => 'Lista sinonima',
         'addSynonym' => 'Dodaj sinonim',
         'annex' => 'Annex'
-
     ],
 
     'field_observations' => [
@@ -220,6 +216,7 @@ return [
         'indigenous' => 'Autohtona',
         'dead_from_total' => 'Mrtve jedinke od ukupnog broja',
         'alive_from_total' => 'Žive jedinke od ukupnog broja',
+		'total' => 'Ukupan broj jedinki',
         'exact_number' => 'Tačan broj',
         'offences' => 'Slučaj pripada ovim prestupima',
         'place' => 'Mesto',
@@ -228,6 +225,7 @@ return [
         'folder_id' => 'ID Foldera',
         'file' => 'Fajl',
         'in_report' => 'Ušlo u izveštaj',
+		'input_date' => 'Datum unosa',
         'offence_details' => 'Prestup opširnije',
         'case_reported' => 'Slučaj prijavljen',
         'case_reported_by' => 'Slučaj prijavio',
@@ -243,8 +241,6 @@ return [
         'suspect_place' => 'Mesto stanovanja',
         'suspect_profile' => 'Profil osobe',
         'suspects_number' => 'Broj osumnjičenih',
-        'cites' => 'CITES',
-        'origin_of_individuals' => 'Poreklo jedinki',
         'sources' => 'Osnovni izvor podataka',
         'source' => 'Tip izvora',
         'source_description' => 'Opis izvora',
@@ -254,6 +250,8 @@ return [
         'ads' => 'Oglasi',
         'institutions' => 'Institucije',
         'associates' => 'Saradnici',
+		'cites' => 'CITES',
+        'origin_of_individuals' => 'Poreklo jedinki',
         'rejected' => 'Odbačen',
         'select_date' => 'Odaberite datum',
         'remove_source_tooltip' => 'Ukloni izvor',

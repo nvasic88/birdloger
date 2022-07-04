@@ -2,21 +2,21 @@
 
 @section('content')
     <div class="box content">
-        <h1>Uputstvo za uvoz terenskih podataka</h1>
+        <h1>Field observations import guide</h1>
 
         <div class="message mt-8">
             <div class="message-body">
-                Uvoz podataka iz tablice u Birdloger je kompleksan proces. Tom prilikom
-                mogu da se potkradu greške koje nije jednostavno ispraviti. Unos podataka
-                na ovaj način je opravdan ukoliko se radi o velikom setu podataka, koji nije
-                jednostavno prekucati unutar veb okruženja Birdloger. Ipak, pre nego što se
-                odlučite za uvoz podataka iz tabele razmislite o drugim mogućnostima i dobro
-                proučite ovo uputstvo kako bi izbegli neželjene komplikacije.
+                Importing data into Birdloger from a table is complex process.
+                Some errors that are not easy to handle could appear during this task.
+                Entering observations this way is justified if you have a large set of data,
+                which is not easy to type into Birdloger web interface. However, before
+                you choose to import data from the table, think about all other options
+                and study this manual in details, so we can avoid unnecessary complications.
             </div>
         </div>
 
         <div>
-            <p>Uputstvo je trenutno u stranju izrade.</p>
+            <p>To be completed</p>
         </div>
     </div>
 @endsection
@@ -27,7 +27,7 @@
             <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
             <li><a href="{{ route('contributor.field-observations.index') }}">{{ __('navigation.my_field_observations') }}</a></li>
             <li><a href="{{ route('contributor.field-observations-import.index') }}">{{ __('navigation.field_observations_import') }}</a></li>
-            <li class="is-active"><a>Uputstvo za uvoz</a></li>
+            <li class="is-active"><a>Import Guide</a></li>
         </ul>
     </div>
 @endsection

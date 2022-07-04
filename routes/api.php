@@ -177,6 +177,16 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get('field-observation-imports/{import}/errors', 'FieldObservationImportsController@errors')
         ->name('api.field-observation-imports.errors');
 
+    // Poaching observations import
+    Route::post('poaching-observation-imports', 'PoachingObservationImportsController@store')
+        ->name('api.poaching-observation-imports.store');
+
+    Route::get('field-observation-imports/{import}', 'PoachingObservationImportsController@show')
+        ->name('api.poaching-observation-imports.show');
+
+    Route::get('field-observation-imports/{import}/errors', 'PoachingObservationImportsController@errors')
+        ->name('api.poaching-observation-imports.errors');
+
     // Approved field observations
     Route::post('approved-field-observations/batch', 'ApprovedFieldObservationsBatchController@store')
         ->name('api.approved-field-observations-batch.store');

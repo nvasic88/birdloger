@@ -57,14 +57,16 @@ class ViewServiceProvider extends ServiceProvider
                     Menu::new()
                         ->prepend('<p class="menu-label">' . trans('navigation.my') . '</p>')
                         ->addClass('menu-list')
-                        ->route('contributor.field-observations.index', trans('navigation.field_observations'))
-                        ->routeIf(
+                        ->route(
+                            'contributor.field-observations.index',
+                            trans('navigation.field_observations')
+                        )->routeIf(
                             auth()->user()->hasAnyRole(['poaching']),
-                            'poaching.observations.index',
+                            'contributor.poaching-observations.index',
                             trans('navigation.poaching_observations')
                         )->routeIf(
                             auth()->user()->hasAnyRole(['electrocution']),
-                            'electrocution.observations.index',
+                            'contributor.electrocution-observations.index',
                             trans('navigation.electrocution_observations')
                         )
                         ->setActiveClass('is-active')
