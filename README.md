@@ -1,4 +1,4 @@
-# Biordloger
+# Birdloger
 
 ## Modified clone of [Biologer](https://github.com/Biologer/Biologer)
 
