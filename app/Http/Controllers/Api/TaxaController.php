@@ -6,10 +6,7 @@ use App\Http\Requests\StoreTaxon;
 use App\Http\Requests\UpdateTaxon;
 use App\Http\Resources\TaxonCollectionResource;
 use App\Http\Resources\TaxonResource;
-use App\Synonym;
 use App\Taxon;
-use App\Family;
-use App\Order;
 use Illuminate\Http\Request;
 
 class TaxaController
