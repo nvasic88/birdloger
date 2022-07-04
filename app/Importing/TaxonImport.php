@@ -324,7 +324,6 @@ class TaxonImport extends BaseImport
     protected function getTaxonData(array $item)
     {
         $order_family = $this->createOrderFamily($item);
-        $author = $this->getAuthorOnly($item);
 
         return [
             'name' => Arr::get($item, 'name'),
@@ -332,9 +331,9 @@ class TaxonImport extends BaseImport
             'type' => Arr::get($item, 'type'),
             'order_id' => Arr::get($order_family, 'order_id'),
             'family_id' => Arr::get($order_family, 'family_id'),
-            'strictly_protected' => $this->getStrictlyProtected($item),
+            'strictly_protected' => $this->getBoolean($item, 'strictly_protected'),
             'strictly_note' => Arr::get($item, 'strictly_note') ?: null,
-            'protected' => $this->getProtected($item),
+            'protected' => $this->getBoolean($item, 'protected'),
             'protected_note' => Arr::get($item, 'protected_note') ?: null,
             'iucn_cat' => Arr::get($item, 'iucn_cat') ?: null,
             'birdlife_seq' => Arr::get($item, 'birdlife_seq'),
@@ -344,12 +343,12 @@ class TaxonImport extends BaseImport
             'euring_sci_name' => Arr::get($item, 'euring_sci_name') ?: null,
             'eunis_n2000code' => Arr::get($item, 'eunis_n2000code') ?: null,
             'eunis_sci_name' => Arr::get($item, 'eunis_sci_name') ?: null,
-            'refer' => $this->getRefer($item),
-            'prior' => $this->getPrior($item),
+            'refer' => $this->getBoolean($item, 'refer'),
+            'prior' => $this->getBoolean($item, 'prior'),
             'gn_status' => Arr::get($item, 'gn_status') ?: null,
             'bioras_sci_name' => Arr::get($item, 'bioras_sci_name') ?: null,
             'full_sci_name' => Arr::get($item, 'full_sci_name') ?: null,
-            'author' => $author,
+            'author' => Arr::get($item, 'author') ?: null,
             'rank' => 'species',
         ];
     }
@@ -420,31 +419,9 @@ class TaxonImport extends BaseImport
         return $annexes_ids;
     }
 
-    private function getStrictlyProtected(array $item)
+    private function getBoolean(array $item, string $key)
     {
-        $value = Arr::get($item, 'strictly_protected', false);
-
-        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    private function getProtected(array $item)
-    {
-        $value = Arr::get($item, 'protected', false);
-
-        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    private function getRefer(array $item)
-    {
-        $value = Arr::get($item, 'refer', false);
-
-        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    private function getPrior(array $item)
-    {
-        $value = Arr::get($item, 'prior', false);
-
+        $value = Arr::get($item, $key, false);
         return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 

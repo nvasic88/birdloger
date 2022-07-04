@@ -29,7 +29,7 @@ abstract class BaseImportController
      *
      * @param  \App\Import  $import
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Import
+     * @return bool
      */
     protected function canSeeDetails(Import $import, Request $request)
     {
@@ -94,7 +94,7 @@ abstract class BaseImportController
      *
      * @param  \App\Import  $import
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Import
+     * @return bool
      */
     protected function canSeeErrors(Import $import, Request $request)
     {
