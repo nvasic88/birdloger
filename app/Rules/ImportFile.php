@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use Box\Spout\Common\Type;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Illuminate\Contracts\Validation\Rule;
 

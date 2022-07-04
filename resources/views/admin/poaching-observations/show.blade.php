@@ -26,7 +26,7 @@
 @section('breadcrumbs')
     <div class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li><a href="{{ route('poaching.index') }}">{{ __('navigation.dashboard') }}</a></li>
+            <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
             <li>
                 <a href="{{ route('curator.approved-poaching-observations.index') }}">{{ __('navigation.all_poaching_observations') }}</a>
             </li>

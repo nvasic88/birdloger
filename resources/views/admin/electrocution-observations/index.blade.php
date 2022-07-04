@@ -24,14 +24,14 @@
 @section('breadcrumbs')
     <div class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li><a href="{{ route('electrocution.index') }}">{{ __('navigation.dashboard') }}</a></li>
+            <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
             <li class="is-active"><a>{{ __('navigation.all_electrocution_observations') }}</a></li>
         </ul>
     </div>
 @endsection
 
 @section('navigationActions')
-    <a href="{{ route('electrocution.observations.create') }}" class="button is-secondary is-outlined">
+    <a href="{{ route('contributor.electrocution-observations.create') }}" class="button is-secondary is-outlined">
         @include('components.icon', ['icon' => 'plus'])
         <span>{{ __('navigation.new_electrocution_observation') }}</span>
     </a>
