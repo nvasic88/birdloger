@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Api\My;
 use App\Http\Resources\PoachingObservationResource;
 use App\PoachingObservation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PoachingObservationsController
 {
     /**
-     * Get field observations made by the user.
+     * Get poaching observations made by the user.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\PoachingObservationResource
+     * @param Request $request
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {

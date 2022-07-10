@@ -17,7 +17,7 @@
             approvable
             approve-route="api.approved-poaching-observations-batch.store"
             show-status
-        />
+        ></nz-poaching-observations-table>
     </div>
 @endsection
 
@@ -35,6 +35,7 @@
         @include('components.icon', ['icon' => 'plus'])
         <span>{{ __('navigation.new_poaching_observation') }}</span>
     </a>
+
     <a href="{{ route('contributor.poaching-observations-import.index') }}" class="button is-secondary is-outlined ml-2">
         @include('components.icon', ['icon' => 'upload'])
         <span>{{ __('navigation.import') }}</span>

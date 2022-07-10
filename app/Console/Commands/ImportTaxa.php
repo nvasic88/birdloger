@@ -63,7 +63,7 @@ class ImportTaxa extends Command
     private $redLists;
 
     /**
-     * Available stages
+     * Available stages.
      *
      * @var \Illuminate\Database\Eloquent\Collection
      */
@@ -78,7 +78,7 @@ class ImportTaxa extends Command
     {
         $path = $this->argument('path');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             $this->error('File at given path doen\'t exist.');
 
             exit(1);
@@ -144,7 +144,7 @@ class ImportTaxa extends Command
         $rows = [];
         $rowNumber = 1;
 
-        while (!feof($file)) {
+        while (! feof($file)) {
             $row = fgetcsv($file);
 
             if (empty($row)) {
@@ -157,7 +157,7 @@ class ImportTaxa extends Command
                 $rows[] = $this->mapColumnsOnRow($row, $columns);
             }
 
-            $this->info('Reading row # ' . $rowNumber);
+            $this->info('Reading row # '.$rowNumber);
 
             if ($this->option('chunked') && $this->shouldInsertChunk($rowNumber)) {
                 $callback($rows);
@@ -279,7 +279,7 @@ class ImportTaxa extends Command
         foreach ($ranks as $rank) {
             $name = trim($this->getNameForRank($rank, $taxon));
 
-            if (!$name) {
+            if (! $name) {
                 continue;
             }
 
@@ -325,9 +325,9 @@ class ImportTaxa extends Command
     private function isCompoundSubspeciesName($rank, $taxon)
     {
         return $rank === 'subspecies' &&
-            !empty($taxon['genus'] &&
-                !empty($taxon['species']) &&
-                !empty($taxon['subspecies']));
+            ! empty($taxon['genus'] &&
+                ! empty($taxon['species']) &&
+                ! empty($taxon['subspecies']));
     }
 
     /**
@@ -340,7 +340,7 @@ class ImportTaxa extends Command
     {
         return implode(' ', array_filter([
             trim($taxon['genus']),
-            empty($taxon['subgenus']) ? null : '(' . $taxon['subgenus'] . ')',
+            empty($taxon['subgenus']) ? null : '('.$taxon['subgenus'].')',
             trim($taxon['species']),
             trim($taxon['subspecies']),
         ]));
@@ -356,8 +356,8 @@ class ImportTaxa extends Command
     private function isCompoundSpeciesName($rank, $taxon)
     {
         return $rank === 'species' &&
-            !empty($taxon['genus'] &&
-                !empty($taxon['species']));
+            ! empty($taxon['genus'] &&
+                ! empty($taxon['species']));
     }
 
     /**
@@ -370,7 +370,7 @@ class ImportTaxa extends Command
     {
         return implode(' ', array_filter([
             trim($taxon['genus']),
-            empty($taxon['subgenus']) ? null : '(' . $taxon['subgenus'] . ')',
+            empty($taxon['subgenus']) ? null : '('.$taxon['subgenus'].')',
             trim($taxon['species']),
         ]));
     }
@@ -408,10 +408,10 @@ class ImportTaxa extends Command
     private function extractOtherTaxonData($row)
     {
         return [
-            'allochthonous' => !empty($row['allochthonous']),
-            'invasive' => !empty($row['invasive']),
-            'restricted' => !empty($row['restricted']),
-            'uses_atlas_codes' => !empty($row['uses_atlas_codes']),
+            'allochthonous' => ! empty($row['allochthonous']),
+            'invasive' => ! empty($row['invasive']),
+            'restricted' => ! empty($row['restricted']),
+            'uses_atlas_codes' => ! empty($row['uses_atlas_codes']),
             'author' => isset($row['author']) ? trim($row['author']) : null,
             'fe_old_id' => empty($row['fe_old_id']) ? null : $row['fe_old_id'],
             'fe_id' => empty($row['fe_id']) ? null : $row['fe_id'],
@@ -453,11 +453,11 @@ class ImportTaxa extends Command
         foreach ($tree as $current) {
             // Connect the taxon with it's parent to establish ancestry.
             $current->parent_id = $last ? $last->id : null;
-            $doesntExist = !$current->exists;
+            $doesntExist = ! $current->exists;
 
             if ($current->isDirty() || $doesntExist) {
                 $current->save();
-                $this->info('Stored taxon: ' . $current->name);
+                $this->info('Stored taxon: '.$current->name);
             }
 
             // If we wanted to attribute the taxa tree to a user,

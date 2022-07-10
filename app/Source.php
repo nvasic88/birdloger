@@ -42,5 +42,4 @@ class Source extends Model
             'link' => $this->link,
         ];
     }
-
 }

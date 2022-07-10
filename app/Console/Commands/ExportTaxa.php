@@ -53,14 +53,14 @@ class ExportTaxa extends Command
     private $redLists;
 
     /**
-     * Available stages
+     * Available stages.
      *
      * @var \Illuminate\Database\Eloquent\Collection
      */
     private $stages;
 
     /**
-     * Available stages
+     * Available stages.
      *
      * @var \Illuminate\Database\Eloquent\Collection
      */
@@ -116,7 +116,7 @@ class ExportTaxa extends Command
     }
 
     /**
-     * Get columns for export
+     * Get columns for export.
      *
      * @return array
      */
@@ -173,13 +173,13 @@ class ExportTaxa extends Command
             $transformed[$ancestor->rank] = $ancestor->name;
         }
 
-      	foreach ($taxon->stages as $stage) {
-        	$transformed["stage_{$stage->name}"] = 'X';
+        foreach ($taxon->stages as $stage) {
+            $transformed["stage_{$stage->name}"] = 'X';
         }
 
         foreach (LaravelLocalization::getSupportedLanguagesKeys() as $locale) {
             $translation = $taxon->translateOrNew($locale);
-          	$localeSnakeCase = str_replace('-', '_', strtolower($locale));
+            $localeSnakeCase = str_replace('-', '_', strtolower($locale));
 
             $transformed["native_name_{$localeSnakeCase}"] = $translation->native_name;
             $transformed["description_{$localeSnakeCase}"] = $translation->description;

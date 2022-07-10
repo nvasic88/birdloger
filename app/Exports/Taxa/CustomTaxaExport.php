@@ -18,6 +18,7 @@ class CustomTaxaExport extends BaseExport
     public static function columnData()
     {
         $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
+
         return collect()->concat([
             [
                 'label' => trans('labels.id'),

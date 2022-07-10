@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Filters\Filterable;
-
+use Illuminate\Database\Eloquent\Model;
 
 class Synonym extends Model
 {
@@ -37,7 +36,7 @@ class Synonym extends Model
             'id' => $this->id,
             'taxon' => $this->taxon,
             'taxon_id' => $this->taxon_id,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 
@@ -53,7 +52,7 @@ class Synonym extends Model
             'id' => $this->id,
             'taxon' => $this->taxon,
             'taxon_id' => $this->taxon_id,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 }

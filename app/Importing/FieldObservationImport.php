@@ -248,7 +248,6 @@ class FieldObservationImport extends BaseImport
             return $columns->filter(function ($column) {
                 return ! in_array($column['value'], ['identifier', 'observers']);
             })->values();
-
         });
     }
 
@@ -280,7 +279,7 @@ class FieldObservationImport extends BaseImport
         return Validator::make($data, [
             'taxon' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'spid' => [
                 'required',
@@ -308,7 +307,7 @@ class FieldObservationImport extends BaseImport
             'sex' => ['nullable', Rule::in(Sex::options())],
             'number' => ['nullable', 'integer', 'min:1'],
             'number_of' => ['nullable', 'string',
-                Rule::in(NumberOf::options())],
+                Rule::in(NumberOf::options()), ],
             'found_dead' => ['nullable', 'string', Rule::in($this->yesNo())],
             'found_dead_note' => ['nullable', 'string', 'max:1000'],
             'time' => ['nullable', 'date_format:H:i'],
@@ -370,7 +369,7 @@ class FieldObservationImport extends BaseImport
             # 'types' => trans('labels.field_observations.types'),
             'original_identification' => trans('labels.field_observations.original_identification'),
             'dataset' => trans('labels.field_observations.dataset'),
-            'description' => trans('labels.field_observations.description')
+            'description' => trans('labels.field_observations.description'),
         ]);
     }
 
@@ -403,6 +402,8 @@ class FieldObservationImport extends BaseImport
         );
 
         $fieldObservation->observation->observers()->sync($this->getObservers($item), []);
+
+        $fieldObservation->approve();
 
         activity()->performedOn($fieldObservation)
             ->causedBy($this->model()->user)
@@ -479,7 +480,7 @@ class FieldObservationImport extends BaseImport
             'data_provider' => Arr::get($item, 'data_provider') ?: null,
             'data_limit' => Arr::get($item, 'data_limit') ?: null,
             'description' => Arr::get($item, 'description') ?: null,
-            'atlas_code' => $atlasCode === '' ? null : (int)$atlasCode,
+            'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
             'found_dead' => $this->getFoundDead($item),
             'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
         ];
@@ -575,16 +576,20 @@ class FieldObservationImport extends BaseImport
     protected function getObservers(array $data): ?array
     {
         $observers = Arr::get($data, 'observers');
-        $observer_ids = array();
-        if (!$observers) return null;
-        foreach (explode('; ', $observers) as $observer){
+        $observer_ids = [];
+        if (! $observers) {
+            return null;
+        }
+        foreach (explode('; ', $observers) as $observer) {
             $ob = explode(' ', $observer);
-            if (count($ob) < 2 || count($ob) > 3)
+            if (count($ob) < 2 || count($ob) > 3) {
                 break;
+            }
             $firstName = $ob[0];
             $lastName = $ob[1];
-            if (count($ob) > 2)
+            if (count($ob) > 2) {
                 $lastName .= ' '.$ob[2];
+            }
             $obs = Observer::firstOrCreate([
                 'firstName' => $firstName,
                 'lastName' => $lastName,
@@ -592,6 +597,7 @@ class FieldObservationImport extends BaseImport
             $obs->save();
             $observer_ids[] = $obs->id;
         }
+
         return $observer_ids;
     }
 

@@ -21,18 +21,18 @@ return [
     ],
 
     'field_observations_import' => [
-        'short_info' => 'Ukoliko želite da uvezete podatke iz tabele, potrebno ' .
-            'je da ona bude sačuvana kao XLSX datoteka. Nakon izbora datoteke, treba ' .
-            'da uskladite redosled kolona u Birdlogeru tako da on odgovara redosledu u ' .
-            'tabeli i da odaberete koje kolone želite da uvezete. Spisak kolona mora ' .
+        'short_info' => 'Ukoliko želite da uvezete podatke iz tabele, potrebno '.
+            'je da ona bude sačuvana kao XLSX datoteka. Nakon izbora datoteke, treba '.
+            'da uskladite redosled kolona u Birdlogeru tako da on odgovara redosledu u '.
+            'tabeli i da odaberete koje kolone želite da uvezete. Spisak kolona mora '.
             'da prati kolekciju Birdloger baze podataka',
     ],
 
     'taxa_import' => [
-        'short_info' => 'Ukoliko želite da uvezete podatke iz tabele, potrebno ' .
-            'je da ona bude sačuvana kao XLSX datoteka. Nakon izbora datoteke, treba ' .
-            'da uskladite redosled kolona u Birdlogeru tako da on odgovara redosledu u ' .
-            'tabeli i da odaberete koje kolone želite da uvezete. Spisak kolona mora ' .
+        'short_info' => 'Ukoliko želite da uvezete podatke iz tabele, potrebno '.
+            'je da ona bude sačuvana kao XLSX datoteka. Nakon izbora datoteke, treba '.
+            'da uskladite redosled kolona u Birdlogeru tako da on odgovara redosledu u '.
+            'tabeli i da odaberete koje kolone želite da uvezete. Spisak kolona mora '.
             'da prati kolekciju Birdloger baze podataka',
     ],
 

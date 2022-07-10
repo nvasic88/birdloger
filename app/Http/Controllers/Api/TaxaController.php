@@ -19,7 +19,7 @@ class TaxaController
     public function index(Request $request)
     {
         $taxa = Taxon::with([
-            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators', 'family'
+            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators', 'family',
         ])->filter($request)->orderBy('id')->paginate($request->input('per_page', 15));
 
         return new TaxonCollectionResource($taxa);
@@ -34,7 +34,7 @@ class TaxaController
     public function show(Taxon $taxon)
     {
         return new TaxonResource($taxon->load([
-            'conservationLegislations', 'redLists', 'conservationDocuments'
+            'conservationLegislations', 'redLists', 'conservationDocuments',
         ]));
     }
 

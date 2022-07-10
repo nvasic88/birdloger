@@ -20,7 +20,7 @@ class ElectrocutionObservationsController
     }
 
     /**
-     * Show field observation details.
+     * Show electrocution observation details.
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @param \Illuminate\Http\Request $request
@@ -48,7 +48,7 @@ class ElectrocutionObservationsController
     }
 
     /**
-     * Show form to edit field observation.
+     * Show form to edit electrocution observation.
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @param \Illuminate\Http\Request $request

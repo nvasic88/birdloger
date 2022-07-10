@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Observer;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreObserver  extends FormRequest
+class StoreObserver extends FormRequest
 {
     public function rules()
     {
@@ -25,6 +25,7 @@ class StoreObserver  extends FormRequest
             )
         ))->save();
         $observer->observations()->sync($this->only(['observation_id']));
+
         return $observer;
     }
 
@@ -39,6 +40,7 @@ class StoreObserver  extends FormRequest
             )
         );
         $observer->observations()->sync($this->only(['observation_id']));
+
         return $observer;
     }
 }

@@ -15,9 +15,9 @@
             submit-more
             should-confirm-cancel
             @role([
-        'admin', 'electrocution'])
-        show-observer-identifier
-        @endrole
+            'admin', 'electrocution'])
+            show-observer-identifier
+            @endrole
         />
     </div>
 @endsection

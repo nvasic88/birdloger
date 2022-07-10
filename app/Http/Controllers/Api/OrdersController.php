@@ -17,6 +17,7 @@ class OrdersController
     public function check(Request $request)
     {
         $order = Order::where('name', $request->name)->firstOrFail();
+
         return response()->json($order);
     }
 

@@ -19,7 +19,7 @@ class PublicFieldObservationsController
         $result = FieldObservation::with([
              'observation.taxon', 'observation.photos', 'activity.causer',
              'observation.types.translations', 'observedBy', 'identifiedBy',
-             'observation.observers'
+             'observation.observers',
         ])->public()->filter($request)->orderBy('id')->paginate($request->get('per_page', 15));
 
         return PublicFieldObservationResource::collection($result);

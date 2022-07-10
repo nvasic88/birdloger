@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Synonym;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSynonym  extends FormRequest
+class StoreSynonym extends FormRequest
 {
     public function rules()
     {
@@ -23,6 +23,7 @@ class StoreSynonym  extends FormRequest
                 $this->only(['name', 'taxon_id'])
             )
         ))->save();
+
         return $synonym;
     }
 

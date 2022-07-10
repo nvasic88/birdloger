@@ -1,4 +1,4 @@
-@extends('layouts.dashboard', ['title' => __('navigation.poaching_observations_import')])
+@extends('layouts.dashboard', ['title' => __('navigation.electrocution_observations_import')])
 
 @section('content')
     <div class="box">
@@ -6,14 +6,14 @@
             <div class="message-body">{{ __('pages.field_observations_import.short_info') }}</div>
         </div>
 
-        <nz-poaching-observations-import
+        <nz-electrocution-observations-import
             :columns="{{ $columns }}"
             :running-import="{{ $import ?? 'null' }}"
             :cancellable-statuses="{{ $cancellableStatuses }}"
-            @role(['admin', 'curator', 'poaching'])
+            @role(['admin', 'curator', 'electrocution'])
             can-submit-for-user
             @endrole
-            @role(['curator', 'poaching'])
+            @role(['curator', 'electrocution'])
             can-approve-curated
             @endrole
         />
@@ -24,7 +24,7 @@
     <div class="breadcrumb" aria-label="breadcrumbs">
         <ul>
             <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
-            <li><a href="{{ route('contributor.poaching-observations.index') }}">{{ __('navigation.my_poaching_observations') }}</a></li>
+            <li><a href="{{ route('contributor.electrocution-observations.index') }}">{{ __('navigation.my_electrocution_observations') }}</a></li>
             <li class="is-active"><a>{{ __('navigation.import') }}</a></li>
         </ul>
     </div>

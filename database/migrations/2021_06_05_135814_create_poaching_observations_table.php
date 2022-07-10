@@ -26,8 +26,6 @@ class CreatePoachingObservationsTable extends Migration
             $table->string('folder_id')->nullable();
             $table->string('file')->nullable();
             $table->boolean('in_report')->default(false);
-            # should be many_to_many
-            # $table->enum('offence_case', ['killing', 'catching', 'poisoning', 'owning', 'trade']);
             $table->text('offence_details')->nullable();
             $table->boolean('case_reported')->default(false);
             $table->string('case_reported_by')->nullable();

@@ -22,6 +22,7 @@ class StoreOrder extends FormRequest
                 $this->only(['name'])
             )
         ))->save();
+
         return $order;
     }
 
@@ -35,6 +36,7 @@ class StoreOrder extends FormRequest
                 )
             )
         );
+
         return $order;
     }
 }

@@ -48,7 +48,6 @@ class OffenceCase extends Model
      * Get value based on label.
      *
      * @param string $label
-     * @return void
      */
     public static function getValueFromLabel($label)
     {
@@ -64,7 +63,7 @@ class OffenceCase extends Model
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 
@@ -78,8 +77,7 @@ class OffenceCase extends Model
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
-
 }

@@ -19,7 +19,7 @@ return [
         'couple' => 'Par',
         'singing_male' => 'Pevajući mužjak',
         'active_nest' => 'Aktivno gnezdo',
-        'family_with_cubs' => 'Porodica sa mladuncima'
+        'family_with_cubs' => 'Porodica sa mladuncima',
     ],
 
     'transfer' => [
@@ -112,7 +112,7 @@ return [
         'full_sci_name' => 'Pun naučni naziv',
         'synonyms' => 'Lista sinonima',
         'addSynonym' => 'Dodaj sinonim',
-        'annex' => 'Annex'
+        'annex' => 'Annex',
     ],
 
     'field_observations' => [
@@ -216,16 +216,17 @@ return [
         'indigenous' => 'Autohtona',
         'dead_from_total' => 'Mrtve jedinke od ukupnog broja',
         'alive_from_total' => 'Žive jedinke od ukupnog broja',
-		'total' => 'Ukupan broj jedinki',
+        'total' => 'Ukupan broj jedinki',
         'exact_number' => 'Tačan broj',
         'offences' => 'Slučaj pripada ovim prestupima',
+        'locality' => 'Lokalitet',
         'place' => 'Mesto',
         'municipality' => 'Opština',
         'data_id' => 'ID Podatka',
         'folder_id' => 'ID Foldera',
         'file' => 'Fajl',
         'in_report' => 'Ušlo u izveštaj',
-		'input_date' => 'Datum unosa',
+        'input_date' => 'Datum unosa',
         'offence_details' => 'Prestup opširnije',
         'case_reported' => 'Slučaj prijavljen',
         'case_reported_by' => 'Slučaj prijavio',
@@ -250,7 +251,7 @@ return [
         'ads' => 'Oglasi',
         'institutions' => 'Institucije',
         'associates' => 'Saradnici',
-		'cites' => 'CITES',
+        'cites' => 'CITES',
         'origin_of_individuals' => 'Poreklo jedinki',
         'rejected' => 'Odbačen',
         'select_date' => 'Odaberite datum',
@@ -258,6 +259,9 @@ return [
         'add_source' => 'Dodaj novi izvor',
         'insert_source_description' => 'Unesite opis izvora',
         'insert_source_link' => 'Unesite link izvora',
+        'youtube' => 'YouTube',
+        'facebook' => 'Facebook',
+        'insert_source' => 'Dodaj novi izvor...',
     ],
 
     'proceedings' => [

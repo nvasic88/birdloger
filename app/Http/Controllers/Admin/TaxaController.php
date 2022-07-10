@@ -53,7 +53,7 @@ class TaxaController
     {
         return view('admin.taxa.edit', [
             'taxon' => $taxon->load([
-                'parent', 'redLists', 'conservationLegislations', 'conservationDocuments', 'stages', 'annexes'
+                'parent', 'redLists', 'conservationLegislations', 'conservationDocuments', 'stages', 'annexes',
             ]),
             'ranks' => Taxon::getRankOptions(),
             'conservationLegislations' => ConservationLegislation::all(),

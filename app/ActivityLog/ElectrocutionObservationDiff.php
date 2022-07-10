@@ -107,7 +107,7 @@ class ElectrocutionObservationDiff
 
                 return [
                     'value' => $license->id,
-                    'label' => $license->id ? 'licenses.' . $license->id : null,
+                    'label' => $license->id ? 'licenses.'.$license->id : null,
                 ];
             },
         ];

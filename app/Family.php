@@ -33,7 +33,7 @@ class Family extends Model
             'id' => $this->id,
             'name' => $this->name,
             'order' => $this->order,
-            'order_id' => $this->order_id
+            'order_id' => $this->order_id,
         ];
     }
 
@@ -49,7 +49,7 @@ class Family extends Model
             'id' => $this->id,
             'name' => $this->name,
             'order' => $this->order,
-            'order_id' => $this->order_id
+            'order_id' => $this->order_id,
         ];
     }
 }

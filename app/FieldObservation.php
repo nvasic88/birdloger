@@ -8,6 +8,7 @@ use App\Contracts\FlatArrayable;
 use App\Filters\Filterable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Spatie\Activitylog\Models\Activity;
 
 class FieldObservation extends Model implements FlatArrayable
@@ -109,7 +110,8 @@ class FieldObservation extends Model implements FlatArrayable
         return $this->observation->photos();
     }
 
-    public function stages(){
+    public function stages()
+    {
         return $this->hasMany(Stage::class);
     }
 
@@ -333,7 +335,7 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function getStatusTranslationAttribute()
     {
-        return trans('labels.field_observations.statuses.' . $this->status);
+        return trans('labels.field_observations.statuses.'.$this->status);
     }
 
     /**
@@ -343,7 +345,7 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function getLicenseTranslationAttribute()
     {
-        return trans('licenses.' . $this->license);
+        return trans('licenses.'.$this->license);
     }
 
     /**
@@ -351,7 +353,7 @@ class FieldObservation extends Model implements FlatArrayable
      *
      * @param  array  $photos Paths
      * @param  int  $defaultLicense
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return array|\Illuminate\Database\Eloquent\Collection|Collection
      */
     public function addPhotos($photos, $defaultLicense)
     {
@@ -370,7 +372,7 @@ class FieldObservation extends Model implements FlatArrayable
     /**
      * Remove unused photos and and add new ones.
      *
-     * @param  array  $photos
+     * @param  Collection  $photos
      * @param  int  $defaultLicense
      * @return void
      */
@@ -444,7 +446,7 @@ class FieldObservation extends Model implements FlatArrayable
     {
         $this->observation->unapprove();
 
-        if (!$this->unidentifiable) {
+        if (! $this->unidentifiable) {
             $this->forceFill(['unidentifiable' => true])->save();
         }
 
@@ -484,7 +486,7 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function isPending()
     {
-        return !$this->isApproved() && !$this->unidentifiable;
+        return ! $this->isApproved() && ! $this->unidentifiable;
     }
 
     /**

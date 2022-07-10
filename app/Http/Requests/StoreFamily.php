@@ -23,6 +23,7 @@ class StoreFamily extends FormRequest
                 $this->only(['name', 'order_id'])
             )
         ))->save();
+
         return $family;
     }
 

@@ -29,6 +29,7 @@ class PoachingObservationsController
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(PoachingObservation $poachingObservation)
     {
@@ -46,6 +47,7 @@ class PoachingObservationsController
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(PoachingObservation $poachingObservation)
     {

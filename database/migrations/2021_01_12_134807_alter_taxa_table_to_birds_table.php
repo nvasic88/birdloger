@@ -55,7 +55,6 @@ class AlterTaxaTableToBirdsTable extends Migration
                 ->references('id')
                 ->on('orders')
                 ->onDelete('set null');
-
         });
     }
 

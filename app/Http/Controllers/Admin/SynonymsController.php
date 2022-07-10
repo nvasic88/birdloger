@@ -17,6 +17,7 @@ class SynonymsController
     public function index()
     {
         $synonym = Synonym::all();
+
         return view('admin.synonyms.index', $synonym);
     }
 

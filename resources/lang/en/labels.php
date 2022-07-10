@@ -19,7 +19,7 @@ return [
         'couple' => 'Couple',
         'singing_male' => 'Singing male',
         'active_nest' => 'Active nest',
-        'family_with_cubs' => 'Family with cubs'
+        'family_with_cubs' => 'Family with cubs',
     ],
 
     'transfer' => [
@@ -112,7 +112,7 @@ return [
         'full_sci_name' => 'Full scientific name',
         'synonyms' => 'List of synonyms',
         'addSynonym' => 'Add synonym',
-		'annex' => 'Annex'
+        'annex' => 'Annex',
     ],
 
     'field_observations' => [
@@ -148,7 +148,7 @@ return [
         'stage' => 'Stage',
         'time' => 'Time',
         'observer' => 'Observer',
-		'observers' => 'Observers',
+        'observers' => 'Observers',
         'identifier' => 'Identifier',
         'data_license' => 'Data License',
         'image_license' => 'Image License',
@@ -216,16 +216,17 @@ return [
         'indigenous' => 'Indigenous',
         'dead_from_total' => 'Dead individuals from total number',
         'alive_from_total' => 'Alive individuals from total number',
-		'total' => 'Ukupan broj jedinki',
+        'total' => 'Ukupan broj jedinki',
         'exact_number' => 'Exact number',
         'offences' => 'Case belongs to these offences',
+        'locality' => 'Locality',
         'place' => 'Place',
         'municipality' => 'Municipality',
         'data_id' => 'Data ID',
         'folder_id' => 'Folder ID',
         'file' => 'File',
         'in_report' => 'In report',
-		'input_date' => 'Input date',
+        'input_date' => 'Input date',
         'offence_details' => 'Offence in details',
         'case_reported' => 'Case reported',
         'case_reported_by' => 'Case reported by',
@@ -250,7 +251,7 @@ return [
         'ads' => 'Advertisement',
         'institutions' => 'Institutions',
         'associates' => 'Associates',
-		'cites' => 'CITES',
+        'cites' => 'CITES',
         'origin_of_individuals' => 'Origin of individuals',
         'rejected' => 'Rejected',
         'select_date' => 'Select date',
@@ -258,6 +259,9 @@ return [
         'add_source' => 'Add new source',
         'insert_source_description' => 'Insert sources description',
         'insert_source_link' => 'Insert sources link',
+        'youtube' => 'YouTube',
+        'facebook' => 'Facebook',
+        'insert_source' => 'Insert new source...',
     ],
 
     'proceedings' => [

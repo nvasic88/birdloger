@@ -202,7 +202,7 @@ class UpdateTaxon extends FormRequest
                 if ('parent_id' === $key) {
                     $data['parent'] = $oldData['parent'] ? $oldData['parent']['name'] : $value;
                 } elseif ('rank' === $key) {
-                    $data[$key] = ['value' => $value, 'label' => 'taxonomy.' . $value];
+                    $data[$key] = ['value' => $value, 'label' => 'taxonomy.'.$value];
                 } elseif (in_array($key, ['description', 'native_name'])) {
                     $data[$key] = null;
                 } elseif (in_array($key, ['restricted', 'allochthonous', 'invasive', 'uses_atlas_codes'])) {
@@ -248,7 +248,7 @@ class UpdateTaxon extends FormRequest
         $taxon->load('conservationDocuments');
 
         return $oldValue->count() !== $taxon->conservationDocuments->count()
-            || ($oldValue->isNotEmpty() && !$taxon->conservationDocuments->isNotEmpty()
+            || ($oldValue->isNotEmpty() && ! $taxon->conservationDocuments->isNotEmpty()
                 && $oldValue->pluck('id')->diff($taxon->conservationDocuments->pluck('id'))->isNotEmpty());
     }
 
@@ -257,7 +257,7 @@ class UpdateTaxon extends FormRequest
         $taxon->load('redLists');
 
         return $oldValue->count() !== $taxon->redLists->count()
-            || (!$oldValue->isEmpty() && !$taxon->redLists->isEmpty()
+            || (! $oldValue->isEmpty() && ! $taxon->redLists->isEmpty()
                 && $oldValue->pluck('id')->diff($taxon->redLists->pluck('id'))->isNotEmpty()
                 || $oldValue->filter(function ($oldRedList) use ($taxon) {
                     return $taxon->redLists->contains(function ($redList) use ($oldRedList) {
@@ -278,13 +278,13 @@ class UpdateTaxon extends FormRequest
             return [$translation->locale => $translation->{$translatedAttribute}];
         });
 
-        return !$old->diffAssoc($new)->isEmpty() || !$new->diffAssoc($old)->isEmpty();
+        return ! $old->diffAssoc($new)->isEmpty() || ! $new->diffAssoc($old)->isEmpty();
     }
 
     private function createSynonyms(Taxon $taxon)
     {
         $synonym_names = $this->input('synonym_names');
-        foreach ($synonym_names as $k => $v){
+        foreach ($synonym_names as $k => $v) {
             $synonym = Synonym::firstOrCreate([
                 'name' => $v,
                 'taxon_id' => $taxon->id,
@@ -292,5 +292,4 @@ class UpdateTaxon extends FormRequest
             $synonym->save();
         }
     }
-
 }

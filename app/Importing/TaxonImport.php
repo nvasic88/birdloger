@@ -58,6 +58,7 @@ class TaxonImport extends BaseImport
     public static function columns($user = null)
     {
         $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
+
         return collect([
             [
                 'label' => trans('labels.id'),
@@ -215,11 +216,11 @@ class TaxonImport extends BaseImport
      * Make validator instance.
      *
      * @param  array  $data
-
      */
     protected function makeValidator(array $data)
     {
         $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
+
         return Validator::make($data, [
             'type' => [
                 'required',
@@ -232,7 +233,8 @@ class TaxonImport extends BaseImport
             'synonyms' => ['nullable', 'string'],
             $locales->map(function ($locale) {
                 $nativeName = trans('labels.taxa.native_name');
-                $localeTranslation = trans('languages.' . $locale['name']);
+                $localeTranslation = trans('languages.'.$locale['name']);
+
                 return [
                     "{$nativeName} - {$localeTranslation}" => ['nullable', 'string'],
                 ];
@@ -375,9 +377,11 @@ class TaxonImport extends BaseImport
         $order = Order::firstOrCreate(['name' => Arr::get($item, 'order')]);
         $order->save();
 
-        $family = Family::firstOrCreate(array_merge(
-            ['name' => Arr::get($item, 'family')],
-            ['order_id' => $order->id])
+        $family = Family::firstOrCreate(
+            array_merge(
+                ['name' => Arr::get($item, 'family')],
+                ['order_id' => $order->id]
+            )
         );
         $family->save();
 
@@ -387,9 +391,11 @@ class TaxonImport extends BaseImport
     private function createSynonyms(array $item, $taxon)
     {
         $synonym_names = Arr::get($item, 'synonyms');
-        if (!$synonym_names) return;
+        if (! $synonym_names) {
+            return;
+        }
 
-        foreach (explode('; ', $synonym_names) as $name){
+        foreach (explode('; ', $synonym_names) as $name) {
             $synonym = Synonym::firstOrCreate([
                 'name' => $name,
                 'taxon_id' => $taxon->id,
@@ -401,27 +407,32 @@ class TaxonImport extends BaseImport
     private function getLocaleData($item)
     {
         $locales = collect(LaravelLocalization::getSupportedLocales())->reverse();
-        $localesData['native_name'] = array();
+        $localesData['native_name'] = [];
         foreach ($locales as $localeCode => $locale) {
             $localesData['native_name'][$localeCode] = Arr::get($item, 'native_name_'.Str::snake($localeCode));
         }
+
         return $localesData;
     }
 
     private function getAnnexes(array $item)
     {
         $annexes = Arr::get($item, 'annexes');
-        $annexes_ids = array();
-        if (!$annexes) return null;
-        foreach (explode('; ', $annexes) as $annex){
+        $annexes_ids = [];
+        if (! $annexes) {
+            return;
+        }
+        foreach (explode('; ', $annexes) as $annex) {
             $annexes_ids[] = Annex::where('name', $annex)->first()->id;
         }
+
         return $annexes_ids;
     }
 
     private function getBoolean(array $item, string $key)
     {
         $value = Arr::get($item, $key, false);
+
         return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
@@ -429,8 +440,11 @@ class TaxonImport extends BaseImport
     {
         // trimming year after comma if exists
         $author = Arr::get($item, 'author');
-        if (!$author) return null;
+        if (! $author) {
+            return;
+        }
         $author = explode(', ', $author);
+
         return $author[0];
     }
 }

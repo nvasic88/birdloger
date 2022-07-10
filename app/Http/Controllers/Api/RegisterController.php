@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\License;
 use App\User;
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Laravel\Passport\Client;
 
 class RegisterController

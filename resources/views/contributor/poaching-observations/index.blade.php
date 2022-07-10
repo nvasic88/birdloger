@@ -4,16 +4,16 @@
     <div class="box">
         <nz-poaching-observations-table
             list-route="api.my.poaching-observations.index"
-            view-route="poaching.observations.show"
-            edit-route="poaching.observations.edit"
+            view-route="contributor.poaching-observations.show"
+            edit-route="contributor.poaching-observations.edit"
             delete-route="api.poaching-observations.destroy"
             empty="{{ __('No data...') }}"
             show-status
             show-activity-log
             @role([
-        'admin', 'poaching'])
-        show-observer
-        @endrole
+            'admin', 'poaching'])
+            show-observer
+            @endrole
         />
     </div>
 @endsection

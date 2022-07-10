@@ -119,7 +119,7 @@ class TaxaTest extends TestCase
 
         Passport::actingAs(factory(User::class)->create());
 
-        $response = $this->getJson('/api/taxa?' . http_build_query([
+        $response = $this->getJson('/api/taxa?'.http_build_query([
             'name' => 'Cerambyx cerdo',
             'taxonId' => $cerdo->id,
         ]));

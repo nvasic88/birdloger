@@ -20,9 +20,9 @@
             should-confirm-cancel
             submit-only-dirty
             @role([
-        'admin', 'poaching'])
-        show-observer-identifier
-        @endrole
+            'admin', 'poaching'])
+            show-observer-identifier
+            @endrole
         />
     </div>
 @endsection

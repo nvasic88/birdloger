@@ -28,6 +28,7 @@ class ElectrocutionObservationsController
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(ElectrocutionObservation $electrocutionObservation)
     {
@@ -45,6 +46,7 @@ class ElectrocutionObservationsController
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(ElectrocutionObservation $electrocutionObservation)
     {

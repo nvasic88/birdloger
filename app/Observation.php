@@ -11,7 +11,7 @@ class Observation extends Model
     ];
 
     const NUMBER_OF_OPTIONS = [
-        'individual', 'couple', 'singing_male', 'active_nest', 'family_with_cubs'
+        'individual', 'couple', 'singing_male', 'active_nest', 'family_with_cubs',
     ];
 
     /**
@@ -250,7 +250,7 @@ class Observation extends Model
      */
     public function getSexTranslationAttribute()
     {
-        return $this->sex ? trans('labels.sexes.' . $this->sex) : null;
+        return $this->sex ? trans('labels.sexes.'.$this->sex) : null;
     }
 
     /**
@@ -260,21 +260,7 @@ class Observation extends Model
      */
     public function getNumberOfTranslationAttribute()
     {
-        return $this->number_of ? trans('labels.number_of.' . $this->number_of) : null;
-    }
-
-    /**
-     * Add a comment to the observation.
-     *
-     * @param  string  $comment
-     * @return Comment
-     */
-    public function addNewComment($comment)
-    {
-        return $this->comments()->save(new Comment([
-            'body' => $comment,
-            'user_id' => auth()->user()->id,
-        ]));
+        return $this->number_of ? trans('labels.number_of.'.$this->number_of) : null;
     }
 
     /**
@@ -284,7 +270,7 @@ class Observation extends Model
      */
     public function isDateComplete()
     {
-        return !(is_null($this->year)
+        return ! (is_null($this->year)
             || is_null($this->month)
             || is_null($this->day));
     }
@@ -308,7 +294,7 @@ class Observation extends Model
      */
     public function unapprove()
     {
-        if (!is_null($this->approved_at)) {
+        if (! is_null($this->approved_at)) {
             $this->forceFill(['approved_at' => null])->save();
         }
     }
@@ -320,7 +306,7 @@ class Observation extends Model
      */
     public function isApproved()
     {
-        return !empty($this->approved_at);
+        return ! empty($this->approved_at);
     }
 
     /**

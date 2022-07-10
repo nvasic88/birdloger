@@ -93,8 +93,6 @@ class CustomFieldObservationsExport extends BaseExport
                 'label' => trans('labels.exports.observers'),
                 'value' => 'observers',
             ],
-
-            # TODO: Check if needed
             [
                 'label' => trans('labels.field_observations.location'),
                 'value' => 'location',

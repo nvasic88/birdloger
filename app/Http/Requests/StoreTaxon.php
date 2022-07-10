@@ -111,16 +111,20 @@ class StoreTaxon extends FormRequest
      */
     protected function createTaxon()
     {
-        return Taxon::create(array_merge(array_map('trim', $this->only(['name', 'rank'])),
-            $this->createOrGetFamilyArray(), $this->only([
+        return Taxon::create(array_merge(
+            array_map('trim', $this->only(['name', 'rank'])),
+            $this->createOrGetFamilyArray(),
+            $this->only([
                 'parent_id', 'author', 'uses_atlas_codes',
                 'spid', 'birdlife_seq', 'birdlife_id', 'ebba_code', 'euring_code',
                 'euring_sci_name', 'eunis_n2000code', 'eunis_sci_name', 'bioras_sci_name',
                 'refer', 'prior', 'gn_status', 'type', 'strictly_protected', 'strictly_note',
-                'protected', 'protected_note', 'iucn_cat', 'full_sci_name', 'order_id'
-            ]), Localization::transformTranslations($this->only([
+                'protected', 'protected_note', 'iucn_cat', 'full_sci_name', 'order_id',
+            ]),
+            Localization::transformTranslations($this->only([
                 'description', 'native_name',
-            ]))));
+            ]))
+        ));
     }
 
     /**
@@ -168,7 +172,7 @@ class StoreTaxon extends FormRequest
         $family = Family::firstOrCreate(array_merge($familyName, ['order_id' => $order->id]));
         $family->save();
 
-        return array_map('trim', ['family_id'=>strval($family->id), 'order_id'=>strval($order->id)]);
+        return array_map('trim', ['family_id' => strval($family->id), 'order_id' => strval($order->id)]);
     }
 
     /**
@@ -200,9 +204,10 @@ class StoreTaxon extends FormRequest
             ->log('created');
     }
 
-    protected function createSynonyms(Taxon $taxon){
+    protected function createSynonyms(Taxon $taxon)
+    {
         $synonym_names = $this->input('synonym_names');
-        foreach ($synonym_names as $k => $v){
+        foreach ($synonym_names as $k => $v) {
             $synonym = Synonym::firstOrCreate([
                 'name' => $v,
                 'taxon_id' => $taxon->id,

@@ -21,7 +21,7 @@ class Annex extends Model
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 
@@ -35,8 +35,7 @@ class Annex extends Model
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
-
 }

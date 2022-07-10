@@ -12,7 +12,7 @@ class Observer extends Model
 
     protected $fillable = ['firstName', 'lastName'];
     /**
-     * One observer for multiple observations
+     * One observer for multiple observations.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

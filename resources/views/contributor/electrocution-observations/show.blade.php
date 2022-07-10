@@ -11,7 +11,10 @@
 
         <h2 class="is-size-4">{{ __('Activity Log') }}</h2>
 
-        <nz-electrocution-observation-activity-log :activities="{{ $electrocutionObservation->activity }}"/>
+        <nz-electrocution-observation-activity-log
+            :activities="{{ $electrocutionObservation->activity }}"
+        >
+        </nz-electrocution-observation-activity-log>
     </div>
 @endsection
 

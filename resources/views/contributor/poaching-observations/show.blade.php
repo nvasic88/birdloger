@@ -11,7 +11,10 @@
 
         <h2 class="is-size-4">{{ __('Activity Log') }}</h2>
 
-        <nz-poaching-observation-activity-log :activities="{{ $poachingObservation->activity }}"/>
+        <nz-poaching-observation-activity-log
+            :activities="{{ $poachingObservation->activity }}"
+        >
+        </nz-poaching-observation-activity-log>
     </div>
 @endsection
 

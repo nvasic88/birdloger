@@ -5,8 +5,8 @@
         <nz-electrocution-observation-form
             action="{{ route('api.electrocution-observations.update', $electrocutionObservation) }}"
             method="PUT"
-            redirect-url="{{ route('electrocution.observations.index') }}"
-            cancel-url="{{ route('electrocution.observations.index') }}"
+            redirect-url="{{ route('contributor.electrocution-observations.index') }}"
+            cancel-url="{{ route('contributor.electrocution-observations.index') }}"
             :licenses="{{ json_encode(\App\License::getOptions()) }}"
             :sexes="{{ \App\Sex::options() }}"
             :observation-types="{{ App\ObservationType::all() }}"
@@ -19,9 +19,9 @@
             should-confirm-cancel
             submit-only-dirty
             @role([
-        'admin', 'electrocution'])
-        show-observer-identifier
-        @endrole
+            'admin', 'electrocution'])
+            show-observer-identifier
+            @endrole
         />
     </div>
 @endsection
@@ -29,12 +29,12 @@
 @section('breadcrumbs')
     <div class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-            <li><a href="{{ route('electrocution.index') }}">{{ __('navigation.dashboard') }}</a></li>
+            <li><a href="{{ route('contributor.index') }}">{{ __('navigation.dashboard') }}</a></li>
             <li>
-                <a href="{{ route('electrocution.observations.index') }}">{{ __('navigation.my_electrocution_observations') }}</a>
+                <a href="{{ route('contributor.electrocution-observations.index') }}">{{ __('navigation.my_electrocution_observations') }}</a>
             </li>
             <li>
-                <a href="{{ route('electrocution.observations.show', $electrocutionObservation) }}">{{ $electrocutionObservation->id }}</a>
+                <a href="{{ route('contributor.electrocution-observations.show', $electrocutionObservation) }}">{{ $electrocutionObservation->id }}</a>
             </li>
             <li class="is-active"><a>{{ __('navigation.edit') }}</a></li>
         </ul>

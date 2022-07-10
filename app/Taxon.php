@@ -65,7 +65,7 @@ class Taxon extends Model
         'refer' => false,
         'prior' => false,
         'strictly_protected' => false,
-        'protected' => false
+        'protected' => false,
     ];
 
     /**
@@ -161,7 +161,7 @@ class Taxon extends Model
     public static function sortableFields()
     {
         return [
-            'id', 'name', 'rank_level', 'spid'
+            'id', 'name', 'rank_level', 'spid',
         ];
     }
 
@@ -308,7 +308,7 @@ class Taxon extends Model
     }
 
     /**
-     * Taxon belong to one family
+     * Taxon belong to one family.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -318,11 +318,12 @@ class Taxon extends Model
     }
 
     /**
-     * Taxon belong to one order
+     * Taxon belong to one order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function order(){
+    public function order()
+    {
         return $this->family->order();
     }
 
@@ -358,8 +359,8 @@ class Taxon extends Model
     public function scopeWithScientificOrNativeName($query, $name)
     {
         return $query->where(function ($query) use ($name) {
-            $query->where('name', 'like', '%' . $name . '%')
-                ->orWhereTranslationLike('native_name', '%' . $name . '%');
+            $query->where('name', 'like', '%'.$name.'%')
+                ->orWhereTranslationLike('native_name', '%'.$name.'%');
         });
     }
 
@@ -452,7 +453,7 @@ class Taxon extends Model
      */
     public function getRankTranslationAttribute()
     {
-        return trans('taxonomy.' . $this->rank);
+        return trans('taxonomy.'.$this->rank);
     }
 
     /**
@@ -573,7 +574,7 @@ class Taxon extends Model
 
         return [
             'elevation' => (int) $observation->elevation,
-            'date' => $observation->year . '-' . $month . '-' . $day,
+            'date' => $observation->year.'-'.$month.'-'.$day,
             'stage' => $observation->stage_name ?? 'unknown',
         ];
     }
@@ -654,7 +655,7 @@ class Taxon extends Model
             return [
                 'level' => $level,
                 'value' => $rank,
-                'label' => trans('taxonomy.' . $rank),
+                'label' => trans('taxonomy.'.$rank),
             ];
         })->values();
     }

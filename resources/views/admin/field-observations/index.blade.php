@@ -19,7 +19,7 @@
             show-status
             export-url="{{ route('api.field-observation-exports.store') }}"
             :export-columns="{{ $exportColumns }}"
-        />
+        ></nz-field-observations-table>
     </div>
 @endsection
 
@@ -36,5 +36,10 @@
     <a href="{{ route('contributor.field-observations.create') }}" class="button is-secondary is-outlined">
         @include('components.icon', ['icon' => 'plus'])
         <span>{{ __('navigation.new_field_observation') }}</span>
+    </a>
+
+    <a href="{{ route('contributor.field-observations-import.index') }}" class="button is-secondary is-outlined ml-2">
+        @include('components.icon', ['icon' => 'upload'])
+        <span>{{ __('navigation.import') }}</span>
     </a>
 @endsection

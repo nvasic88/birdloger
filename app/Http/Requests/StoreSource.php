@@ -25,6 +25,7 @@ class StoreSource extends FormRequest
                 $this->only(['name', 'description', 'link', 'poaching_observation_id'])
             )
         ))->save();
+
         return $source;
     }
 
@@ -38,6 +39,7 @@ class StoreSource extends FormRequest
                 )
             )
         );
+
         return $source;
     }
 }

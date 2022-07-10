@@ -26,7 +26,6 @@ class AlterFieldObservationsTableAddNewIds extends Migration
      */
     public function down()
     {
-
         Schema::table('field_observations', function (Blueprint $table) {
             $table->dropColumn('rid');
             $table->dropColumn('fid');

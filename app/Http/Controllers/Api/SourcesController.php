@@ -8,7 +8,6 @@ use App\Source;
 
 class SourcesController
 {
-
     public function store(StoreSource $request)
     {
         return new SourceResource($request->store());
