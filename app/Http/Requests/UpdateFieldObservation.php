@@ -18,6 +18,7 @@ use App\Support\Dataset;
 use App\Taxon;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -31,8 +32,8 @@ class UpdateFieldObservation extends FormRequest
     public function rules()
     {
         return [
-            'taxon_id' => ['required', 'exists:taxa,id'],
-            'taxon_suggestion' => ['required', 'string', 'max:255'],
+            'taxon_id' => ['nullable', 'exists:taxa,id'],
+            'taxon_suggestion' => ['nullable', 'string', 'max:255'],
             'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -88,6 +89,7 @@ class UpdateFieldObservation extends FormRequest
             'fid' => ['nullable', 'string'],
             'rid' => ['nullable', 'integer'],
             'field_observers' => ['nullable', 'array'],
+            'removed_observers' => ['nullable', 'array'],
         ];
     }
 
@@ -123,7 +125,7 @@ class UpdateFieldObservation extends FormRequest
             if (! empty($changed)) {
                 $this->logActivity($fieldObservation, $changed);
 
-                $fieldObservation->moveToPending();
+                # $fieldObservation->moveToPending();
             }
 
             $this->notifyCreator($fieldObservation);
@@ -280,8 +282,8 @@ class UpdateFieldObservation extends FormRequest
 
     private function updateObservers(FieldObservation $fieldObservation)
     {
-        $observer_ids = array();
-        foreach($this->input('field_observers') as $observer){
+        $observer_ids = [];
+        foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
                 'lastName' => $observer['lastName'],
@@ -289,6 +291,14 @@ class UpdateFieldObservation extends FormRequest
             $obs->save();
             $observer_ids[] = $obs->id;
         }
-        $fieldObservation->observation->observers()->sync($observer_ids, []);
+        foreach ($this->input('removed_observers') as $id) {
+            Arr::forget($observer_ids, $id);
+        }
+
+        if (empty($observer_ids)) {
+            $fieldObservation->observation->observers()->detach();
+        } else {
+            $fieldObservation->observation->observers()->sync($observer_ids, []);
+        }
     }
 }

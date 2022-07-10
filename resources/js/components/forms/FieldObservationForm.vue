@@ -2,35 +2,17 @@
   <form :action="action" method="POST" :lang="locale" class="field-observation-form">
     <div class="columns is-desktop">
       <div class="column is-half-desktop">
-        <div class="columns">
-          <div class="column is-2">
-            <b-field
-              :label="trans('labels.field_observations.taxon_id')"
-              label-for="taxon_id"
-              :type="form.errors.has('taxon_id') ? 'is-danger' : null"
-              :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
-              class="is-required"
-              v-tooltip="trans('labels.observations.id_tooltip')"
-
-            >
-              <b-input id="taxon_id" type="number" v-model="form.taxon_id" disabled="disabled"/>
-            </b-field>
-          </div>
-          <div class="column">
-            <nz-taxon-autocomplete
-              v-model="form.taxon_suggestion"
-              @select="onTaxonSelect"
-              :taxon="observation.taxon"
-              :error="form.errors.has('taxon_id')"
-              :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
-              autofocus
-              ref="taxonAutocomplete"
-              :label="trans('labels.field_observations.taxon')"
-              :placeholder="trans('labels.field_observations.search_for_taxon')"
-              class="is-required"
-            />
-          </div>
-        </div>
+        <nz-taxon-autocomplete
+          v-model="form.taxon_suggestion"
+          @select="onTaxonSelect"
+          :taxon="observation.taxon"
+          :error="form.errors.has('taxon_id')"
+          :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
+          autofocus
+          ref="taxonAutocomplete"
+          :label="trans('labels.field_observations.taxon')"
+          :placeholder="trans('labels.field_observations.search_for_taxon')"
+        />
 
         <nz-date-input
           :year.sync="form.year"
@@ -368,22 +350,26 @@
         <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
         <div class="column is-1"></div>
       </div>
-      <div class="columns" v-for="(observer, index) in observers" :key="index">
-        <div class="column is-2">{{ observer.firstName }}</div>
-        <div class="column is-2">{{ observer.lastName }}</div>
-        <div class="column is-1">
-          <button type="button" class="delete" @click="removeObserver(index)"
-                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-          </button>
+      <div>
+        <div class="columns" v-for="(observer, index) in observers" :key="index">
+          <div class="column is-2">{{ observer.firstName }}</div>
+          <div class="column is-2">{{ observer.lastName }}</div>
+          <div class="column is-1">
+            <button type="button" class="delete" @click="removeObserver(index, observer.id)"
+                    v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
+            </button>
+          </div>
         </div>
       </div>
-      <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
-        <div class="column is-2">{{ observer.firstName }}</div>
-        <div class="column is-2">{{ observer.lastName }}</div>
-        <div class="column is-1">
-          <button type="button" class="delete" @click="removeObserver(index)"
-                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-          </button>
+      <div>
+        <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
+          <div class="column is-2">{{ observer.firstName }}</div>
+          <div class="column is-2">{{ observer.lastName }}</div>
+          <div class="column is-1">
+            <button type="button" class="delete" @click="removeObserver(index, 0)"
+                    v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
+            </button>
+          </div>
         </div>
       </div>
       <div class="columns">
@@ -556,6 +542,7 @@ export default {
           rid: null,
           data_provider: null,
           data_limit: '',
+          removedObservers: [],
         }
       }
     },
@@ -583,6 +570,11 @@ export default {
     showObserverIdentifier: Boolean,
 
     fieldObservers: {
+      type: Array,
+      default: () => []
+    },
+
+    removedObservers: {
       type: Array,
       default: () => []
     },
@@ -672,6 +664,7 @@ export default {
         observers: this.observation.observers,
         reason: null,
         field_observers: this.fieldObservers,
+        removed_observers: this.removedObservers,
       }, {
         resetOnSuccess: false
       })
@@ -704,9 +697,13 @@ export default {
       }
     },
 
-    removeObserver(index) {
-        axios.delete(route('api.observers.destroy', this.observers[index]));
-        this.$delete(this.observers, index);
+    removeObserver(index, id) {
+      if (id === 0){
+        this.$delete(this.fieldObservers, index);
+        return;
+      }
+      this.removedObservers.push(id);
+      this.$delete(this.observers, index);
     },
 
     /**

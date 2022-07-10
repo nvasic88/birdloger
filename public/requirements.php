@@ -2,13 +2,13 @@
 
 define('PHP_VERSION_REQUIRED', '7.2.5');
 
-$strOk   = '<span class="ok">&#10004;</span>';
+$strOk = '<span class="ok">&#10004;</span>';
 $strFail = '<span class="fail">X</span>';
 
-$requirements = array();
+$requirements = [];
 
 // PHP Version
-$requirements['php_version'] = version_compare(PHP_VERSION, PHP_VERSION_REQUIRED ,'>=');
+$requirements['php_version'] = version_compare(PHP_VERSION, PHP_VERSION_REQUIRED, '>=');
 
 // OpenSSL PHP Extension
 $requirements['openssl_enabled'] = extension_loaded('openssl');
@@ -35,7 +35,7 @@ $requirements['ctype'] = extension_loaded('ctype');
 $requirements['gd'] = extension_loaded('gd');
 
 // ImageMagick PHP Extension
-$requirements['imagick'] = class_exists("Imagick");
+$requirements['imagick'] = class_exists('Imagick');
 
 // mod_rewrite
 $requirements['mod_rewrite_enabled'] = null;

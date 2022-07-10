@@ -114,6 +114,6 @@ class PoachingObservationPolicy
      */
     protected function isCurator(User $user, PoachingObservation $poachingObservation)
     {
-        return $user->hasAnyRole(['admin', 'poaching']) && $poachingObservation->shouldBeCuratedBy($user);
+        return $user->hasAnyRole(['admin', 'poaching']);
     }
 }

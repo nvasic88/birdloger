@@ -17,12 +17,12 @@ class PoachingObservationsController
     public function index()
     {
         return view('contributor.poaching-observations.index', [
-            # 'exportColumns' => ContributorFieldObservationsCustomExport::availableColumnData(),
+            'exportColumns' => ContributorFieldObservationsCustomExport::availableColumnData(),
         ]);
     }
 
     /**
-     * Show field observation details.
+     * Show poaching observation details.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @param \Illuminate\Http\Request $request
@@ -50,7 +50,7 @@ class PoachingObservationsController
     }
 
     /**
-     * Show form to edit field observation.
+     * Show form to edit pocahing observation.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @param \Illuminate\Http\Request $request

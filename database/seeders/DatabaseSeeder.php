@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +25,5 @@ class DatabaseSeeder extends Seeder
         // $this->call(RedListsTableSeeder::class);
         // $this->call(ConservationLegislationsTableSeeder::class);
         // $this->call(ConservationDocumentsTableSeeder::class);
-
     }
 }

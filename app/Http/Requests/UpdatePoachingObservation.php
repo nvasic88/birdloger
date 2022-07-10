@@ -22,12 +22,12 @@ use App\Support\Dataset;
 use App\Taxon;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UpdatePoachingObservation extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -36,9 +36,9 @@ class UpdatePoachingObservation extends FormRequest
     public function rules()
     {
         return [
-            'taxon_id' => ['required', 'exists:taxa,id'],
-            'taxon_suggestion' => ['required', 'string', 'max:191'],
-            'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
+            'taxon_id' => ['nullable', 'exists:taxa,id'],
+            'taxon_suggestion' => ['nullable', 'string', 'max:191'],
+            'year' => ['bail', 'nullable', 'date_format:Y', 'before_or_equal:now'],
             'month' => [
                 'bail',
                 'nullable',
@@ -66,7 +66,7 @@ class UpdatePoachingObservation extends FormRequest
             'photos' => [
                 'nullable',
                 'array',
-                'max:' . config('biologer.photos_per_observation'),
+                'max:'.config('biologer.photos_per_observation'),
             ],
             'photos.*.crop' => ['nullable', 'array'],
             'photos.*.crop.x' => ['required_with:photos.*.crop', 'integer'],
@@ -96,6 +96,7 @@ class UpdatePoachingObservation extends FormRequest
 
             'indigenous' => ['boolean'],
             'exact_number' => ['boolean'],
+            'locality' => ['nullable', 'string'],
             'place' => ['nullable', 'string'],
             'municipality' => ['nullable', 'string'],
             'data_id' => ['nullable', 'string'],
@@ -117,6 +118,7 @@ class UpdatePoachingObservation extends FormRequest
             'proceeding' => ['nullable', Rule::in(Proceedings::options()->keys())],
             'verdict' => ['nullable', Rule::in(['yes', 'no', 'rejected'])],
             'verdict_date' => ['nullable', 'date'],
+            'total' => ['nullable', 'integer'],
             'dead_from_total' => ['nullable', 'integer'],
             'alive_from_total' => ['nullable', 'integer'],
             'sanction_rsd' => ['nullable', 'integer'],
@@ -124,6 +126,7 @@ class UpdatePoachingObservation extends FormRequest
             'community_sentence' => ['nullable', 'integer'],
             'suspects_number' => ['nullable', 'integer'],
             'sources' => ['nullable', 'array'],
+            'removed_sources' => ['nullable', 'array'],
 
             'offences_ids' => ['nullable', 'array'],
             'offences_ids.*' => ['required', Rule::in(OffenceCase::pluck('id')->all())],
@@ -134,12 +137,14 @@ class UpdatePoachingObservation extends FormRequest
      * Store observation and related data.
      *
      * @param \App\PoachingObservation $poachingObservation
-     * @return \App\FieldObservation
+     * @return \App\PoachingObservation
      */
     public function save(PoachingObservation $poachingObservation)
     {
         return DB::transaction(function () use ($poachingObservation) {
-            $oldPoachingObservation = $poachingObservation->load('observation.types', 'observation.photos')->replicate();
+            $oldPoachingObservation = $poachingObservation
+                ->load('observation.types', 'observation.photos')
+                ->replicate();
 
             $poachingObservation->update($this->getSpecificObservationData());
             $poachingObservation->load('observation')->observation->update($this->getGeneralObservationData());
@@ -161,10 +166,10 @@ class UpdatePoachingObservation extends FormRequest
 
             // Log activity and move to pending only if something more than
             // updating photo license occurred.
-            if (!empty($changed)) {
+            if (! empty($changed)) {
                 $this->logActivity($poachingObservation, $changed);
 
-                $poachingObservation->moveToPending();
+                # $poachingObservation->moveToPending();
             }
 
             // $this->notifyCreator($poachingObservation);
@@ -174,7 +179,7 @@ class UpdatePoachingObservation extends FormRequest
     }
 
     /**
-     * Get observation data specific to field observation from the request.
+     * Get observation data specific to poaching observation from the request.
      *
      * @return array
      */
@@ -188,6 +193,7 @@ class UpdatePoachingObservation extends FormRequest
 
             'indigenous' => $this->input('indigenous'),
             'exact_number' => $this->input('exact_number'),
+            'locality' => $this->input('locality'),
             'place' => $this->input('place'),
             'municipality' => $this->input('municipality'),
             'data_id' => $this->input('data_id'),
@@ -202,6 +208,7 @@ class UpdatePoachingObservation extends FormRequest
             'associates' => $this->input('associates'),
             'origin_of_individuals' => $this->input('origin_of_individuals'),
             'cites' => $this->input('cites'),
+            'total' => $this->input('total'),
             'dead_from_total' => $this->input('dead_from_total'),
             'alive_from_total' => $this->input('alive_from_total'),
             'suspects_number' => $this->input('suspects_number'),
@@ -233,14 +240,14 @@ class UpdatePoachingObservation extends FormRequest
      */
     protected function getGeneralObservationData()
     {
-        $latitude = (float)str_replace(',', '.', $this->input('latitude'));
-        $longitude = (float)str_replace(',', '.', $this->input('longitude'));
+        $latitude = (float) str_replace(',', '.', $this->input('latitude'));
+        $longitude = (float) str_replace(',', '.', $this->input('longitude'));
 
         $data = [
             'taxon_id' => $this->input('taxon_id'),
             'year' => $this->input('year'),
-            'month' => $this->input('month') ? (int)$this->input('month') : null,
-            'day' => $this->input('day') ? (int)$this->input('day') : null,
+            'month' => $this->input('month') ? (int) $this->input('month') : null,
+            'day' => $this->input('day') ? (int) $this->input('day') : null,
             'location' => $this->input('location'),
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -274,7 +281,7 @@ class UpdatePoachingObservation extends FormRequest
     }
 
     /**
-     * Log update activity for field observation.
+     * Log update activity for poaching observation.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @param array $beforeChange
@@ -290,7 +297,7 @@ class UpdatePoachingObservation extends FormRequest
     }
 
     /**
-     * Sync field observation relations.
+     * Sync poaching observation relations.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return void
@@ -308,7 +315,7 @@ class UpdatePoachingObservation extends FormRequest
      */
     protected function getObserver()
     {
-        if (!$this->input('observed_by_id')) {
+        if (! $this->input('observed_by_id')) {
             return $this->input('observer');
         }
 
@@ -322,7 +329,7 @@ class UpdatePoachingObservation extends FormRequest
      */
     protected function getIdentifier()
     {
-        if (!$this->input('identified_by_id')) {
+        if (! $this->input('identified_by_id')) {
             return $this->input('identifier');
         }
 
@@ -350,7 +357,7 @@ class UpdatePoachingObservation extends FormRequest
 
     private function updateObservers(PoachingObservation $poachingObservation)
     {
-        $observer_ids = array();
+        $observer_ids = [];
         foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
@@ -359,7 +366,15 @@ class UpdatePoachingObservation extends FormRequest
             $obs->save();
             $observer_ids[] = $obs->id;
         }
-        $poachingObservation->observation->observers()->sync($observer_ids, []);
+        foreach ($this->input('removed_observers') as $id) {
+            Arr::forget($observer_ids, $id);
+        }
+
+        if (empty($observer_ids)) {
+            $poachingObservation->observation->observers()->detach();
+        } else {
+            $poachingObservation->observation->observers()->sync($observer_ids, []);
+        }
     }
 
     private function updateSources(PoachingObservation $poachingObservation)
@@ -372,6 +387,11 @@ class UpdatePoachingObservation extends FormRequest
                 'poaching_observation_id' => $poachingObservation['id'],
             ]);
             $src->save();
+        }
+
+        foreach ($this->input('removed_sources') as $id) {
+            $source = Source::find($id);
+            $source->delete();
         }
     }
 }

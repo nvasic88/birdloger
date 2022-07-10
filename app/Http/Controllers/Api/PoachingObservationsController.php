@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class PoachingObservationsController
 {
     /**
-     * Get field observations.
+     * Get poaching observations.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
@@ -27,7 +27,7 @@ class PoachingObservationsController
     }
 
     /**
-     * Add new field observation.
+     * Add new poaching observation.
      *
      * @param \App\Http\Requests\StorePoachingObservation $form
      * @return \App\Http\Resources\PoachingObservationResource
@@ -49,7 +49,7 @@ class PoachingObservationsController
     }
 
     /**
-     * Update field observation.
+     * Update poaching observation.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @param \App\Http\Requests\UpdatePoachingObservation $form
@@ -61,7 +61,7 @@ class PoachingObservationsController
     }
 
     /**
-     * Delete field observation.
+     * Delete poaching observation.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return \Illuminate\Http\JsonResponse

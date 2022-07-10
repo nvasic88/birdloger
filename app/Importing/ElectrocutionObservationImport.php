@@ -2,9 +2,8 @@
 
 namespace App\Importing;
 
-use App\AtlasCode;
 use App\DEM\Reader as DEMReader;
-use App\FieldObservation;
+use App\ElectrocutionObservation;
 use App\License;
 use App\NumberOf;
 use App\Observation;
@@ -12,13 +11,11 @@ use App\Observer;
 use App\Rules\Day;
 use App\Rules\Decimal;
 use App\Rules\Month;
-use App\Sex;
 use App\Stage;
 use App\Support\Dataset;
 use App\Taxon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class ElectrocutionObservationImport extends BaseImport
 {
@@ -69,29 +66,65 @@ class ElectrocutionObservationImport extends BaseImport
     {
         return collect([
             [
-                'label' => trans('labels.id'),
-                'value' => 'id',
+                'label' => trans('labels.electrocution_observations.distance_from_pillar'),
+                'value' => 'distance_from_pillar',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.rid'),
-                'value' => 'rid',
+                'label' => trans('labels.electrocution_observations.age'),
+                'value' => 'age',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.fid'),
-                'value' => 'fid',
+                'label' => trans('labels.electrocution_observations.position'),
+                'value' => 'position',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.state'),
+                'value' => 'state',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.annotation'),
+                'value' => 'annotation',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.number_of_pillars'),
+                'value' => 'number_of_pillars',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.transmission_line'),
+                'value' => 'transmission_line',
+                'required' => false,
+            ],
+
+            [
+                'label' => trans('labels.electrocution_observations.time_of_departure'),
+                'value' => 'time_of_departure',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.time_of_arrival'),
+                'value' => 'time_of_arrival',
                 'required' => false,
             ],
             [
                 'label' => trans('labels.field_observations.latitude'),
                 'value' => 'latitude',
-                'required' => true,
+                'required' => false,
             ],
             [
                 'label' => trans('labels.field_observations.longitude'),
                 'value' => 'longitude',
-                'required' => true,
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.field_observations.accuracy'),
+                'value' => 'accuracy',
+                'required' => false,
             ],
             [
                 'label' => trans('labels.field_observations.day'),
@@ -106,56 +139,31 @@ class ElectrocutionObservationImport extends BaseImport
             [
                 'label' => trans('labels.field_observations.year'),
                 'value' => 'year',
-                'required' => true,
+                'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.time'),
-                'value' => 'time',
+                'label' => trans('labels.field_observations.date'),
+                'value' => 'date',
                 'required' => false,
             ],
             [
                 'label' => trans('labels.field_observations.taxon'),
                 'value' => 'taxon',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.taxa.spid'),
-                'value' => 'spid',
                 'required' => true,
             ],
             [
-                'label' => trans('labels.observations.atlas_code'),
-                'value' => 'atlas_code',
+                'label' => trans('labels.electrocution_observations.duration'),
+                'value' => 'duration',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.number'),
-                'value' => 'number',
+                'label' => trans('labels.electrocution_observations.distance'),
+                'value' => 'distance',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.number_of'),
-                'value' => 'number_of',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.data_provider'),
-                'value' => 'data_provider',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.data_limit'),
-                'value' => 'data_limit',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.comment'),
-                'value' => 'comment',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.identifier'),
-                'value' => 'identifier',
+                'label' => trans('labels.electrocution_observations.transportation'),
+                'value' => 'transportation',
                 'required' => false,
             ],
             [
@@ -163,82 +171,6 @@ class ElectrocutionObservationImport extends BaseImport
                 'value' => 'observers',
                 'required' => false,
             ],
-            [
-                'label' => trans('labels.field_observations.location'),
-                'value' => 'location',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.mgrs10k'),
-                'value' => 'mgrs10k',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.accuracy'),
-                'value' => 'accuracy',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.elevation'),
-                'value' => 'elevation',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.sex'),
-                'value' => 'sex',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.stage'),
-                'value' => 'stage',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.data_license'),
-                'value' => 'license',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.note'),
-                'value' => 'note',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.description'),
-                'value' => 'description',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.project'),
-                'value' => 'project',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.habitat'),
-                'value' => 'habitat',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.found_on'),
-                'value' => 'found_on',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.found_dead'),
-                'value' => 'found_dead',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.found_dead_note'),
-                'value' => 'found_dead_note',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.field_observations.dataset'),
-                'value' => 'dataset',
-                'required' => false,
-            ],
-
 
         ])->pipe(function ($columns) use ($user) {
             if (! $user || optional($user)->hasAnyRole(['admin', 'curator'])) {
@@ -248,7 +180,6 @@ class ElectrocutionObservationImport extends BaseImport
             return $columns->filter(function ($column) {
                 return ! in_array($column['value'], ['identifier', 'observers']);
             })->values();
-
         });
     }
 
@@ -266,7 +197,7 @@ class ElectrocutionObservationImport extends BaseImport
 
     public function generateErrorsRoute()
     {
-        return route('api.field-observation-imports.errors', $this->model());
+        return route('api.poaching-observation-imports.errors', $this->model());
     }
 
     /**
@@ -278,112 +209,66 @@ class ElectrocutionObservationImport extends BaseImport
     protected function makeValidator(array $data)
     {
         return Validator::make($data, [
-            'taxon' => [
-                'nullable',
-                'string'
-            ],
-            'spid' => [
-                'required',
-                Rule::exists('taxa', 'spid'),
-            ],
-            'year' => ['bail', 'date_format:Y', 'required', 'before_or_equal:now'],
+            'distance_from_pillar' => ['nullable'],
+            'age' => ['nullable'],
+            'position' => ['string', 'nullable'],
+            'state' => ['string', 'nullable'],
+            'annotation' => ['text', 'nullable'],
+            'number_of_pillars' => ['nullable'],
+            'transmission_line' => ['string', 'nullable'],
+            'time_of_departure' => ['date_format:H:i', 'nullable'],
+            'time_of_arrival' => ['date_format:H:i:after:time_of_departure', 'nullable'],
+            'duration' => ['nullable'],
+            'distance' => ['nullable'],
+            'transportation' => ['string', 'nullable'],
+
+            'year' => ['bail', 'date_format:Y', 'nullable', 'before_or_equal:now'],
             'month' => [
                 'bail',
                 'nullable',
-                'numeric',
                 new Month(Arr::get($data, 'year')),
             ],
             'day' => [
                 'bail',
                 'nullable',
-                'numeric',
                 new Day(Arr::get($data, 'year'), Arr::get($data, 'month')),
             ],
-            'latitude' => ['required', new Decimal(['min' => -90, 'max' => 90])],
-            'longitude' => ['required', new Decimal(['min' => -180, 'max' => 180])],
-            'elevation' => ['nullable', 'integer', 'max:10000'],
-            'accuracy' => ['nullable', 'integer', 'max:50000'],
+            'latitude' => ['nullable', new Decimal(['min' => -90, 'max' => 90])],
+            'longitude' => ['nullable', new Decimal(['min' => -180, 'max' => 180])],
+            'accuracy' => ['nullable'],
+            'date' => ['nullable'],
+            'input_date' => ['nullable'],
+            'taxon' => [
+                'required',
+                'string',
+            ],
             'observers' => ['nullable', 'string'],
-            'identifier' => ['nullable', 'string'],
-            'sex' => ['nullable', Rule::in(Sex::options())],
-            'number' => ['nullable', 'integer', 'min:1'],
-            'number_of' => ['nullable', 'string',
-                Rule::in(NumberOf::options())],
-            'found_dead' => ['nullable', 'string', Rule::in($this->yesNo())],
-            'found_dead_note' => ['nullable', 'string', 'max:1000'],
-            'time' => ['nullable', 'date_format:H:i'],
-            'project' => ['nullable', 'string', 'max:191'],
-            'habitat' => ['nullable', 'string', 'max:191'],
-            'found_on' => ['nullable', 'string', 'max:191'],
-            'note' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'original_identification' => ['nullable', 'string'],
-            'dataset' => ['nullable', 'string'],
-            'rid' => ['nullable', 'integer', 'min:1'],
-            'fid' => ['nullable', 'string'],
-            'data_provider' => ['nullable', 'string'],
-            'data_limit' => ['nullable', 'string'],
-            'comment' => ['nullable', 'string'],
-            'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
         ], [
-            'year.date_format' => trans('validation.year'),
-            'sex.in' => __('validation.in_extended', [
-                'attribute' => __('labels.literature_observations.sex'),
-                'options' => Sex::labels()->implode('; '),
-            ]),
-            'stage.in' => __('validation.in_extended', [
-                'attribute' => __('labels.literature_observations.stage'),
-                'options' => $this->stagesTranslatedNames()->implode('; '),
-            ]),
-        ], [
-            'rid' => trans('labels.observations.rid'),
-            'fid' => trans('labels.observations.fid'),
+            'distance_from_pillar' => trans('labels.electrocution_observations.distance_from_pillar'),
+            'age' => trans('labels.electrocution_observations.age'),
+            'position' => trans('labels.electrocution_observations.position'),
+            'state' => trans('labels.electrocution_observations.state'),
+            'annotation' => trans('labels.electrocution_observations.annotation'),
+            'number_of_pillars' => trans('labels.electrocution_observations.number_of_pillars'),
+            'transmission_line' => trans('labels.electrocution_observations.transmission_line'),
+            'time_of_departure' => trans('labels.electrocution_observations.time_of_departure'),
+            'time_of_arrival' => trans('labels.electrocution_observations.time_of_arrival'),
+            'duration' => trans('labels.electrocution_observations.duration'),
+            'distance' => trans('labels.electrocution_observations.distance'),
+            'transportation' => trans('labels.electrocution_observations.transportation'),
+
             'latitude' => trans('labels.field_observations.latitude'),
             'longitude' => trans('labels.field_observations.longitude'),
+            'accuracy' => trans('labels.field_observations.accuracy'),
             'day' => trans('labels.field_observations.day'),
             'month' => trans('labels.field_observations.month'),
             'year' => trans('labels.field_observations.year'),
-            'time' => trans('labels.field_observations.time'),
+            'date' => trans('labels.field_observations.date'),
+            'input_date' => trans('labels.poaching_observations.input_date'),
             'taxon' => trans('labels.field_observations.taxon'),
-            'spid' => trans('labels.taxa.spid'),
-            'atlas_code' => trans('labels.observations.atlas_code'),
-            'number' => trans('labels.field_observations.number'),
-            'number_of' => trans('labels.field_observations.number_of'),
-            'data_provider' => trans('labels.observations.data_provider'),
-            'data_limit' => trans('labels.observations.data_limit'),
-            'comment' => trans('labels.field_observations.comment'),
-            'identifier' => trans('labels.field_observations.identifier'),
+
             'observers' => trans('labels.observations.observers'),
-            'location' => trans('labels.field_observations.location'),
-            'accuracy' => trans('labels.field_observations.accuracy'),
-            'elevation' => trans('labels.field_observations.elevation'),
-            'sex' => trans('labels.field_observations.sex'),
-            'stage' => trans('labels.field_observations.stage'),
-            'license' => trans('labels.field_observations.data_license'),
-            'note' => trans('labels.field_observations.note'),
-            'project' => trans('labels.field_observations.project'),
-            'habitat' => trans('labels.field_observations.habitat'),
-            'found_on' => trans('labels.field_observations.found_on'),
-            'found_dead' => trans('labels.field_observations.found_dead'),
-            'found_dead_note' => trans('labels.field_observations.found_dead_note'),
-            # 'status' => trans('labels.field_observations.status'),
-            # 'types' => trans('labels.field_observations.types'),
-            'original_identification' => trans('labels.field_observations.original_identification'),
-            'dataset' => trans('labels.field_observations.dataset'),
-            'description' => trans('labels.field_observations.description')
         ]);
-    }
-
-    /**
-     * "Yes" and "No" options translated in language the import is using.
-     *
-     * @return array
-     */
-    protected function yesNo()
-    {
-        $lang = $this->model()->lang;
-
-        return [__('Yes', [], $lang), __('No', [], $lang)];
     }
 
     /**
@@ -394,22 +279,24 @@ class ElectrocutionObservationImport extends BaseImport
      */
     protected function storeSingleItem(array $item)
     {
-        $fieldObservation = FieldObservation::create(
+        $electrocutionObservation = ElectrocutionObservation::create(
             $this->getSpecificObservationData($item)
         );
 
-        $observation = $fieldObservation->observation()->save(
+        $observation = $electrocutionObservation->observation()->save(
             new Observation($this->getGeneralObservationData($item))
         );
 
-        $fieldObservation->observation->observers()->sync($this->getObservers($item), []);
+        $electrocutionObservation->observation->observers()->sync($this->getObservers($item), []);
 
-        activity()->performedOn($fieldObservation)
+        $electrocutionObservation->approve();
+
+        activity()->performedOn($electrocutionObservation)
             ->causedBy($this->model()->user)
             ->log('created');
 
         if ($observation->isApproved()) {
-            activity()->performedOn($fieldObservation)
+            activity()->performedOn($electrocutionObservation)
                 ->causedBy($this->model()->user)
                 ->log('approved');
         }
@@ -423,15 +310,31 @@ class ElectrocutionObservationImport extends BaseImport
      */
     protected function getSpecificObservationData(array $item)
     {
+        $distance = $this->convertToNumberOrNull(Arr::get($item, 'distance') ?: null);
+        $duration = $this->convertToNumberOrNull(Arr::get($item, 'duration') ?: null);
+        $number_of_pillars = $this->convertToNumberOrNull(Arr::get($item, 'number_of_pillars') ?: null);
+        $distance_from_pillar = $this->convertToNumberOrNull(Arr::get($item, 'distance_from_pillar') ?: null);
+        $age = $this->convertToNumberOrNull(Arr::get($item, 'age') ?: null);
+
         return [
             'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
-            'time' => Arr::get($item, 'time') ?: null,
             # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
             'license' => $this->getLicense($item),
-            'rid' => Arr::get($item, 'rid') ?: null,
-            'fid' => Arr::get($item, 'fid') ?: null,
+
+            'distance_from_pillar' => $distance_from_pillar,
+            'age' => $age,
+            'position' => Arr::get($item, 'position') ?: null,
+            'state' => $this->getBoolean($item, 'state'),
+            'annotation' => Arr::get($item, 'annotation') ?: null,
+            'number_of_pillars' => $number_of_pillars,
+            'transmission_line' => $this->getBoolean($item, 'transmission_line'),
+            'time_of_departure' => $this->getBoolean($item, 'time_of_departure'),
+            'time_of_arrival' => $this->getBoolean($item, 'time_of_arrival'),
+            'duration' => $duration,
+            'distance' => $distance,
+            'transportation' => Arr::get($item, 'transportation') ?: null,
         ];
     }
 
@@ -445,29 +348,24 @@ class ElectrocutionObservationImport extends BaseImport
     {
         $latitude = $this->getLatitude($item);
         $longitude = $this->getLongitude($item);
-        $taxon = $this->getTaxonBySPID($item);
+        $taxon = $this->getTaxon($item);
         $atlasCode = Arr::get($item, 'atlas_code');
+        $day = $this->convertToNumberOrNull(Arr::get($item, 'day') ?: null);
+        $month = $this->convertToNumberOrNull(Arr::get($item, 'month') ?: null);
+        $accuracy = $this->convertAccuracy($item);
 
         return [
             'taxon_id' => $taxon ? $taxon->id : null,
             'latitude' => $latitude,
             'longitude' => $longitude,
-            'day' => Arr::get($item, 'day') ?: null,
-            'month' => Arr::get($item, 'month') ?: null,
-            'year' => Arr::get($item, 'year'),
+            'day' => $day,
+            'month' => $month,
+            'year' => Arr::get($item, 'year') ?: null,
             'location' => Arr::get($item, 'location') ?: null,
-            'mgrs10k' => mgrs10k($latitude, $longitude),
-            'accuracy' => Arr::get($item, 'accuracy') ?: null,
-            'elevation' => $this->getElevation($item),
+            'accuracy' => $accuracy,
             'created_by_id' => $this->model()->for_user_id ?: $this->model()->user_id,
             # 'observer' => $this->getObserver($item),
             'identifier' => $this->getIdentifier($item),
-            'sex' => Sex::getValueFromLabel(Arr::get($item, 'sex', '')),
-            'number' => Arr::get($item, 'number') ?: null,
-            'note' => Arr::get($item, 'note') ?: null,
-            'project' => Arr::get($item, 'project') ?: null,
-            'habitat' => Arr::get($item, 'habitat') ?: null,
-            'found_on' => Arr::get($item, 'found_on') ?: null,
             'stage_id' => $this->getStageId($item),
             # 'original_identification' => Arr::get($item, 'original_identification', Arr::get($item, 'taxon')),
             'original_identification' => Arr::get($item, 'taxon'),
@@ -479,7 +377,7 @@ class ElectrocutionObservationImport extends BaseImport
             'data_provider' => Arr::get($item, 'data_provider') ?: null,
             'data_limit' => Arr::get($item, 'data_limit') ?: null,
             'description' => Arr::get($item, 'description') ?: null,
-            'atlas_code' => $atlasCode === '' ? null : (int)$atlasCode,
+            'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
             'found_dead' => $this->getFoundDead($item),
             'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
         ];
@@ -493,18 +391,12 @@ class ElectrocutionObservationImport extends BaseImport
      */
     protected function getTaxon(array $data)
     {
-        return Taxon::findByName(Arr::get($data, 'taxon'));
-    }
+        $name = explode(' ', Arr::get($data, 'taxon'));
+        if ($name == []) {
+            return;
+        }
 
-    /**
-     * Get ID of taxon using it's name.
-     *
-     * @param  array  $data
-     * @return Taxon|null
-     */
-    protected function getTaxonBySPID(array $data)
-    {
-        return Taxon::findBySPID(Arr::get($data, 'spid'));
+        return Taxon::findByName($name[0].' '.$name[1]);
     }
 
     /**
@@ -564,35 +456,6 @@ class ElectrocutionObservationImport extends BaseImport
         }
 
         return Arr::get($data, 'observer') ?: $this->model()->user->full_name;
-    }
-
-    /**
-     * Get observers full names.
-     *
-     * @param  array  $data
-     * @return array $observer_ids
-     */
-    protected function getObservers(array $data): ?array
-    {
-        $observers = Arr::get($data, 'observers');
-        $observer_ids = array();
-        if (!$observers) return null;
-        foreach (explode('; ', $observers) as $observer){
-            $ob = explode(' ', $observer);
-            if (count($ob) < 2 || count($ob) > 3)
-                break;
-            $firstName = $ob[0];
-            $lastName = $ob[1];
-            if (count($ob) > 2)
-                $lastName .= ' '.$ob[2];
-            $obs = Observer::firstOrCreate([
-                'firstName' => $firstName,
-                'lastName' => $lastName,
-            ]);
-            $obs->save();
-            $observer_ids[] = $obs->id;
-        }
-        return $observer_ids;
     }
 
     /**
@@ -763,5 +626,70 @@ class ElectrocutionObservationImport extends BaseImport
     protected function shouldApproveCurated()
     {
         return $this->model()->options['approve_curated'] ?? false;
+    }
+
+    protected function getBoolean(array $item, string $key)
+    {
+        $value = Arr::get($item, $key, false);
+
+        return $this->isTranslatedYes($value) || filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    protected function convertToNumberOrNull($arg)
+    {
+        if (is_numeric($arg)) {
+            return $arg;
+        }
+
+        return;
+    }
+
+    protected function convertAccuracy(array $item)
+    {
+        $accuracy = Arr::get($item, 'accuracy') ?: null;
+
+        if (! $accuracy) {
+            return;
+        }
+
+        if (! is_numeric($accuracy)) {
+            return 5000;
+        }
+
+        return $accuracy;
+    }
+
+    /**
+     * Get observers full names.
+     *
+     * @param  array  $data
+     * @return array $observer_ids
+     */
+    protected function getObservers(array $data): ?array
+    {
+        $observers = Arr::get($data, 'observers');
+        $observer_ids = [];
+        if (! $observers) {
+            return null;
+        }
+        foreach (explode('; ', $observers) as $observer) {
+            $ob = explode(' ', $observer);
+            if (count($ob) < 2 || count($ob) > 3) {
+                break;
+            }
+            $firstName = $ob[0];
+            $lastName = $ob[1];
+            if (count($ob) > 2) {
+                $lastName .= ' '.$ob[2];
+            }
+            $obs = Observer::firstOrCreate([
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+            ]);
+            $obs->save();
+            $observer_ids[] = $obs->id;
+        }
+
+        return $observer_ids;
     }
 }

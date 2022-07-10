@@ -18,6 +18,7 @@ use App\Support\Dataset;
 use App\Taxon;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -31,8 +32,8 @@ class UpdateElectrocutionObservation extends FormRequest
     public function rules()
     {
         return [
-            'taxon_id' => ['required', 'exists:taxa,id'],
-            'taxon_suggestion' => ['required', 'string', 'max:255'],
+            'taxon_id' => ['nullable', 'exists:taxa,id'],
+            'taxon_suggestion' => ['nullable', 'string', 'max:255'],
             'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -58,7 +59,7 @@ class UpdateElectrocutionObservation extends FormRequest
             'found_dead' => ['nullable', 'boolean'],
             'found_dead_note' => ['nullable'],
             'data_license' => ['nullable', Rule::in(License::activeIds())],
-            'photos' => ['nullable', 'array', 'max:' . config('biologer.photos_per_observation')],
+            'photos' => ['nullable', 'array', 'max:'.config('biologer.photos_per_observation')],
             'photos.*.id' => ['required_without:photos.*.path', 'integer'],
             'photos.*.path' => ['required_without:photos.*.id', 'string'],
             'photos.*.crop' => ['nullable', 'array'],
@@ -129,10 +130,10 @@ class UpdateElectrocutionObservation extends FormRequest
 
             // Log activity and move to pending only if something more than
             // updating photo license occurred.
-            if (!empty($changed)) {
+            if (! empty($changed)) {
                 $this->logActivity($electrocutionObservation, $changed);
 
-                $electrocutionObservation->moveToPending();
+                # $electrocutionObservation->moveToPending();
             }
 
             $this->notifyCreator($electrocutionObservation);
@@ -182,14 +183,14 @@ class UpdateElectrocutionObservation extends FormRequest
      */
     protected function getGeneralObservationData()
     {
-        $latitude = (float)str_replace(',', '.', $this->input('latitude'));
-        $longitude = (float)str_replace(',', '.', $this->input('longitude'));
+        $latitude = (float) str_replace(',', '.', $this->input('latitude'));
+        $longitude = (float) str_replace(',', '.', $this->input('longitude'));
 
         $data = [
             'taxon_id' => $this->input('taxon_id'),
             'year' => $this->input('year'),
-            'month' => $this->input('month') ? (int)$this->input('month') : null,
-            'day' => $this->input('day') ? (int)$this->input('day') : null,
+            'month' => $this->input('month') ? (int) $this->input('month') : null,
+            'day' => $this->input('day') ? (int) $this->input('day') : null,
             'location' => $this->input('location'),
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -256,7 +257,7 @@ class UpdateElectrocutionObservation extends FormRequest
      */
     protected function getObserver()
     {
-        if (!$this->input('observed_by_id')) {
+        if (! $this->input('observed_by_id')) {
             return $this->input('observer');
         }
 
@@ -270,7 +271,7 @@ class UpdateElectrocutionObservation extends FormRequest
      */
     protected function getIdentifier()
     {
-        if (!$this->input('identified_by_id')) {
+        if (! $this->input('identified_by_id')) {
             return $this->input('identifier');
         }
 
@@ -298,7 +299,7 @@ class UpdateElectrocutionObservation extends FormRequest
 
     private function updateObservers(ElectrocutionObservation $electrocutionObservation)
     {
-        $observer_ids = array();
+        $observer_ids = [];
         foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
@@ -307,6 +308,14 @@ class UpdateElectrocutionObservation extends FormRequest
             $obs->save();
             $observer_ids[] = $obs->id;
         }
-        $electrocutionObservation->observation->observers()->sync($observer_ids, []);
+        foreach ($this->input('removed_observers') as $id) {
+            Arr::forget($observer_ids, $id);
+        }
+
+        if (empty($observer_ids)) {
+            $electrocutionObservation->observation->observers()->detach();
+        } else {
+            $electrocutionObservation->observation->observers()->sync($observer_ids, []);
+        }
     }
 }

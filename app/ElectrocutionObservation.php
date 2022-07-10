@@ -8,6 +8,7 @@ use App\Contracts\FlatArrayable;
 use App\Filters\Filterable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Spatie\Activitylog\Models\Activity;
 
 class ElectrocutionObservation extends Model implements FlatArrayable
@@ -45,6 +46,11 @@ class ElectrocutionObservation extends Model implements FlatArrayable
         'approved_at' => 'datetime',
         'time_of_departure' => 'datetime',
         'time_of_arrival' => 'datetime',
+        'distance_from_pillar' => 'integer',
+        'age' => 'integer',
+        'number_of_pillars' => 'integer',
+        'duration' => 'integer',
+        'distance' => 'integer',
     ];
 
     protected function filters()
@@ -353,7 +359,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      */
     public function getStatusTranslationAttribute()
     {
-        return trans('labels.field_observations.statuses.' . $this->status);
+        return trans('labels.field_observations.statuses.'.$this->status);
     }
 
     /**
@@ -363,7 +369,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      */
     public function getLicenseTranslationAttribute()
     {
-        return trans('licenses.' . $this->license);
+        return trans('licenses.'.$this->license);
     }
 
     /**
@@ -390,7 +396,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     /**
      * Remove unused photos and and add new ones.
      *
-     * @param array $photos
+     * @param Collection $photos
      * @param int $defaultLicense
      * @return void
      */
@@ -464,7 +470,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     {
         $this->observation->unapprove();
 
-        if (!$this->unidentifiable) {
+        if (! $this->unidentifiable) {
             $this->forceFill(['unidentifiable' => true])->save();
         }
 
@@ -504,7 +510,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      */
     public function isPending()
     {
-        return !$this->isApproved() && !$this->unidentifiable;
+        return ! $this->isApproved() && ! $this->unidentifiable;
     }
 
     /**

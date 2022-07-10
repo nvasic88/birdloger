@@ -1,8 +1,7 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/js/dashboard.js": "/js/dashboard.js?id=e6301f7a167efe31c116",
-    "/js/public.js": "/js/public.js?id=2622c30b6fe3271b1f33",
-    "/js/vendors~buefy.js": "/js/vendors~buefy.js?id=e39a8ebadd52c9ed68e9",
-    "/js/vendors~public.js": "/js/vendors~public.js?id=83372884f4a2b91b6577"
+    "/js/app.js": "/js/app.js?id=aca2fbd2d62c5616710de470e7c9262e",
+    "/js/15ab1370a43ee0ae.js": "/js/15ab1370a43ee0ae.js?id=02396a1f34caa7e85f5849a8822f3126",
+    "/js/5c6e7b36aa4b9c0a.js": "/js/5c6e7b36aa4b9c0a.js?id=ce94d736e8d7257e0a72b12e88bc8829",
+    "/js/ce821db3f735b7eb.js": "/js/ce821db3f735b7eb.js?id=788d8da27701732fc668e21e85d396d8",
+    "/css/app.css": "/css/app.css?id=f662ee5c8c2724d1f26c3fb846dbe5bd"
 }

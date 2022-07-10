@@ -116,6 +116,6 @@ class FieldObservationPolicy
      */
     protected function isCurator(User $user, FieldObservation $fieldObservation)
     {
-        return $user->hasRole('curator') && $fieldObservation->shouldBeCuratedBy($user);
+        return $user->hasAnyRole(['curator', 'admin']);
     }
 }

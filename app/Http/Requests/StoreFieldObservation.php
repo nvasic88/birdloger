@@ -30,8 +30,8 @@ class StoreFieldObservation extends FormRequest
     public function rules()
     {
         return [
-            'taxon_id' => ['required', 'exists:taxa,id'],
-            'taxon_suggestion' => ['required', 'string', 'max:191'],
+            'taxon_id' => ['nullable', 'exists:taxa,id'],
+            'taxon_suggestion' => ['nullable', 'string', 'max:191'],
             'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -126,6 +126,8 @@ class StoreFieldObservation extends FormRequest
         $fieldObservation = FieldObservation::create($this->getSpecificObservationData());
 
         $fieldObservation->observation()->create($this->getGeneralObservationData());
+
+        $fieldObservation->approve();
 
         return $fieldObservation;
     }
@@ -349,8 +351,8 @@ class StoreFieldObservation extends FormRequest
 
     private function createObservers(FieldObservation $fieldObservation)
     {
-        $observer_ids = array();
-        foreach($this->input('field_observers') as $observer){
+        $observer_ids = [];
+        foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
                 'lastName' => $observer['lastName'],

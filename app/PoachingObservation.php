@@ -8,6 +8,7 @@ use App\Contracts\FlatArrayable;
 use App\Filters\Filterable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Spatie\Activitylog\Models\Activity;
 
 class PoachingObservation extends Model implements FlatArrayable
@@ -48,13 +49,14 @@ class PoachingObservation extends Model implements FlatArrayable
         'in_report' => 'boolean',
         'case_reported' => 'boolean',
         'opportunity' => 'boolean',
+        'total' => 'integer',
         'dead_from_total' => 'integer',
         'alive_from_total' => 'integer',
         'sanction_rsd' => 'integer',
         'sanction_eur' => 'integer',
         'community_sentence' => 'integer',
         'suspects_number' => 'integer',
-        'verdict_date' => 'datetime'
+        'verdict_date' => 'datetime',
     ];
 
     protected function filters()
@@ -122,7 +124,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Stage of the observation
+     * Stage of the observation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -132,13 +134,14 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Can have many offence cases
+     * Can have many offence cases.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function offences()
     {
-        return $this->belongsToMany(OffenceCase::class,
+        return $this->belongsToMany(
+            OffenceCase::class,
             'offence_case_poaching_observation',
             'poaching_id',
             'offence_id'
@@ -370,7 +373,7 @@ class PoachingObservation extends Model implements FlatArrayable
      */
     public function getStatusTranslationAttribute()
     {
-        return trans('labels.field_observations.statuses.' . $this->status);
+        return trans('labels.field_observations.statuses.'.$this->status);
     }
 
     /**
@@ -380,7 +383,7 @@ class PoachingObservation extends Model implements FlatArrayable
      */
     public function getLicenseTranslationAttribute()
     {
-        return trans('licenses.' . $this->license);
+        return trans('licenses.'.$this->license);
     }
 
     /**
@@ -388,7 +391,7 @@ class PoachingObservation extends Model implements FlatArrayable
      *
      * @param array $photos Paths
      * @param int $defaultLicense
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return array|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
     public function addPhotos($photos, $defaultLicense)
     {
@@ -407,9 +410,9 @@ class PoachingObservation extends Model implements FlatArrayable
     /**
      * Remove unused photos and and add new ones.
      *
-     * @param array $photos
+     * @param Collection $photos
      * @param int $defaultLicense
-     * @return void
+     * @return array|array[]
      */
     public function syncPhotos($photos, $defaultLicense)
     {
@@ -481,7 +484,7 @@ class PoachingObservation extends Model implements FlatArrayable
     {
         $this->observation->unapprove();
 
-        if (!$this->unidentifiable) {
+        if (! $this->unidentifiable) {
             $this->forceFill(['unidentifiable' => true])->save();
         }
 
@@ -521,7 +524,7 @@ class PoachingObservation extends Model implements FlatArrayable
      */
     public function isPending()
     {
-        return !$this->isApproved() && !$this->unidentifiable;
+        return ! $this->isApproved() && ! $this->unidentifiable;
     }
 
     /**
@@ -665,6 +668,7 @@ class PoachingObservation extends Model implements FlatArrayable
 
             'indigenous' => $this->indigenous,
             'exact_number' => $this->exact_number,
+            'locality' => $this->locality,
             'place' => $this->place,
             'municipality' => $this->municipality,
             'data_id' => $this->data_id,
@@ -686,6 +690,7 @@ class PoachingObservation extends Model implements FlatArrayable
             'proceeding' => $this->proceeding,
             'verdict' => $this->verdict,
             'verdict_date' => $this->verdict_date,
+            'total' => $this->total,
             'dead_from_total' => $this->dead_from_total,
             'alive_from_total' => $this->alive_from_total,
             'sanction_rsd' => $this->sanction_rsd,
@@ -752,6 +757,7 @@ class PoachingObservation extends Model implements FlatArrayable
 
             'indigenous' => $this->indigenous,
             'exact_number' => $this->exact_number,
+            'locality' => $this->locality,
             'place' => $this->place,
             'municipality' => $this->municipality,
             'data_id' => $this->data_id,
@@ -773,6 +779,7 @@ class PoachingObservation extends Model implements FlatArrayable
             'proceeding' => $this->proceeding,
             'verdict' => $this->verdict,
             'verdict_date' => $this->verdict_date,
+            'total' => $this->total,
             'dead_from_total' => $this->dead_from_total,
             'alive_from_total' => $this->alive_from_total,
             'sanction_rsd' => $this->sanction_rsd,

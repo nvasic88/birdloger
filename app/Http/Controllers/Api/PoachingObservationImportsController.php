@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Importing\FieldObservationImport;
+use App\Importing\PoachingObservationImport;
 
 class PoachingObservationImportsController extends BaseImportController
 {
@@ -13,6 +13,6 @@ class PoachingObservationImportsController extends BaseImportController
      */
     protected function type()
     {
-        return FieldObservationImport::class;
+        return PoachingObservationImport::class;
     }
 }

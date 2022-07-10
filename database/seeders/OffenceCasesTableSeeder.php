@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\OffenceCase;
 use Illuminate\Database\Seeder;
 
@@ -10,7 +12,7 @@ class OffenceCasesTableSeeder extends Seeder
         'catching',
         'poisoning',
         'owning',
-        'trading'
+        'trading',
     ];
 
     /**

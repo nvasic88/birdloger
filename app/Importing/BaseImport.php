@@ -54,7 +54,7 @@ abstract class BaseImport
      * List of all columns.
      *
      * @param  \App\User|null  $user
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public static function availableColumns($user = null)
     {
@@ -301,7 +301,7 @@ abstract class BaseImport
             $writer = $this->makeValidationErrorWriter();
 
             $this->readParsed(function ($item) use ($writer, &$rowNumber, &$passed) {
-                if (!$this->validateItemAndWriteErrors($item, $writer, $rowNumber)) {
+                if (! $this->validateItemAndWriteErrors($item, $writer, $rowNumber)) {
                     $passed = false;
                 }
 
@@ -385,7 +385,8 @@ abstract class BaseImport
     /**
      * Store import in DB.
      *
-     * @return void
+     * @return Import
+     * @throws \Exception
      */
     public function store()
     {
@@ -410,6 +411,7 @@ abstract class BaseImport
      * Store parsed data in DB.
      *
      * @return void
+     * @throws \Exception
      */
     private function storeParsed()
     {

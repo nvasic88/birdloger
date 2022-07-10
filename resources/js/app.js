@@ -62,11 +62,14 @@ Vue.component('NzAnnouncementForm', () => import('./components/forms/Announcemen
 Vue.component('NzPublicationForm', () => import('./components/forms/PublicationForm'))
 
 Vue.component('NzFieldObservationActivityLog', () => import('./components/activity/FieldObservationActivityLog'))
+Vue.component('NzPoachingObservationActivityLog', () => import('./components/activity/PoachingObservationActivityLog'))
+Vue.component('NzElectrocutionObservationActivityLog', () => import('./components/activity/ElectrocutionObservationActivityLog'))
 Vue.component('NzLiteratureObservationActivityLog', () => import('./components/activity/LiteratureObservationActivityLog'))
 Vue.component('NzTaxonActivityLog', () => import('./components/activity/TaxonActivityLog'))
 
 Vue.component('NzFieldObservationsImport', () => import('./components/imports/FieldObservationsImport'))
 Vue.component('NzPoachingObservationsImport', () => import('./components/imports/PoachingObservationsImport'))
+Vue.component('NzElectrocutionObservationsImport', () => import('./components/imports/ElectrocutionObservationsImport'))
 Vue.component('NzLiteratureObservationsImport', () => import('./components/imports/LiteratureObservationsImport'))
 Vue.component('NzTaxaImport', () => import('./components/imports/TaxonImport'))
 

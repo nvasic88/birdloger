@@ -30,8 +30,8 @@ class StoreElectrocutionObservation extends FormRequest
     public function rules()
     {
         return [
-            'taxon_id' => ['required', 'exists:taxa,id'],
-            'taxon_suggestion' => ['required', 'string', 'max:191'],
+            'taxon_id' => ['nullable', 'exists:taxa,id'],
+            'taxon_suggestion' => ['nullable', 'string', 'max:191'],
             'year' => ['bail', 'required', 'date_format:Y', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -60,7 +60,7 @@ class StoreElectrocutionObservation extends FormRequest
             'photos' => [
                 'nullable',
                 'array',
-                'max:' . config('biologer.photos_per_observation'),
+                'max:'.config('biologer.photos_per_observation'),
             ],
             'photos.*.crop' => ['nullable', 'array'],
             'photos.*.crop.x' => ['required_with:photos.*.crop', 'integer'],
@@ -136,6 +136,8 @@ class StoreElectrocutionObservation extends FormRequest
 
         $electrocutionObservation->observation()->create($this->getGeneralObservationData());
 
+        $electrocutionObservation->approve();
+
         return $electrocutionObservation;
     }
 
@@ -173,14 +175,14 @@ class StoreElectrocutionObservation extends FormRequest
      */
     protected function getGeneralObservationData()
     {
-        $latitude = (float)str_replace(',', '.', $this->input('latitude'));
-        $longitude = (float)str_replace(',', '.', $this->input('longitude'));
+        $latitude = (float) str_replace(',', '.', $this->input('latitude'));
+        $longitude = (float) str_replace(',', '.', $this->input('longitude'));
 
         return [
             'taxon_id' => $this->input('taxon_id'),
             'year' => $this->input('year'),
-            'month' => $this->input('month') ? (int)$this->input('month') : null,
-            'day' => $this->input('day') ? (int)$this->input('day') : null,
+            'month' => $this->input('month') ? (int) $this->input('month') : null,
+            'day' => $this->input('day') ? (int) $this->input('day') : null,
             'location' => $this->input('location'),
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -230,7 +232,7 @@ class StoreElectrocutionObservation extends FormRequest
      */
     protected function getObservedBy()
     {
-        if (!$this->user()->hasAnyRole(['admin', 'curator'])) {
+        if (! $this->user()->hasAnyRole(['admin', 'curator'])) {
             return $this->user()->id;
         }
 
@@ -238,7 +240,7 @@ class StoreElectrocutionObservation extends FormRequest
             return $this->input('observed_by_id');
         }
 
-        if (!$this->input('observer')) {
+        if (! $this->input('observer')) {
             return $this->user()->id;
         }
     }
@@ -264,7 +266,7 @@ class StoreElectrocutionObservation extends FormRequest
      */
     protected function getIdentifier()
     {
-        if (!$this->user()->hasAnyRole(['admin', 'curator'])) {
+        if (! $this->user()->hasAnyRole(['admin', 'curator'])) {
             return $this->isIdentified() ? $this->user()->full_name : null;
         }
 
@@ -280,11 +282,11 @@ class StoreElectrocutionObservation extends FormRequest
      */
     protected function getIdentifedBy()
     {
-        if (!$this->isIdentified()) {
+        if (! $this->isIdentified()) {
             return;
         }
 
-        if (!$this->user()->hasAnyRole(['admin', 'curator', 'electrocution'])) {
+        if (! $this->user()->hasAnyRole(['admin', 'curator', 'electrocution'])) {
             return $this->user()->id;
         }
 
@@ -292,7 +294,7 @@ class StoreElectrocutionObservation extends FormRequest
             return $this->input('identified_by_id');
         }
 
-        if (!$this->input('identifier')) {
+        if (! $this->input('identifier')) {
             return $this->user()->id;
         }
     }
@@ -344,7 +346,7 @@ class StoreElectrocutionObservation extends FormRequest
         }
 
         $electrocutionObservation->curators()->each(function ($curator) use ($electrocutionObservation) {
-            if (!$this->user()->is($curator)) {
+            if (! $this->user()->is($curator)) {
                 $curator->notify(new ElectrocutionObservationForApproval($electrocutionObservation));
             }
         });
@@ -354,7 +356,7 @@ class StoreElectrocutionObservation extends FormRequest
     {
         $token = $this->user()->token();
 
-        if (!$token) {
+        if (! $token) {
             return;
         }
 
@@ -367,7 +369,7 @@ class StoreElectrocutionObservation extends FormRequest
 
     private function createObservers(ElectrocutionObservation $electrocutionObservation)
     {
-        $observer_ids = array();
+        $observer_ids = [];
         foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],

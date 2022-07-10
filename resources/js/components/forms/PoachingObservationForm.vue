@@ -2,35 +2,17 @@
   <form :action="action" method="POST" :lang="locale" class="poaching-observation-form">
     <div class="columns is-desktop">
       <div class="column is-half-desktop">
-        <div class="columns">
-          <div class="column is-2">
-            <b-field
-              :label="trans('labels.field_observations.taxon_id')"
-              label-for="taxon_id"
-              :type="form.errors.has('taxon_id') ? 'is-danger' : null"
-              :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
-              class="is-required"
-              v-tooltip="trans('labels.observations.id_tooltip')"
-
-            >
-              <b-input id="taxon_id" type="number" v-model="form.taxon_id" disabled="disabled"/>
-            </b-field>
-          </div>
-          <div class="column">
-            <nz-taxon-autocomplete
-              v-model="form.taxon_suggestion"
-              @select="onTaxonSelect"
-              :taxon="observation.taxon"
-              :error="form.errors.has('taxon_id')"
-              :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
-              autofocus
-              ref="taxonAutocomplete"
-              :label="trans('labels.field_observations.taxon')"
-              :placeholder="trans('labels.field_observations.search_for_taxon')"
-              class="is-required"
-            />
-          </div>
-        </div>
+        <nz-taxon-autocomplete
+          v-model="form.taxon_suggestion"
+          @select="onTaxonSelect"
+          :taxon="observation.taxon"
+          :error="form.errors.has('taxon_id')"
+          :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
+          autofocus
+          ref="taxonAutocomplete"
+          :label="trans('labels.field_observations.taxon')"
+          :placeholder="trans('labels.field_observations.search_for_taxon')"
+        />
 
         <nz-date-input
           :year.sync="form.year"
@@ -190,141 +172,19 @@
         </b-select>
       </b-field>
 
-      <div class="columns">
-        <div class="column">
-          <b-field
-            :label="trans('labels.observations.data_provider')"
-            label-for="data_provider"
-            :error="form.errors.has('data_provider')"
-            :message="form.errors.has('data_provider') ? form.errors.first('data_provider') : null"
-          >
-            <b-input id="data_provider" name="data_provider" v-model="form.data_provider"/>
-          </b-field>
-        </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.observations.data_limit')"
-            label-for="data_limit"
-            :error="form.errors.has('data_limit')"
-            :message="form.errors.has('data_limit') ? form.errors.first('data_limit') : null"
-          >
-            <b-input id="data_limit" name="data_limit" v-model="form.data_limit"/>
-          </b-field>
-        </div>
 
-      </div>
-
-      <b-field
-        :label="trans('labels.field_observations.note')"
-        label-for="note"
-        :error="form.errors.has('note')"
-        :message="form.errors.has('note') ? form.errors.first('note') : null"
-      >
-        <b-input id="note" type="textarea" v-model="form.note"/>
-      </b-field>
-
-
-      <b-field
-        :label="trans('labels.field_observations.habitat')"
-        label-for="habitat"
-        :error="form.errors.has('habitat')"
-        :message="form.errors.has('habitat') ? form.errors.first('habitat') : null"
-      >
-        <b-input id="habitat" name="habitat" v-model="form.habitat"/>
-      </b-field>
-
-      <b-field
-        :label="trans('labels.field_observations.description')"
-        label-for="description"
-        :error="form.errors.has('description')"
-        :message="form.errors.has('description') ? form.errors.first('description') : null"
-      >
-        <b-input id="description" type="textarea" v-model="form.description"/>
-      </b-field>
-
-      <b-field
-        :label="trans('labels.field_observations.comment')"
-        label-for="comment"
-        :error="form.errors.has('comment')"
-        :message="form.errors.has('comment') ? form.errors.first('comment') : null"
-      >
-        <b-input id="comment" type="textarea" v-model="form.comment"/>
-      </b-field>
 
       <div class="columns">
         <div class="column">
           <b-field
-            :label="trans('labels.literature_observations.project')"
-            :type="form.errors.has('project') ? 'is-danger' : null"
-            :message="form.errors.has('project') ? form.errors.first('project') : null"
+            :label="trans('labels.poaching_observations.total')"
+            label-for="total"
+            :type="form.errors.has('total') ? 'is-danger' : null"
+            :message="form.errors.has('total') ? form.errors.first('total') : null"
           >
-            <label for="project" class="label" slot="label">
-              <span class="is-dashed" v-tooltip="{content: trans('labels.literature_observations.project_tooltip')}">
-                {{ trans('labels.literature_observations.project') }}
-              </span>
-            </label>
-
-            <b-input id="project" name="project" v-model="form.project"/>
+            <b-input id="total" name="total" type="number" v-model="form.total"/>
           </b-field>
         </div>
-
-        <div class="column">
-          <b-field
-            :label="trans('labels.field_observations.dataset')"
-            label-for="dataset"
-            :type="form.errors.has('dataset') ? 'is-danger' : null"
-            :message="form.errors.has('dataset') ? form.errors.first('dataset') : null"
-          >
-            <b-input id="dataset" name="dataset" v-model="form.dataset"/>
-          </b-field>
-        </div>
-      </div>
-
-      <div class="columns">
-
-        <div class="column">
-          <b-field
-            :label="trans('labels.field_observations.number')"
-            label-for="number"
-            :type="form.errors.has('number') ? 'is-danger' : null"
-            :message="form.errors.has('number') ? form.errors.first('number') : null"
-          >
-            <b-input id="number" type="number" v-model="form.number"/>
-          </b-field>
-        </div>
-
-        <div class="column">
-          <b-field
-            :label="trans('labels.field_observations.number_of')"
-            label-for="number_of"
-            :type="form.errors.has('number_of') ? 'is-danger' : null"
-            :message="form.errors.has('number_of') ? form.errors.first('number_of') : null"
-          >
-            <b-select v-model="form.number_of" expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
-              <option value="individual">{{ trans('labels.number_of.individual') }}</option>
-              <option value="couple">{{ trans('labels.number_of.couple') }}</option>
-              <option value="singing_male">{{ trans('labels.number_of.singing_male') }}</option>
-              <option value="active_nest">{{ trans('labels.number_of.active_nest') }}</option>
-              <option value="family_with_cubs">{{ trans('labels.number_of.family_with_cubs') }}</option>
-            </b-select>
-          </b-field>
-        </div>
-      </div>
-
-      <b-checkbox v-model="form.found_dead">{{ trans('labels.observations.found_dead') }}</b-checkbox>
-
-      <b-field
-        :label="trans('labels.observations.found_dead_note')"
-        label-for="found_dead_note"
-        v-if="form.found_dead"
-        :error="form.errors.has('found_dead_note')"
-        :message="form.errors.has('found_dead_note') ? form.errors.first('found_dead_note') : null"
-      >
-        <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note"/>
-      </b-field>
-
-      <div class="columns">
         <div class="column">
           <b-field
             :label="trans('labels.poaching_observations.dead_from_total')"
@@ -375,6 +235,16 @@
       </b-field>
 
       <div class="columns">
+        <div class="column">
+          <b-field
+            :label="trans('labels.poaching_observations.locality')"
+            label-for="locality"
+            :type="form.errors.has('locality') ? 'is-danger' : null"
+            :message="form.errors.has('locality') ? form.errors.first('locality') : null"
+          >
+            <b-input id="locality" name="locality" v-model="form.locality"/>
+          </b-field>
+        </div>
         <div class="column">
           <b-field
             :label="trans('labels.poaching_observations.place')"
@@ -623,38 +493,46 @@
 
       <div><b>{{ trans('labels.poaching_observations.sources') }}</b></div>
       <div class="columns">
-        <div class="column"><b>{{ trans('labels.poaching_observations.source') }}</b></div>
-        <div class="column"><b>{{ trans('labels.poaching_observations.source_description') }}</b></div>
-        <div class="column"><b>{{ trans('labels.poaching_observations.source_link') }}</b></div>
-        <div class="column"></div>
+        <div class="column is-3"><b>{{ trans('labels.poaching_observations.source') }}</b></div>
+        <div class="column is-3"><b>{{ trans('labels.poaching_observations.source_description') }}</b></div>
+        <div class="column is-5"><b>{{ trans('labels.poaching_observations.source_link') }}</b></div>
+        <div class="column is-1"></div>
       </div>
 
-      <div class="columns" v-for="(source, index) in sources" :key="index">
-        <div class="column">{{ trans('labels.poaching_observations.' + source.name) }}</div>
-        <div class="column">{{ source.description }}</div>
-        <div class="column">{{ source.link }}</div>
-        <div class="column">
-          <button type="button" class="delete" @click="removeSource(index)"
-                  v-tooltip="{content: trans('labels.poaching_observations.remove_source_tooltip')}">
-          </button>
+      <div>
+        <div class="columns" v-for="(source, index) in sources" :key="index">
+          <div class="column is-3">{{ trans('labels.poaching_observations.' + source.name) }}</div>
+          <div class="column is-3">{{ source.description }}</div>
+          <div class="column is-5">
+            <a :href="source.link">{{ source.link }}</a>
+          </div>
+          <div class="column is-1">
+            <button type="button" class="delete" @click="removeSource(index, source.id)"
+                    v-tooltip="{content: trans('labels.poaching_observations.remove_source_tooltip')}">
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="columns" v-for="(source, index) in poachingSources" :key="index">
-        <div class="column">{{ trans('labels.poaching_observations.' + source.name) }}</div>
-        <div class="column">{{ source.description }}</div>
-        <div class="column">{{ source.link }}</div>
-        <div class="column">
-          <button type="button" class="delete" @click="removeSource(index)"
-                  v-tooltip="{content: trans('labels.poaching_observations.remove_source_tooltip')}">
-          </button>
+      <div>
+        <div class="columns" v-for="(source, index) in poachingSources" :key="index">
+          <div class="column is-3">{{ trans('labels.poaching_observations.' + source.name) }}</div>
+          <div class="column is-3">{{ source.description }}</div>
+          <div class="column is-5">
+                <a :href="source.link">{{ source.link }}</a>
+          </div>
+          <div class="column is-1">
+            <button type="button" class="delete" @click="removeSource(index, 0)"
+                    v-tooltip="{content: trans('labels.poaching_observations.remove_source_tooltip')}">
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="columns">
-        <div class="column">
+        <div class="column is-3">
           <b-select v-model="form.source" expanded>
-            <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+            <option :value="null">{{ trans('labels.poaching_observations.insert_source') }}</option>
             <option value="social_media">{{ trans("labels.poaching_observations.social_media") }}</option>
             <option value="media">{{ trans("labels.poaching_observations.media") }}</option>
             <option value="ads">{{ trans("labels.poaching_observations.ads") }}</option>
@@ -662,17 +540,17 @@
             <option value="associates">{{ trans("labels.poaching_observations.associates") }}</option>
           </b-select>
         </div>
-        <div class="column">
+        <div class="column is-3">
           <b-input id="sourceDescription" v-model="sourceDescription" ref="sourceDescription"
                    v-if="form.source"
                    v-on:keydown.native.enter.prevent="$refs.sourceLink.focus"/>
         </div>
-        <div class="column">
+        <div class="column is-4">
           <b-input id="sourceLink" v-model="sourceLink" ref="sourceLink"
                    v-if="form.source"
                    v-on:keydown.native.enter.prevent="addSource"/>
         </div>
-        <div class="column">
+        <div class="column is-2">
           <button v-if="form.source" type="button" class="button is-primary" @click="addSource">
             {{ trans("labels.poaching_observations.add_source") }}
           </button>
@@ -687,22 +565,27 @@
         <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
         <div class="column is-1"></div>
       </div>
-      <div class="columns" v-for="(observer, index) in observers" :key="index">
-        <div class="column is-2">{{ observer.firstName }}</div>
-        <div class="column is-2">{{ observer.lastName }}</div>
-        <div class="column is-1">
-          <button type="button" class="delete" @click="removeObserver(index)"
-                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-          </button>
+      <div>
+        <div class="columns" v-for="(observer, index) in observers" :key="index">
+          <div class="column is-2">{{ observer.firstName }}</div>
+          <div class="column is-2">{{ observer.lastName }}</div>
+          <div class="column is-1">
+            <button type="button" class="delete" @click="removeObserver(index, observer.id)"
+                    v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
+            </button>
+          </div>
         </div>
       </div>
-      <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
-        <div class="column is-2">{{ observer.firstName }}</div>
-        <div class="column is-2">{{ observer.lastName }}</div>
-        <div class="column is-1">
-          <button type="button" class="delete" @click="removeObserver(index)"
-                  v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-          </button>
+
+      <div>
+        <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
+          <div class="column is-2">{{ observer.firstName }}</div>
+          <div class="column is-2">{{ observer.lastName }}</div>
+          <div class="column is-1">
+            <button type="button" class="delete" @click="removeObserver(index, 0)"
+                    v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
+            </button>
+          </div>
         </div>
       </div>
       <div class="columns">
@@ -869,6 +752,7 @@ export default {
           data_limit: '',
           indigenous: false,
           exact_number: false,
+          locality: null,
           place: null,
           municipality: null,
           data_id: null,
@@ -891,6 +775,7 @@ export default {
           verdict: null,
           verdict_date: null,
           source: null,
+          total: null,
           dead_from_total: null,
           alive_from_total: null,
           suspects_number: null,
@@ -899,7 +784,9 @@ export default {
           community_sentence: null,
 
           sources: [],
-          offences: []
+          offences: [],
+          removedSources: [],
+          removedObservers: [],
 
         }
       }
@@ -940,6 +827,16 @@ export default {
     atlasCodes: Array,
 
     offences: Array,
+
+    removedSources: {
+      type: Array,
+      default: () => []
+    },
+
+    removedObservers: {
+      type: Array,
+      default: () => []
+    },
 
   },
 
@@ -1026,6 +923,8 @@ export default {
         reason: null,
         field_observers: this.fieldObservers,
         sources: this.poachingSources,
+        removed_sources: this.removedSources,
+        removed_observers: this.removedObservers,
         verdict_date: this.observation.verdict ? new Date(this.observation.verdict_date) : null,
       }, {
         resetOnSuccess: false
@@ -1053,8 +952,12 @@ export default {
       }
     },
 
-    removeObserver(index) {
-      axios.delete(route('api.observers.destroy', this.observers[index]));
+    removeObserver(index, id) {
+      if (id === 0){
+        this.$delete(this.fieldObservers, index);
+        return;
+      }
+      this.removedObservers.push(id);
       this.$delete(this.observers, index);
     },
 
@@ -1355,8 +1258,12 @@ export default {
       this.sourceLink = null;
     },
 
-    removeSource(index) {
-      axios.delete(route('api.sources.destroy', this.sources[index]));
+    removeSource(index, id) {
+      if (id === 0){
+        this.$delete(this.poachingSources, index);
+        return;
+      }
+      this.removedSources.push(id);
       this.$delete(this.sources, index);
     },
 

@@ -68,6 +68,7 @@ class PoachingObservationDiff
             'proceeding',
             'verdict',
             'verdict_date',
+            'total',
             'dead_from_total',
             'alive_from_total',
             'sanction_rsd',
