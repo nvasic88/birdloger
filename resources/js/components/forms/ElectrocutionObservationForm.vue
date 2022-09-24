@@ -700,11 +700,6 @@ export default {
       default: () => []
     },
 
-    removedObservers: {
-      type: Array,
-      default: () => []
-    },
-
     atlasCodes: Array,
   },
 
@@ -794,7 +789,6 @@ export default {
         observers: this.observation.observers,
         reason: null,
         field_observers: this.fieldObservers,
-        removed_observers: this.removedObservers,
       }, {
         resetOnSuccess: false
       })
@@ -832,7 +826,6 @@ export default {
         this.$delete(this.fieldObservers, index);
         return;
       }
-      this.removedObservers.push(id);
       this.$delete(this.observers, index);
     },
 

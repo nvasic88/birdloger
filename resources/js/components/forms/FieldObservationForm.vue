@@ -542,7 +542,6 @@ export default {
           rid: null,
           data_provider: null,
           data_limit: '',
-          removedObservers: [],
         }
       }
     },
@@ -570,11 +569,6 @@ export default {
     showObserverIdentifier: Boolean,
 
     fieldObservers: {
-      type: Array,
-      default: () => []
-    },
-
-    removedObservers: {
       type: Array,
       default: () => []
     },
@@ -664,7 +658,6 @@ export default {
         observers: this.observation.observers,
         reason: null,
         field_observers: this.fieldObservers,
-        removed_observers: this.removedObservers,
       }, {
         resetOnSuccess: false
       })
@@ -702,7 +695,6 @@ export default {
         this.$delete(this.fieldObservers, index);
         return;
       }
-      this.removedObservers.push(id);
       this.$delete(this.observers, index);
     },
 

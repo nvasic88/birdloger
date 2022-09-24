@@ -300,6 +300,11 @@ class UpdateElectrocutionObservation extends FormRequest
     private function updateObservers(ElectrocutionObservation $electrocutionObservation)
     {
         $observer_ids = [];
+
+        foreach ($this->input('observers') as $observer) {
+            $observer_ids[] = $observer['id'];
+        }
+
         foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
@@ -308,14 +313,11 @@ class UpdateElectrocutionObservation extends FormRequest
             $obs->save();
             $observer_ids[] = $obs->id;
         }
-        foreach ($this->input('removed_observers') as $id) {
-            Arr::forget($observer_ids, $id);
-        }
 
         if (empty($observer_ids)) {
             $electrocutionObservation->observation->observers()->detach();
         } else {
-            $electrocutionObservation->observation->observers()->sync($observer_ids, []);
+            $electrocutionObservation->observation->observers()->sync($observer_ids);
         }
     }
 }

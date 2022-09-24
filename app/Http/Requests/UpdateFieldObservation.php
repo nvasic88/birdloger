@@ -283,6 +283,11 @@ class UpdateFieldObservation extends FormRequest
     private function updateObservers(FieldObservation $fieldObservation)
     {
         $observer_ids = [];
+
+        foreach ($this->input('observers') as $observer) {
+            $observer_ids[] = $observer['id'];
+        }
+
         foreach ($this->input('field_observers') as $observer) {
             $obs = Observer::firstOrCreate([
                 'firstName' => $observer['firstName'],
@@ -291,14 +296,11 @@ class UpdateFieldObservation extends FormRequest
             $obs->save();
             $observer_ids[] = $obs->id;
         }
-        foreach ($this->input('removed_observers') as $id) {
-            Arr::forget($observer_ids, $id);
-        }
 
         if (empty($observer_ids)) {
             $fieldObservation->observation->observers()->detach();
         } else {
-            $fieldObservation->observation->observers()->sync($observer_ids, []);
+            $fieldObservation->observation->observers()->sync($observer_ids);
         }
     }
 }

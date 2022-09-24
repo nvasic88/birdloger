@@ -786,7 +786,6 @@ export default {
           sources: [],
           offences: [],
           removedSources: [],
-          removedObservers: [],
 
         }
       }
@@ -829,11 +828,6 @@ export default {
     offences: Array,
 
     removedSources: {
-      type: Array,
-      default: () => []
-    },
-
-    removedObservers: {
       type: Array,
       default: () => []
     },
@@ -924,7 +918,6 @@ export default {
         field_observers: this.fieldObservers,
         sources: this.poachingSources,
         removed_sources: this.removedSources,
-        removed_observers: this.removedObservers,
         verdict_date: this.observation.verdict ? new Date(this.observation.verdict_date) : null,
       }, {
         resetOnSuccess: false
@@ -957,7 +950,6 @@ export default {
         this.$delete(this.fieldObservers, index);
         return;
       }
-      this.removedObservers.push(id);
       this.$delete(this.observers, index);
     },
 
