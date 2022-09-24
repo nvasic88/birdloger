@@ -18,7 +18,6 @@ use App\Support\Dataset;
 use App\Taxon;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
