@@ -18,6 +18,7 @@ use App\Sex;
 use App\Source;
 use App\Stage;
 use App\Support\Dataset;
+use App\Suspect;
 use App\Taxon;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -106,15 +107,11 @@ class StorePoachingObservation extends FormRequest
             'case_reported_by' => ['nullable', 'string'],
             'opportunity' => ['nullable', 'boolean'],
             'annotation' => ['nullable', 'string'],
-            'suspect_name' => ['nullable', 'string'],
-            'suspect_place' => ['nullable', 'string'],
-            'suspect_profile' => ['nullable', 'string'],
-            'suspect_note' => ['nullable', 'string'],
             'associates' => ['nullable', 'string'],
             'origin_of_individuals' => ['nullable', 'string'],
             'cites' => ['nullable', Rule::in(Cites::options()->keys())],
             'proceeding' => ['nullable', Rule::in(Proceedings::options()->keys())],
-            'verdict' => ['nullable', Rule::in(['yes', 'no', 'rejected'])],
+            'verdict' => ['nullable', Rule::in(['yes', 'no', 'rejected', 'declined', 'in_progress'])],
             'verdict_date' => ['nullable', 'date'],
             'total' => ['nullable', 'integer'],
             'dead_from_total' => ['nullable', 'integer'],
@@ -122,11 +119,17 @@ class StorePoachingObservation extends FormRequest
             'sanction_rsd' => ['nullable', 'integer'],
             'sanction_eur' => ['nullable', 'integer'],
             'community_sentence' => ['nullable', 'integer'],
-            'suspects_number' => ['nullable', 'integer'],
             'sources' => ['nullable', 'array'],
 
             'offences_ids' => ['nullable', 'array'],
             'offences_ids.*' => ['required', Rule::in(OffenceCase::pluck('id')->all())],
+
+            'new_suspects' => ['nullable', 'array'],
+            'case_name' => ['nullable', 'string'],
+            'case_against' => ['nullable', 'string'],
+            'case_against_mb' => ['nullable', 'string'],
+            'case_against_pib' => ['nullable', 'string'],
+            'case_submitted_to' => ['nullable', 'string'],
         ];
     }
 
@@ -147,6 +150,8 @@ class StorePoachingObservation extends FormRequest
                 $this->createObservers($poachingObservation);
 
                 $this->createSources($poachingObservation);
+
+                $this->createSuspects($poachingObservation);
 
                 $this->syncRelations($poachingObservation);
 
@@ -196,17 +201,18 @@ class StorePoachingObservation extends FormRequest
             'file' => $this->input('file'),
             'offence_details' => $this->input('offence_details'),
             'in_report' => $this->input('in_report'),
-            'suspect_name' => $this->input('suspect_name'),
-            'suspect_place' => $this->input('suspect_place'),
-            'suspect_profile' => $this->input('suspect_profile'),
-            'suspect_note' => $this->input('suspect_note'),
+
             'associates' => $this->input('associates'),
             'origin_of_individuals' => $this->input('origin_of_individuals'),
             'cites' => $this->input('cites'),
             'total' => $this->input('total'),
             'dead_from_total' => $this->input('dead_from_total'),
             'alive_from_total' => $this->input('alive_from_total'),
-            'suspects_number' => $this->input('suspects_number'),
+            'case_name' => $this->input('case_name'),
+            'case_against' => $this->input('case_against'),
+            'case_against_mb' => $this->input('case_against_mb'),
+            'case_against_pib' => $this->input('case_against_pib'),
+            'case_submitted_to' => $this->input('case_submitted_to'),
 
             'case_reported' => $this->input('case_reported'),
             'case_reported_by' => $this->input('case_reported', false) ? $this->input('case_reported_by') : null,
@@ -445,6 +451,24 @@ class StorePoachingObservation extends FormRequest
                 'poaching_observation_id' => $poachingObservation['id'],
             ]);
             $src->save();
+        }
+    }
+
+    private function createSuspects($poachingObservation)
+    {
+        $new_suspects = $this->input('new_suspects');
+        foreach ($new_suspects as $k => $v) {
+            $suspects = Suspect::firstOrCreate([
+                'name' => $v['name'],
+                'place' => $v['place'],
+                'profile' => $v['profile'],
+                'phone' => $v['phone'],
+                'email' => $v['email'],
+                'social_media' => $v['social_media'],
+                'note' => $v['note'],
+                'poaching_observation_id' => $poachingObservation->id,
+            ]);
+            $suspects->save();
         }
     }
 }

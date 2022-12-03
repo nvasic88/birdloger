@@ -12,7 +12,7 @@
 
         <tr>
             <td><b>{{ __('labels.observations.date') }}</b></td>
-            <td>{{ $electrocutionObservation->observation->day }}.{{ $electrocutionObservation->observation->month }}.{{ $electrocutionObservation->observation->year }}.</td>
+            <td>{{ $fieldObservation->observation->day }}.{{ $fieldObservation->observation->month }}.{{ $fieldObservation->observation->year }}.</td>
         </tr>
 
         <tr>
@@ -168,10 +168,7 @@
             <td><b>{{ __('labels.observations.observers') }}</b></td>
             <td>
                 @foreach ($fieldObservation->observation->observers as $observer)
-                    {{$observer->firstName}} {{$observer->lastName}}
-                    @if(!$loop->last)
-                        {{";"}}
-                    @endif
+                    {{$observer->firstName}} {{$observer->lastName}}@if(!$loop->last){{";"}}@endif
                 @endforeach
             </td>
         </tr>

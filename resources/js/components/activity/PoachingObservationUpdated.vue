@@ -21,11 +21,10 @@ export default {
       const poaching = ['indigenous', 'dead_from_total', 'alive_from_total', 'total', 'exact_number', 'offences',
         'locality', 'place', 'municipality', 'data_id', 'folder_id', 'file', 'in_report', 'input_date',
         'offence_details', 'case_reported', 'case_reported_by', 'verdict', 'verdict_date', 'proceeding', 'sanction_rsd',
-        'sanction_eur', 'community_sentence', 'opportunity', 'annotation', 'suspect_name', 'suspect_place',
-        'suspect_profile', 'suspects_number', 'sources', 'source', 'source_description', 'source_link', 'social_media',
-        'media', 'ads', 'institutions', 'associates', 'cites', 'origin_of_individuals', 'rejected', 'select_date',
-        'remove_source_tooltip', 'add_source', 'insert_source_description', 'insert_source_link', 'youtube', 'facebook',
-        'insert_source']
+        'sanction_eur', 'community_sentence', 'opportunity', 'annotation', 'sources', 'source', 'source_description',
+        'source_link', 'social_media','media', 'ads', 'institutions', 'associates', 'cites', 'origin_of_individuals',
+        'rejected', 'youtube', 'facebook', 'case_against', 'case_against_pib', 'case_against_mb', 'case_submitted_to',
+        'case_name']
 
       return Object.keys(old).map(key => {
         const val = this.oldValue(old, key)

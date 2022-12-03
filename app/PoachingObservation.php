@@ -55,7 +55,6 @@ class PoachingObservation extends Model implements FlatArrayable
         'sanction_rsd' => 'integer',
         'sanction_eur' => 'integer',
         'community_sentence' => 'integer',
-        'suspects_number' => 'integer',
         'verdict_date' => 'datetime',
     ];
 
@@ -148,9 +147,24 @@ class PoachingObservation extends Model implements FlatArrayable
         );
     }
 
+    /**
+     * Sources of the poaching.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function sources()
     {
         return $this->hasMany(Source::class);
+    }
+
+    /**
+     * Suspects of the poaching.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function suspects()
+    {
+        return $this->hasMany(Suspect::class);
     }
 
     /**
@@ -408,7 +422,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Remove unused photos and and add new ones.
+     * Remove unused photos and add new ones.
      *
      * @param Collection $photos
      * @param int $defaultLicense
@@ -680,10 +694,6 @@ class PoachingObservation extends Model implements FlatArrayable
             'case_reported_by' => $this->case_reported_by,
             'opportunity' => $this->opportunity,
             'annotation' => $this->annotation,
-            'suspect_name' => $this->suspect_name,
-            'suspect_place' => $this->suspect_place,
-            'suspect_profile' => $this->suspect_profile,
-            'suspect_note' => $this->suspect_note,
             'associates' => $this->associates,
             'origin_of_individuals' => $this->origin_of_individuals,
             'cites' => $this->cites,
@@ -696,10 +706,14 @@ class PoachingObservation extends Model implements FlatArrayable
             'sanction_rsd' => $this->sanction_rsd,
             'sanction_eur' => $this->sanction_eur,
             'community_sentence' => $this->community_sentence,
-            'suspects_number' => $this->suspects_number,
+            'case_against' => $this->case_against,
+            'case_against_mb' => $this->case_against_mb,
+            'case_against_pib' => $this->case_against_pib,
+            'case_submitted_to' => $this->case_submitted_to,
 
             'sources' => $this->sources()->get(),
             'offences' => $this->offences()->get(),
+            'suspects' => $this->suspects()->get(),
         ];
     }
 
@@ -769,10 +783,6 @@ class PoachingObservation extends Model implements FlatArrayable
             'case_reported_by' => $this->case_reported_by,
             'opportunity' => $this->opportunity,
             'annotation' => $this->annotation,
-            'suspect_name' => $this->suspect_name,
-            'suspect_place' => $this->suspect_place,
-            'suspect_profile' => $this->suspect_profile,
-            'suspect_note' => $this->suspect_note,
             'associates' => $this->associates,
             'origin_of_individuals' => $this->origin_of_individuals,
             'cites' => $this->cites,
@@ -785,7 +795,14 @@ class PoachingObservation extends Model implements FlatArrayable
             'sanction_rsd' => $this->sanction_rsd,
             'sanction_eur' => $this->sanction_eur,
             'community_sentence' => $this->community_sentence,
-            'suspects_number' => $this->suspects_number,
+            'case_against' => $this->case_against,
+            'case_against_mb' => $this->case_against_mb,
+            'case_against_pib' => $this->case_against_pib,
+            'case_submitted_to' => $this->case_submitted_to,
+
+            'sources' => $this->sources()->get(),
+            'offences' => $this->offences()->get(),
+            'suspects' => $this->suspects()->get(),
         ];
     }
 

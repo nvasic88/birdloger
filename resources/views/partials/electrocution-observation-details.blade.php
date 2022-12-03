@@ -191,8 +191,9 @@
         <tr>
             <td><b>{{ __('labels.observations.observers') }}</b></td>
             <td>
-                <!-- Must be one line for no space after observer if multiple -->
-                @foreach ($electrocutionObservation->observation->observers as $observer){{$observer->firstName}} {{$observer->lastName}}@if(!$loop->last){{","}}@endif @endforeach
+                @foreach ($electrocutionObservation->observation->observers as $observer)
+                    {{$observer->firstName}} {{$observer->lastName}}@if(!$loop->last){{","}}@endif
+                @endforeach
             </td>
         </tr>
 

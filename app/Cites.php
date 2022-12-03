@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cites extends Model
 {
-    const I = 'I';
-    const II = 'II';
-    const III = 'III';
+    const I = '1';
+    const II = '2';
+    const III = '3';
 
     /**
      * Labels for Validity options.

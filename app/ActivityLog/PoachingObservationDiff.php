@@ -58,10 +58,6 @@ class PoachingObservationDiff
             'case_reported_by',
             'opportunity',
             'annotation',
-            'suspect_name',
-            'suspect_place',
-            'suspect_profile',
-            'suspect_note',
             'associates',
             'origin_of_individuals',
             'cites',
@@ -74,8 +70,11 @@ class PoachingObservationDiff
             'sanction_rsd',
             'sanction_eur',
             'community_sentence',
-            'suspects_number',
             'sources',
+            'case_against',
+            'case_against_mb',
+            'case_against_pib',
+            'case_submitted_to',
         ];
     }
 

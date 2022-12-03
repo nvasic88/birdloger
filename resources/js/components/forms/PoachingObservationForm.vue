@@ -104,6 +104,17 @@
 
     <div class="mt-4" v-show="showMoreDetails">
 
+      <div>
+        <b-field
+          :label="trans('labels.poaching_observations.case_name')"
+          label-for="case_name"
+          :type="form.errors.has('case_name') ? 'is-danger' : null"
+          :message="form.errors.has('case_name') ? form.errors.first('case_name') : null"
+        >
+          <b-input id="case_name" name="case_name" v-model="form.case_name"/>
+        </b-field>
+      </div>
+
       <div class="columns">
 
         <div class="column">
@@ -337,10 +348,12 @@
             :message="form.errors.has('verdict') ? form.errors.first('verdict') : null"
           >
             <b-select v-model="form.verdict" expanded>
-              <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
-              <option value="yes">{{ trans("Yes") }}</option>
-              <option value="no">{{ trans("No") }}</option>
-              <option value="rejected">{{ trans("labels.poaching_observations.rejected") }}</option>
+              <option :value="null">{{ trans("labels.verdicts.unknown") }}</option>
+              <option value="yes">{{ trans("labels.verdicts.yes") }}</option>
+              <option value="no">{{ trans("labels.verdicts.no") }}</option>
+              <option value="rejected">{{ trans("labels.verdicts.rejected") }}</option>
+              <option value="declined">{{ trans("labels.verdicts.declined") }}</option>
+              <option value="in_progress">{{ trans("labels.verdicts.in_progress") }}</option>
             </b-select>
           </b-field>
         </div>
@@ -411,59 +424,61 @@
         </div>
       </div>
 
+      <div class="columns" v-if="form.case_reported">
+        <div class="column is-one-quarter">
+          <b-field
+            :label="trans('labels.poaching_observations.case_submitted_to')"
+            label-for="case_submitted_to"
+            :type="form.errors.has('case_submitted_to') ? 'is-danger' : null"
+            :message="form.errors.has('case_submitted_to') ? form.errors.first('case_submitted_to') : null"
+          >
+            <b-input id="case_submitted_to" name="case_submitted_to" v-model="form.case_submitted_to"/>
+          </b-field>
+        </div>
+        <div class="column is-one-quarter">
+          <b-field
+            :label="trans('labels.poaching_observations.case_against')"
+            label-for="case_against"
+            :type="form.errors.has('case_against') ? 'is-danger' : null"
+            :message="form.errors.has('case_against') ? form.errors.first('case_against') : null"
+          >
+            <b-select v-model="form.case_against" expanded>
+              <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
+              <option value="individual">{{ trans("labels.poaching_observations.individual") }}</option>
+              <option value="legal_entity">{{ trans("labels.poaching_observations.legal_entity") }}</option>
+            </b-select>
+          </b-field>
+        </div>
+        <div class="column is-one-quarter" v-if="form.case_against === 'individual'">
+          <b-field
+            :label="trans('labels.poaching_observations.case_against_mb')"
+            label-for="case_against_mb"
+            :type="form.errors.has('case_against_mb') ? 'is-danger' : null"
+            :message="form.errors.has('case_against_mb') ? form.errors.first('case_against_mb') : null"
+          >
+            <b-input id="case_against_mb" name="case_against_mb" v-model="form.case_against_mb"/>
+          </b-field>
+        </div>
+        <div class="column is-one-quarter" v-if="form.case_against === 'legal_entity'">
+          <b-field
+            :label="trans('labels.poaching_observations.case_against_pib')"
+            label-for="case_against_pib"
+            :type="form.errors.has('case_against_pib') ? 'is-danger' : null"
+            :message="form.errors.has('case_against_pib') ? form.errors.first('case_against_pib') : null"
+          >
+            <b-input id="case_against_pib" name="case_against_pib" v-model="form.case_against_pib"/>
+          </b-field>
+        </div>
+      </div>
+
       <b-field
         :label="trans('labels.poaching_observations.annotation')"
         label-for="annotation"
-        v-if="form.case_reported"
         :error="form.errors.has('annotation')"
         :message="form.errors.has('annotation') ? form.errors.first('annotation') : null"
       >
         <b-input id="annotation" type="textarea" v-model="form.annotation"/>
       </b-field>
-
-
-      <div class="columns">
-        <div class="column">
-          <b-field
-            :label="trans('labels.poaching_observations.suspect_name')"
-            label-for="suspect_name"
-            :type="form.errors.has('suspect_name') ? 'is-danger' : null"
-            :message="form.errors.has('suspect_name') ? form.errors.first('suspect_name') : null"
-          >
-            <b-input id="suspect_name" name="suspect_name" v-model="form.suspect_name"/>
-          </b-field>
-        </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.poaching_observations.suspect_place')"
-            label-for="suspect_place"
-            :type="form.errors.has('suspect_place') ? 'is-danger' : null"
-            :message="form.errors.has('suspect_place') ? form.errors.first('suspect_place') : null"
-          >
-            <b-input id="suspect_place" name="suspect_place" v-model="form.suspect_place"/>
-          </b-field>
-        </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.poaching_observations.suspect_profile')"
-            label-for="suspect_profile"
-            :type="form.errors.has('suspect_profile') ? 'is-danger' : null"
-            :message="form.errors.has('suspect_profile') ? form.errors.first('suspect_profile') : null"
-          >
-            <b-input id="suspect_profile" name="suspect_profile" v-model="form.suspect_profile"/>
-          </b-field>
-        </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.poaching_observations.suspects_number')"
-            label-for="suspects_number"
-            :type="form.errors.has('suspects_number') ? 'is-danger' : null"
-            :message="form.errors.has('suspects_number') ? form.errors.first('suspects_number') : null"
-          >
-            <b-input id="suspects_number" name="suspects_number" type="number" v-model="form.suspects_number"/>
-          </b-field>
-        </div>
-      </div>
 
       <b-field
         :label="trans('labels.poaching_observations.cites')"
@@ -485,11 +500,108 @@
         :type="form.errors.has('origin_of_individuals') ? 'is-danger' : null"
         :message="form.errors.has('origin_of_individuals') ? form.errors.first('origin_of_individuals') : null"
       >
-        <b-input id="origin_of_individuals" name="origin_of_individuals" type="number"
+        <b-input id="origin_of_individuals" name="origin_of_individuals"
                  v-model="form.origin_of_individuals"/>
       </b-field>
 
       <hr>
+
+      <div><b>{{ trans('labels.poaching_observations.suspects') }}</b></div>
+
+      <div class="columns">
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_name') }}</b></div>
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_place') }}</b></div>
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_profile') }}</b></div>
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_phone') }}</b></div>
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_email') }}</b></div>
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_social_media') }}</b></div>
+        <div class="column"><b>{{ trans('labels.poaching_observations.suspect_note') }}</b></div>
+        <div class="column"></div>
+      </div>
+
+      <div v-if="observation.id != null">
+        <div v-if="suspects.length > 0">
+          <b-field v-for="(suspect, index) in suspects" :key="index">
+            <div class="columns">
+              <div class="column">{{ suspect.name }}</div>
+              <div class="column">{{ suspect.place }}</div>
+              <div class="column">{{ suspect.profile }}</div>
+              <div class="column">{{ suspect.phone }}</div>
+              <div class="column">{{ suspect.email }}</div>
+              <div class="column">{{ suspect.social_media }}</div>
+              <div class="column">{{ suspect.note }}</div>
+              <div class="column">
+                <button type="button" class="delete" @click="removeSuspect(index, suspect.id)"
+                        v-tooltip="{content: trans('labels.poaching_observations.remove_suspect')}">
+                </button>
+              </div>
+            </div>
+          </b-field>
+        </div>
+      </div>
+      <b-field v-for="(suspect, index) in newSuspects" :key="index">
+        <div class="columns">
+          <div class="column">{{ suspect.name }}</div>
+          <div class="column">{{ suspect.place }}</div>
+          <div class="column">{{ suspect.profile }}</div>
+          <div class="column">{{ suspect.phone }}</div>
+          <div class="column">{{ suspect.email }}</div>
+          <div class="column">{{ suspect.social_media }}</div>
+          <div class="column">{{ suspect.note }}</div>
+          <div class="column">
+            <button type="button" class="delete" @click="removeSuspect(index, 0)"
+                    v-tooltip="{content: trans('labels.poaching_observations.remove_suspect')}">
+            </button>
+          </div>
+        </div>
+      </b-field>
+
+
+
+      <b-field
+        :type="suspectErrors ? 'is-danger' : null"
+        :message="suspectErrors ? suspectErrors : null"
+      />
+      <div class="columns">
+        <div class="column">
+          <b-input maxlength="100" v-model="suspect_name" v-on:keydown.native.enter.prevent="addSuspect"
+                   :placeholder="trans('labels.poaching_observations.suspect_name')"/>
+        </div>
+        <div class="column">
+          <b-input maxlength="100" v-model="suspect_place" v-on:keydown.native.enter.prevent="addSuspect"
+                   :placeholder="trans('labels.poaching_observations.suspect_place')"/>
+        </div>
+        <div class="column">
+          <b-input maxlength="100" v-model="suspect_profile" v-on:keydown.native.enter.prevent="addSuspect"
+                   :placeholder="trans('labels.poaching_observations.suspect_profile')"/>
+        </div>
+        <div class="column">
+          <b-input maxlength="100" v-model="suspect_phone" v-on:keydown.native.enter.prevent="addSuspect"
+                   :placeholder="trans('labels.poaching_observations.suspect_phone')"/>
+        </div>
+        <div class="column">
+          <b-input maxlength="100" v-model="suspect_email" v-on:keydown.native.enter.prevent="addSuspect"
+                   :placeholder="trans('labels.poaching_observations.suspect_email')"/>
+        </div>
+
+      </div>
+      <div class="columns">
+        <div class="column">
+          <b-input type="textarea" v-model="suspect_social_media"
+                   :placeholder="trans('labels.poaching_observations.suspect_social_media')"/>
+        </div>
+        <div class="column">
+          <b-input type="textarea" v-model="suspect_note"
+                   :placeholder="trans('labels.poaching_observations.suspect_note')"/>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <button type="button" class="button is-primary" @click="addSuspect">
+          {{ trans("labels.poaching_observations.add_suspect") }}
+        </button>
+        </div>
+      </div>
 
       <div><b>{{ trans('labels.poaching_observations.sources') }}</b></div>
       <div class="columns">
@@ -764,10 +876,6 @@ export default {
           case_reported_by: null,
           opportunity: false,
           annotation: '',
-          suspect_name: null,
-          suspect_place: null,
-          suspect_profile: null,
-          suspect_note: '',
           associates: null,
           origin_of_individuals: null,
           cites: null,
@@ -782,10 +890,16 @@ export default {
           sanction_eur: null,
           sanction_rsd: null,
           community_sentence: null,
+          case_name: null,
+          case_against: null,
+          case_against_mb: null,
+          case_against_pib: null,
+          case_submitted_to: null,
 
           sources: [],
           offences: [],
           removedSources: [],
+          removedSuspects: [],
 
         }
       }
@@ -832,6 +946,18 @@ export default {
       default: () => []
     },
 
+    newSuspects: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+
+    removedSuspects: {
+      type: Array,
+      default: () => []
+    },
+
   },
 
   data() {
@@ -844,8 +970,8 @@ export default {
       exifExtracted: false,
       lastStageId: this.observation.stage_id,
       observers: this.observation.observers,
-      observerFirstName: '',
-      observerLastName: '',
+      observerFirstName: null,
+      observerLastName: null,
       observerErrors: {
         type: Array,
         default: () => []
@@ -853,6 +979,15 @@ export default {
       sources: this.observation.sources,
       sourceDescription: null,
       sourceLink: null,
+      suspect_name: null,
+      suspect_place: null,
+      suspect_profile: null,
+      suspect_phone: null,
+      suspect_email: null,
+      suspect_social_media: null,
+      suspect_note: null,
+      suspects: this.observation.suspects,
+      suspectErrors: null,
     }
   },
 
@@ -919,38 +1054,12 @@ export default {
         sources: this.poachingSources,
         removed_sources: this.removedSources,
         verdict_date: this.observation.verdict ? new Date(this.observation.verdict_date) : null,
+
+        new_suspects: this.newSuspects,
+        removed_suspects: this.removedSuspects,
       }, {
         resetOnSuccess: false
       })
-    },
-
-    addObserver() {
-      if (this.observerFirstName && this.observerLastName) {
-        this.fieldObservers.push({
-          'firstName': this.observerFirstName,
-          'lastName': this.observerLastName,
-        })
-        this.observerFirstName = null;
-        this.observerLastName = null;
-        this.observerErrors = [];
-      } else {
-        if (!this.observerFirstName) {
-          this.observerErrors.observerFirstName = "This field is required";
-          this.$forceUpdate();
-        }
-        if (!this.observerLastName) {
-          this.observerErrors.observerLastName = "This field is required";
-          this.$forceUpdate();
-        }
-      }
-    },
-
-    removeObserver(index, id) {
-      if (id === 0){
-        this.$delete(this.fieldObservers, index);
-        return;
-      }
-      this.$delete(this.observers, index);
     },
 
     /**
@@ -1257,6 +1366,80 @@ export default {
       }
       this.removedSources.push(id);
       this.$delete(this.sources, index);
+    },
+
+    /**
+     * Add observer for poaching observation
+     *
+     */
+    addObserver() {
+      if (this.observerFirstName && this.observerLastName) {
+        this.fieldObservers.push({
+          'firstName': this.observerFirstName,
+          'lastName': this.observerLastName,
+        })
+        this.observerFirstName = null;
+        this.observerLastName = null;
+        this.observerErrors = [];
+      } else {
+        if (!this.observerFirstName) {
+          this.observerErrors.observerFirstName = "This field is required";
+          this.$forceUpdate();
+        }
+        if (!this.observerLastName) {
+          this.observerErrors.observerLastName = "This field is required";
+          this.$forceUpdate();
+        }
+      }
+    },
+
+    removeObserver(index, id) {
+      if (id === 0){
+        this.$delete(this.fieldObservers, index);
+        return;
+      }
+      this.$delete(this.observers, index);
+    },
+
+    /**
+     * Add observer for poaching observation
+     *
+     */
+    addSuspect() {
+      if (this.suspect_name || this.suspect_place || this.suspect_profile || this.suspect_phone || this.suspect_email || this.suspect_social_media || this.suspect_note) {
+        console.log('hi')
+        this.newSuspects.push({
+          'name': this.suspect_name,
+          'place': this.suspect_place,
+          'profile': this.suspect_profile,
+          'phone': this.suspect_phone,
+          'email': this.suspect_email,
+          'social_media': this.suspect_social_media,
+          'note': this.suspect_note,
+        })
+        this.suspect_name = null;
+        this.suspect_place = null;
+        this.suspect_profile = null;
+        this.suspect_phone = null;
+        this.suspect_email = null;
+        this.suspect_social_media = null;
+        this.suspect_note = null;
+
+        this.suspectErrors = null;
+      } else {
+        console.log('hi error')
+        this.suspectErrors = "Any field is required";
+        this.$forceUpdate();
+      }
+    },
+
+    removeSuspect(index, id) {
+      if (id === 0){
+        this.$delete(this.newSuspects, index);
+        return;
+      }
+      this.removedSuspects.push(id);
+      this.$delete(this.suspects, index);
     },
 
   }
