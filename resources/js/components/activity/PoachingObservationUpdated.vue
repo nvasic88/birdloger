@@ -1,6 +1,6 @@
 <template>
   <div class="activity-log-item">
-    {{ activity.created_at | formatDateTime }} {{ activity.causer.full_name }} {{ trans('activityLog.changed') }} {{ formatedChanges }}: {{ activity.properties.reason }}
+    {{ activity.created_at | formatDateTime }} {{ activity.causer.full_name }} {{ trans('activityLog.changed') }} {{ formatedChanges }}. {{ trans('activityLog.reason') }}: {{ activity.properties.reason }}
   </div>
 </template>
 
@@ -18,10 +18,21 @@ export default {
   computed: {
     formatedChanges() {
       const old = this.activity.properties.old
+      const poaching = ['indigenous', 'dead_from_total', 'alive_from_total', 'total', 'exact_number', 'offences',
+        'locality', 'place', 'municipality', 'data_id', 'folder_id', 'file', 'in_report', 'input_date',
+        'offence_details', 'case_reported', 'case_reported_by', 'verdict', 'verdict_date', 'proceeding', 'sanction_rsd',
+        'sanction_eur', 'community_sentence', 'opportunity', 'annotation', 'suspect_name', 'suspect_place',
+        'suspect_profile', 'suspects_number', 'sources', 'source', 'source_description', 'source_link', 'social_media',
+        'media', 'ads', 'institutions', 'associates', 'cites', 'origin_of_individuals', 'rejected', 'select_date',
+        'remove_source_tooltip', 'add_source', 'insert_source_description', 'insert_source_link', 'youtube', 'facebook',
+        'insert_source']
 
       return Object.keys(old).map(key => {
         const val = this.oldValue(old, key)
-        return `${this.trans('labels.poaching_observations.'+key)}` + (val ? ` (${val})` : '')
+        if (poaching.includes(key))
+          return `${this.trans('labels.poaching_observations.'+key)}` + (val ? ` (${val})` : '')
+        else
+          return `${this.trans('labels.observations.'+key)}` + (val ? ` (${val})` : '')
       }).join(', ')
     }
   },

@@ -10,8 +10,8 @@
           :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
           autofocus
           ref="taxonAutocomplete"
-          :label="trans('labels.field_observations.taxon')"
-          :placeholder="trans('labels.field_observations.search_for_taxon')"
+          :label="trans('labels.observations.taxon')"
+          :placeholder="trans('labels.observations.search_for_taxon')"
         />
 
         <nz-date-input
@@ -19,15 +19,15 @@
           :month.sync="form.month"
           :day.sync="form.day"
           :errors="form.errors"
-          :label="trans('labels.field_observations.date')"
+          :label="trans('labels.observations.date')"
           :placeholders="{
-              year: trans('labels.field_observations.year'),
-              month: trans('labels.field_observations.month'),
-              day: trans('labels.field_observations.day')
+              year: trans('labels.observations.year'),
+              month: trans('labels.observations.month'),
+              day: trans('labels.observations.day')
           }"
         />
 
-        <b-field :label="trans('labels.field_observations.photos')">
+        <b-field :label="trans('labels.observations.photos')">
           <div class="columns">
             <div class="column is-one-third">
               <nz-photo-upload
@@ -35,7 +35,7 @@
                 :image-path="getObservationPhotoAttribute(0, 'path')"
                 :image-license="getObservationPhotoAttribute(0, 'license')"
                 :licenses="licenses"
-                :text="trans('labels.field_observations.upload')"
+                :text="trans('labels.observations.upload')"
                 @uploaded="onPhotoUploaded"
                 @removed="onPhotoRemoved"
                 @cropped="onPhotoCropped"
@@ -51,7 +51,7 @@
                 :image-path="getObservationPhotoAttribute(1, 'path')"
                 :image-license="getObservationPhotoAttribute(1, 'license')"
                 :licenses="licenses"
-                :text="trans('labels.field_observations.upload')"
+                :text="trans('labels.observations.upload')"
                 @uploaded="onPhotoUploaded"
                 @removed="onPhotoRemoved"
                 @cropped="onPhotoCropped"
@@ -67,7 +67,7 @@
                 :image-path="getObservationPhotoAttribute(2, 'path')"
                 :image-license="getObservationPhotoAttribute(2, 'license')"
                 :licenses="licenses"
-                :text="trans('labels.field_observations.upload')"
+                :text="trans('labels.observations.upload')"
                 @uploaded="onPhotoUploaded"
                 @removed="onPhotoRemoved"
                 @cropped="onPhotoCropped"
@@ -97,7 +97,7 @@
       class="button is-text"
       @click="showMoreDetails = !showMoreDetails"
     >
-      {{ showMoreDetails ? trans('labels.field_observations.less_details') : trans('labels.field_observations.more_details') }}
+      {{ showMoreDetails ? trans('labels.observations.less_details') : trans('labels.observations.more_details') }}
     </button>
 
     <div class="mt-4" v-show="showMoreDetails">
@@ -106,13 +106,13 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.stage')"
+            :label="trans('labels.observations.stage')"
             label-for="stage"
             :type="form.errors.has('stage_id') ? 'is-danger' : null"
             :message="form.errors.has('stage_id') ? form.errors.first('stage_id') : null"
           >
             <b-select id="stage" v-model="form.stage_id" :disabled="!stages.length" @input="lastStageId = $event" expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_stage') }}</option>
+              <option :value="null">{{ trans('labels.observations.choose_a_stage') }}</option>
               <option v-for="stage in stages" :value="stage.id" :key="stage.id" v-text="trans(`stages.${stage.name}`)"></option>
             </b-select>
           </b-field>
@@ -120,12 +120,12 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.sex')"
+            :label="trans('labels.observations.sex')"
             :type="form.errors.has('sex') ? 'is-danger' : null"
             :message="form.errors.has('sex') ? form.errors.first('sex') : null"
           >
             <b-select v-model="form.sex" expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+              <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
               <option v-for="(label,sex) in sexes" :key="sex" :value="sex" v-text="label"></option>
             </b-select>
           </b-field>
@@ -133,7 +133,7 @@
       </div>
 
       <b-field
-        :label="trans('labels.field_observations.types')"
+        :label="trans('labels.observations.types')"
         :error="form.errors.has('observation_types_ids')"
         :message="form.errors.has('observation_types_ids') ? form.errors.first('observation_types_ids') : null"
       >
@@ -144,7 +144,7 @@
           :allowNew="false"
           field="name"
           icon="tag"
-          :placeholder="trans('labels.field_observations.types_placeholder')"
+          :placeholder="trans('labels.observations.types_placeholder')"
           @typing="onTypeTyping"
           @keyup.native.delete="onTypeBackspace"
           open-on-focus
@@ -162,7 +162,7 @@
         :message="form.errors.has('atlas_code') ? form.errors.first('atlas_code') : null"
       >
         <b-select id="atlas-code" v-model="form.atlas_code" expanded>
-          <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+          <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
           <option v-for="atlasCode in atlasCodes" :value="atlasCode.code" v-text="atlasCode.name" :key="atlasCode.code"></option>
         </b-select>
       </b-field>
@@ -171,7 +171,7 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.number')"
+            :label="trans('labels.observations.number')"
             label-for="number"
             :type="form.errors.has('number') ? 'is-danger' : null"
             :message="form.errors.has('number') ? form.errors.first('number') : null"
@@ -182,13 +182,13 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.number_of')"
+            :label="trans('labels.observations.number_of')"
             label-for="number_of"
             :type="form.errors.has('number_of') ? 'is-danger' : null"
             :message="form.errors.has('number_of') ? form.errors.first('number_of') : null"
           >
             <b-select v-model="form.number_of" expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+              <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
               <option value="individual">{{trans('labels.number_of.individual')}}</option>
               <option value="couple">{{trans('labels.number_of.couple')}}</option>
               <option value="singing_male">{{trans('labels.number_of.singing_male')}}</option>
@@ -222,7 +222,7 @@
         </div>
         <div class="column">
           <b-field
-            :label="trans('labels.observations.fid')"
+            :label="trans('labels.field_observations.fid')"
             label-for="fid"
             :error="form.errors.has('fid')"
             :message="form.errors.has('fid') ? form.errors.first('fid') : null"
@@ -232,7 +232,7 @@
         </div>
         <div class="column">
           <b-field
-            :label="trans('labels.observations.rid')"
+            :label="trans('labels.field_observations.rid')"
             label-for="rid"
             :type="form.errors.has('rid') ? 'is-danger' : null"
             :message="form.errors.has('rid') ? form.errors.first('rid') : null"
@@ -244,7 +244,7 @@
       </div>
 
       <b-field
-        :label="trans('labels.field_observations.note')"
+        :label="trans('labels.observations.note')"
         label-for="note"
         :error="form.errors.has('note')"
         :message="form.errors.has('note') ? form.errors.first('note') : null"
@@ -254,7 +254,7 @@
 
 
       <b-field
-        :label="trans('labels.field_observations.habitat')"
+        :label="trans('labels.observations.habitat')"
         label-for="habitat"
         :error="form.errors.has('habitat')"
         :message="form.errors.has('habitat') ? form.errors.first('habitat') : null"
@@ -264,7 +264,7 @@
 
 
       <b-field
-        :label="trans('labels.field_observations.time')"
+        :label="trans('labels.observations.time')"
         label-for="time"
         :type="form.errors.has('time') ? 'is-danger' : null"
         :message="form.errors.has('time') ? form.errors.first('time') : null"
@@ -273,7 +273,7 @@
           id="time"
           :value="time"
           @input="onTimeInput"
-          :placeholder="trans('labels.field_observations.click_to_select')"
+          :placeholder="trans('labels.observations.click_to_select')"
           icon="clock-o"
           :mobile-native="false"
         >
@@ -284,7 +284,7 @@
       </b-field>
 
       <b-field
-        :label="trans('labels.field_observations.description')"
+        :label="trans('labels.observations.description')"
         label-for="description"
         :error="form.errors.has('description')"
         :message="form.errors.has('description') ? form.errors.first('description') : null"
@@ -293,7 +293,7 @@
       </b-field>
 
       <b-field
-        :label="trans('labels.field_observations.comment')"
+        :label="trans('labels.observations.comment')"
         label-for="comment"
         :error="form.errors.has('comment')"
         :message="form.errors.has('comment') ? form.errors.first('comment') : null"
@@ -320,7 +320,7 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.dataset')"
+            :label="trans('labels.observations.dataset')"
             label-for="dataset"
             :type="form.errors.has('dataset') ? 'is-danger' : null"
             :message="form.errors.has('dataset') ? form.errors.first('dataset') : null"
@@ -411,7 +411,7 @@
           :error="form.errors.has('identifier')"
           :message="form.errors.has('identifier') ? form.errors.first('identifier') : null"
           :user="form.identified_by"
-          :label="trans('labels.field_observations.identifier')"
+          :label="trans('labels.observations.identifier')"
           :disabled="!isIdentified"
         />
       </template>
@@ -419,13 +419,13 @@
       <div class="columns">
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.data_license')"
+            :label="trans('labels.observations.data_license')"
             label-for="data_license"
             :type="form.errors.has('data_license') ? 'is-danger' : null"
             :message="form.errors.has('data_license') ? form.errors.first('data_license') : null"
           >
             <b-select id="data_license" v-model="form.data_license" expanded>
-              <option :value="null">{{ trans('labels.field_observations.default') }}</option>
+              <option :value="null">{{ trans('labels.observations.default') }}</option>
               <option v-for="(label, value) in licenses" :value="value" v-text="label" v-bind:key="value"></option>
             </b-select>
           </b-field>
@@ -442,7 +442,7 @@
           'is-loading': submittingWithRedirect
       }"
       @click.prevent="submitWithRedirect"
-      v-tooltip="{content: trans('labels.field_observations.save_tooltip')}"
+      v-tooltip="{content: trans('labels.observations.save_tooltip')}"
     >
       {{ trans('buttons.save') }}
     </button>
@@ -456,7 +456,7 @@
       }"
       @click.prevent="submitWithoutRedirect"
       v-if="submitMore"
-      v-tooltip="{content: trans('labels.field_observations.save_more_tooltip')}"
+      v-tooltip="{content: trans('labels.observations.save_more_tooltip')}"
     >
       {{ trans('buttons.save_more') }}
     </button>
@@ -888,7 +888,7 @@ export default {
 
       return [
         this.trans('Use data from photo to fill the form?') + "\n",
-        ...Object.keys(data).map(key => `${this.trans('labels.field_observations.'+key)}: ${data[key]}`)
+        ...Object.keys(data).map(key => `${this.trans('labels.observations.'+key)}: ${data[key]}`)
       ].join("\n")
     },
 

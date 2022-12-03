@@ -116,6 +116,11 @@ return [
     ],
 
     'field_observations' => [
+        'fid' => 'Feature ID',
+        'rid' => 'RID',
+    ],
+
+    'observations' => [
         'taxon' => 'Naziv vrste',
         'taxon_id' => 'ID vrste',
         'original_identification' => 'Originalna identifikacija',
@@ -147,9 +152,8 @@ return [
         'sex' => 'Pol',
         'stage' => 'Stadijum',
         'time' => 'Vreme',
-        'observer' => 'Uočio',
-        'observers' => 'Uočili',
-        'identifier' => 'Identifikovao',
+        'observer' => 'Posmatrač',
+        'identifier' => 'Administrator unosa',
         'data_license' => 'Licenca podataka',
         'image_license' => 'Licenca slika',
         'default' => 'Podrazumevano',
@@ -176,17 +180,13 @@ return [
 
         'include_lower_taxa' => 'Uključujući niže vrste',
         'submitted_using' => 'Poslato preko',
-    ],
 
-    'observations' => [
         'observers' => 'Posmatrači',
         'firstName' => 'Ime',
         'lastName' => 'Prezime',
-        'fid' => 'Feature ID',
-        'rid' => 'RID',
         'data_limit' => 'Data limit',
         'data_provider' => 'Data provider',
-        'add_observer' => 'Dodaj novog posmatrača',
+        'add_observer' => 'Dodaj posmatrača',
         'remove_observer_tooltip' => 'Ukloni posmatrača',
         'id_tooltip' => 'Naziv vrste mora biti izabran preko pretrage, ID se automatski popunjava',
         'atlas_code' => 'Atlas kod',
@@ -194,22 +194,27 @@ return [
         'found_dead_note' => 'Beleške o mrtvoj jedinki',
         'insert_first_name' => 'Unesite ime posmatrača',
         'insert_last_name' => 'Unesite prezime posmatrača',
-
     ],
 
     'electrocution_observations' => [
-        'time_of_departure' => 'Vreme polaksa (h)',
-        'time_of_arrival' => 'Vreme dolaska (h)',
         'duration' => 'Obilazak linije trajao (min)',
-        'distance' => 'Pređena kilometraža (km)',
-        'transportation' => 'Prevoz',
         'distance_from_pillar' => 'Udaljenost od stuba (cm)',
-        'number_of_pillars' => 'Broj stuba',
-        'transmission_line' => 'Linija dalekovoda',
+        'pillar_number' => 'Broj stuba',
         'age' => 'Starost',
         'position' => 'Pozicija leša',
         'state' => 'Stanje uginule jedinke',
         'annotation' => 'Napomena',
+        'found_dead' => 'Ptica stradala u koliziji?',
+        'found_dead_note' => 'Beleške o koliziji',
+        'death_cause' => 'Uzrok smrti',
+        'column_type' => 'Tip stuba',
+        'console_type' => 'Tip konzole',
+        'voltage' => 'Voltaža',
+        'iba' => 'IBA',
+        'time_of_corpse_found' => 'Vreme pronalaska leša (h)',
+        'electrocution' => 'Elektrokucija',
+        'collision' => 'Kolizija',
+        'unknown' => 'Nepoznato',
     ],
 
     'poaching_observations' => [

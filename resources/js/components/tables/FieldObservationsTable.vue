@@ -85,23 +85,23 @@
               @select="onTaxonSelect"
               v-model="newFilter.taxon"
               :taxon="newFilter.selectedTaxon"
-              :label="trans('labels.field_observations.taxon')"
-              :placeholder="trans('labels.field_observations.search_for_taxon')"
+              :label="trans('labels.observations.taxon')"
+              :placeholder="trans('labels.observations.search_for_taxon')"
             />
           </div>
 
-          <b-field :label="trans('labels.field_observations.date')" class="column is-half">
+          <b-field :label="trans('labels.observations.date')" class="column is-half">
             <b-field expanded grouped>
               <b-field expanded>
                 <b-input
-                  :placeholder="trans('labels.field_observations.year')"
+                  :placeholder="trans('labels.observations.year')"
                   v-model="newFilter.year"
                 />
               </b-field>
 
               <b-field expanded>
                 <b-select
-                  :placeholder="trans('labels.field_observations.month')"
+                  :placeholder="trans('labels.observations.month')"
                   v-model="newFilter.month"
                   expanded
                 >
@@ -113,7 +113,7 @@
 
               <b-field expanded>
                 <b-select
-                  :placeholder="trans('labels.field_observations.day')"
+                  :placeholder="trans('labels.observations.day')"
                   v-model="newFilter.day"
                   expanded
                 >
@@ -129,7 +129,7 @@
             v-if="showObserver"
             class="column is-half"
             v-model="newFilter.observer"
-            :label="trans('labels.field_observations.observer')"
+            :label="trans('labels.observations.observer')"
             placeholder=""
           />
         </div>
@@ -180,7 +180,7 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="taxon_name" :label="trans('labels.field_observations.taxon')" sortable>
+      <b-table-column field="taxon_name" :label="trans('labels.observations.taxon')" sortable>
         <template #default="{ row }">
           <div :class="{'has-text-grey': !row.taxon}">
             <span>{{ row.taxon ? row.taxon.name : row.taxon_suggestion }}</span>
@@ -204,7 +204,7 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="year" :label="trans('labels.field_observations.year')" numeric sortable>
+      <b-table-column field="year" :label="trans('labels.observations.year')" numeric sortable>
         <template #default="{ row }">
           {{ row.year }}
         </template>
@@ -213,7 +213,7 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="month" :label="trans('labels.field_observations.month')" numeric sortable>
+      <b-table-column field="month" :label="trans('labels.observations.month')" numeric sortable>
         <template #default="{ row }">
           {{ row.month }}
         </template>
@@ -222,7 +222,7 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="day" :label="trans('labels.field_observations.day')" numeric sortable>
+      <b-table-column field="day" :label="trans('labels.observations.day')" numeric sortable>
         <template #default="{ row }">
           {{ row.day }}
         </template>
@@ -240,9 +240,9 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="status" :label="trans('labels.field_observations.status')" v-if="showStatus">
+      <b-table-column field="status" :label="trans('labels.observations.status')" v-if="showStatus">
         <template #default="{ row }">
-          <span :class="determineStatusClass(row.status)" :title="trans(`labels.field_observations.statuses.${row.status}`)">
+          <span :class="determineStatusClass(row.status)" :title="trans(`labels.observations.statuses.${row.status}`)">
             <b-icon :icon="determineStatusIcon(row.status)" />
           </span>
         </template>
@@ -291,9 +291,9 @@
 
               <small>{{ row.mgrs10k.replace(/^[0-9]+[a-zA-Z]/, '$& ') }}</small><br>
 
-              <small>{{ trans('labels.field_observations.elevation') }}: {{ row.elevation }}m</small><br>
+              <small>{{ trans('labels.observations.elevation') }}: {{ row.elevation }}m</small><br>
 
-              <small v-if="row.accuracy">{{ trans('labels.field_observations.accuracy') }}: {{ row.accuracy }}m</small>
+              <small v-if="row.accuracy">{{ trans('labels.observations.accuracy') }}: {{ row.accuracy }}m</small>
             </div>
           </div>
         </article>

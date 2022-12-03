@@ -48,7 +48,7 @@
 
 				<div class="w-full" v-if="withLicense">
 					<b-select :value="image.license" @input="handleLicenseChanged" expanded>
-						<option :value="null">{{ trans('labels.field_observations.default') }}</option>
+						<option :value="null">{{ trans('labels.observations.default') }}</option>
 						<option v-for="(label, value) in licenses" :value="value" :key="value" v-text="label"></option>
 					</b-select>
 				</div>

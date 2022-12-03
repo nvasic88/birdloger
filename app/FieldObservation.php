@@ -335,7 +335,7 @@ class FieldObservation extends Model implements FlatArrayable
      */
     public function getStatusTranslationAttribute()
     {
-        return trans('labels.field_observations.statuses.'.$this->status);
+        return trans('labels.observations.statuses.'.$this->status);
     }
 
     /**

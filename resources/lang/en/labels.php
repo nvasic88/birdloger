@@ -116,6 +116,11 @@ return [
     ],
 
     'field_observations' => [
+        'fid' => 'Feature ID',
+        'rid' => 'RID',
+    ],
+
+    'observations' => [
         'taxon' => 'Species name',
         'taxon_id' => 'Species ID',
         'original_identification' => 'Original Identification',
@@ -148,8 +153,7 @@ return [
         'stage' => 'Stage',
         'time' => 'Time',
         'observer' => 'Observer',
-        'observers' => 'Observers',
-        'identifier' => 'Identifier',
+        'identifier' => 'Input Administrator',
         'data_license' => 'Data License',
         'image_license' => 'Image License',
         'default' => 'Default',
@@ -176,14 +180,10 @@ return [
 
         'include_lower_taxa' => 'Include lower species',
         'submitted_using' => 'Submitted Using',
-    ],
 
-    'observations' => [
         'observers' => 'Observers',
         'firstName' => 'First Name',
         'lastName' => 'Last Name',
-        'fid' => 'Feature ID',
-        'rid' => 'RID',
         'data_limit' => 'Data limit',
         'data_provider' => 'Data provider',
         'add_observer' => 'Add observer',
@@ -194,22 +194,27 @@ return [
         'found_dead_note' => 'Note on dead observation',
         'insert_first_name' => 'Insert first name',
         'insert_last_name' => 'Insert last name',
-
     ],
 
     'electrocution_observations' => [
-        'time_of_departure' => 'Time of departure (h)',
-        'time_of_arrival' => 'Time of arrival (h)',
         'duration' => 'Line tour duration (min)',
-        'distance' => 'Traveled distance (km)',
-        'transportation' => 'Transportation',
         'distance_from_pillar' => 'Distance from pillar (cm)',
-        'number_of_pillars' => 'Number of pillars',
-        'transmission_line' => 'Transmission line',
+        'pillar_number' => 'Pillar number',
         'age' => 'Age',
         'position' => 'Corpse position',
         'state' => 'The condition of the dead individual',
         'annotation' => 'Annotation',
+        'found_dead' => 'Bird died in a collision?',
+        'found_dead_note' => 'Notes on a collision',
+        'death_cause' => 'Cause of death',
+        'column_type' => 'Column type',
+        'console_type' => 'Console type',
+        'voltage' => 'Voltage',
+        'iba' => 'IBA',
+        'time_of_corpse_found' => 'Vreme pronalaska leša (h)',
+        'electrocution' => 'Electrocution',
+        'collision' => 'Collision',
+        'unknown' => 'Unknown',
     ],
 
     'poaching_observations' => [

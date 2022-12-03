@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Exports\FieldObservations;
+namespace App\Exports\ElectrocutionObservations;
 
 use App\Export;
 use App\Exports\BaseExport;
-use App\FieldObservation;
+use App\ElectrocutionObservation;
 use Illuminate\Support\Collection;
 
-class CustomFieldObservationsExport extends BaseExport
+class ElectrocutionObservationsExport extends BaseExport
 {
     /**
      * Column labels and names.
@@ -22,39 +22,39 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'id',
             ],
             [
-                'label' => trans('labels.field_observations.rid'),
+                'label' => trans('labels.observations.rid'),
                 'value' => 'rid',
             ],
             [
-                'label' => trans('labels.field_observations.fid'),
+                'label' => trans('labels.observations.fid'),
                 'value' => 'fid',
             ],
             [
-                'label' => trans('labels.observations.latitude'),
+                'label' => trans('labels.field_observations.latitude'),
                 'value' => 'latitude',
             ],
             [
-                'label' => trans('labels.observations.longitude'),
+                'label' => trans('labels.field_observations.longitude'),
                 'value' => 'longitude',
             ],
             [
-                'label' => trans('labels.observations.day'),
+                'label' => trans('labels.field_observations.day'),
                 'value' => 'day',
             ],
             [
-                'label' => trans('labels.observations.month'),
+                'label' => trans('labels.field_observations.month'),
                 'value' => 'month',
             ],
             [
-                'label' => trans('labels.observations.year'),
+                'label' => trans('labels.field_observations.year'),
                 'value' => 'year',
             ],
             [
-                'label' => trans('labels.observations.time'),
+                'label' => trans('labels.field_observations.time'),
                 'value' => 'time',
             ],
             [
-                'label' => trans('labels.observations.taxon'),
+                'label' => trans('labels.field_observations.taxon'),
                 'value' => 'taxon',
             ],
             [
@@ -66,11 +66,11 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'atlas_code',
             ],
             [
-                'label' => trans('labels.observations.number'),
+                'label' => trans('labels.field_observations.number'),
                 'value' => 'number',
             ],
             [
-                'label' => trans('labels.observations.number_of'),
+                'label' => trans('labels.field_observations.number_of'),
                 'value' => 'number_of',
             ],
             [
@@ -82,11 +82,11 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'data_limit',
             ],
             [
-                'label' => trans('labels.observations.comment'),
+                'label' => trans('labels.field_observations.comment'),
                 'value' => 'comment',
             ],
             [
-                'label' => trans('labels.observations.identifier'),
+                'label' => trans('labels.field_observations.identifier'),
                 'value' => 'identifier',
             ],
             [
@@ -94,67 +94,67 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'observers',
             ],
             [
-                'label' => trans('labels.observations.location'),
+                'label' => trans('labels.field_observations.location'),
                 'value' => 'location',
             ],
             [
-                'label' => trans('labels.observations.mgrs10k'),
+                'label' => trans('labels.field_observations.mgrs10k'),
                 'value' => 'mgrs10k',
             ],
             [
-                'label' => trans('labels.observations.accuracy'),
+                'label' => trans('labels.field_observations.accuracy'),
                 'value' => 'accuracy',
             ],
             [
-                'label' => trans('labels.observations.elevation'),
+                'label' => trans('labels.field_observations.elevation'),
                 'value' => 'elevation',
             ],
             [
-                'label' => trans('labels.observations.sex'),
+                'label' => trans('labels.field_observations.sex'),
                 'value' => 'sex',
             ],
             [
-                'label' => trans('labels.observations.stage'),
+                'label' => trans('labels.field_observations.stage'),
                 'value' => 'stage',
             ],
             [
-                'label' => trans('labels.observations.data_license'),
+                'label' => trans('labels.field_observations.data_license'),
                 'value' => 'license',
             ],
             [
-                'label' => trans('labels.observations.note'),
+                'label' => trans('labels.field_observations.note'),
                 'value' => 'note',
             ],
             [
-                'label' => trans('labels.observations.description'),
+                'label' => trans('labels.field_observations.description'),
                 'value' => 'description',
             ],
             [
-                'label' => trans('labels.observations.project'),
+                'label' => trans('labels.field_observations.project'),
                 'value' => 'project',
             ],
             [
-                'label' => trans('labels.observations.habitat'),
+                'label' => trans('labels.field_observations.habitat'),
                 'value' => 'habitat',
             ],
             [
-                'label' => trans('labels.observations.found_on'),
+                'label' => trans('labels.field_observations.found_on'),
                 'value' => 'found_on',
             ],
             [
-                'label' => trans('labels.observations.found_dead'),
+                'label' => trans('labels.electrocution_observations.found_dead'),
                 'value' => 'found_dead',
             ],
             [
-                'label' => trans('labels.observations.found_dead_note'),
+                'label' => trans('labels.electrocution_observations.found_dead_note'),
                 'value' => 'found_dead_note',
             ],
             [
-                'label' => trans('labels.observations.status'),
+                'label' => trans('labels.field_observations.status'),
                 'value' => 'status',
             ],
             [
-                'label' => trans('labels.observations.dataset'),
+                'label' => trans('labels.field_observations.dataset'),
                 'value' => 'dataset',
             ],
 
@@ -190,7 +190,7 @@ class CustomFieldObservationsExport extends BaseExport
      */
     protected function query(Export $export)
     {
-        return FieldObservation::with([
+        return ElectrocutionObservation::with([
             'observation.taxon', 'observation.photos', 'observedBy', 'identifiedBy',
             'observation.types.translations', 'observation.stage',
         ])->filter($export->filter)->orderBy('id');
@@ -199,7 +199,7 @@ class CustomFieldObservationsExport extends BaseExport
     /**
      * Extract needed data from item.
      *
-     * @param  \App\FieldObservation  $item
+     * @param  \App\ElectrocutionObservation  $item
      * @return array
      */
     protected function transformItem($item)

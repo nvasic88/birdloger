@@ -67,8 +67,7 @@ class UpdateElectrocutionObservation extends FormRequest
             'photos.*.crop.width' => ['required_with:photos.*.crop', 'integer'],
             'photos.*.crop.height' => ['required_with:photos.*.crop', 'integer'],
             'photos.*.license' => ['nullable', Rule::in(License::activeIds())],
-            'time_of_departure' => ['nullable', 'date_format:H:i'],
-            'time_of_arrival' => ['nullable', 'date_format:H:i'],
+            'time_of_corpse_found' => ['nullable', 'date_format:H:i'],
             'project' => ['nullable', 'string', 'max:191'],
             'habitat' => ['nullable', 'string', 'max:191'],
             'found_on' => ['nullable', 'string', 'max:191'],
@@ -82,29 +81,28 @@ class UpdateElectrocutionObservation extends FormRequest
             'dataset' => ['nullable', 'string', 'max:255'],
             'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
             'number_of' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'comment' => ['nullable', 'string'],
             'data_provider' => ['nullable', 'string'],
             'data_limit' => ['nullable', 'string'],
             'field_observers' => ['nullable', 'array'],
             'position' => ['nullable', 'string'],
             'state' => ['nullable', 'string'],
-            'annotation' => ['nullable', 'string'],
-            'number_of_pillars' => ['nullable', 'integer', 'max:100'],
+            'pillar_number' => ['nullable', 'string'],
             'distance_from_pillar' => ['nullable', 'integer'],
-            'transmission_line' => ['nullable', 'string'],
             'age' => ['nullable', 'integer', 'max:100'],
             'duration' => ['nullable', 'integer'],
-            'distance' => ['nullable', 'integer'],
-            'transportation' => ['nullable', 'string'],
+            'death_cause' => ['nullable', 'string', Rule::in(['collision', 'electrocution'])],
+            'column_type' => ['nullable','string'],
+            'console_type' => ['nullable','string'],
+            'voltage' => ['nullable','string'],
+            'iba' => ['nullable','string'],
         ];
     }
 
     /**
      * Store observation and related data.
      *
-     * @param \App\ElectrocutionObservation $electrocutionObservation
-     * @return \App\ElectrocutionObservation
+     * @param ElectrocutionObservation $electrocutionObservation
+     * @return ElectrocutionObservation
      */
     public function save(ElectrocutionObservation $electrocutionObservation)
     {
@@ -142,7 +140,7 @@ class UpdateElectrocutionObservation extends FormRequest
     }
 
     /**
-     * Get observation data specific to field observation from the request.
+     * Get observation data specific to electrocution observation from the request.
      *
      * @return array
      */
@@ -153,18 +151,18 @@ class UpdateElectrocutionObservation extends FormRequest
             'taxon_suggestion' => $this->input('taxon_id')
                 ? Taxon::find($this->input('taxon_id'))->name
                 : $this->input('taxon_suggestion'),
-            'time_of_departure' => $this->input('time_of_departure'),
-            'time_of_arrival' => $this->input('time_of_arrival'),
+            'time_of_corpse_found' => $this->input('time_of_corpse_found'),
             'position' => $this->input('position'),
             'state' => $this->input('state'),
-            'annotation' => $this->input('annotation'),
-            'number_of_pillars' => $this->input('number_of_pillars'),
+            'pillar_number' => $this->input('pillar_number'),
             'distance_from_pillar' => $this->input('distance_from_pillar'),
-            'transmission_line' => $this->input('transmission_line'),
             'age' => $this->input('age'),
             'duration' => $this->input('duration'),
-            'distance' => $this->input('distance'),
-            'transportation' => $this->input('transportation'),
+            'death_cause' => $this->input('death_cause'),
+            'column_type' => $this->input('column_type'),
+            'console_type' => $this->input('console_type'),
+            'voltage' => $this->input('voltage'),
+            'iba' => $this->input('iba'),
         ];
 
         if ($this->user()->hasAnyRole(['admin', 'curator', 'electrocution'])) {
@@ -203,10 +201,8 @@ class UpdateElectrocutionObservation extends FormRequest
             'project' => $this->input('project'),
             'habitat' => $this->input('habitat'),
             'found_on' => $this->input('found_on'),
-            'description' => $this->input('description'),
             'note' => $this->input('note'),
             'dataset' => $this->input('dataset') ?? Dataset::default(),
-            'comment' => $this->input('comment'),
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
             'atlas_code' => $this->input('atlas_code'),
@@ -223,9 +219,9 @@ class UpdateElectrocutionObservation extends FormRequest
     }
 
     /**
-     * Log update activity for field observation.
+     * Log update activity for electrocution observation.
      *
-     * @param \App\ElectrocutionObservation $electrocutionObservation
+     * @param ElectrocutionObservation $electrocutionObservation
      * @param array $beforeChange
      * @return void
      */
@@ -239,9 +235,9 @@ class UpdateElectrocutionObservation extends FormRequest
     }
 
     /**
-     * Sync field observation relations.
+     * Sync electrocution observation relations.
      *
-     * @param \App\ElectrocutionObservation $electrocutionObservation
+     * @param ElectrocutionObservation $electrocutionObservation
      * @return void
      */
     protected function syncRelations(ElectrocutionObservation $electrocutionObservation)
@@ -281,7 +277,7 @@ class UpdateElectrocutionObservation extends FormRequest
     /**
      * Send notification to creator of observation that it has been updated.
      *
-     * @param \App\ElectrocutionObservation $electrocutionObservation
+     * @param ElectrocutionObservation $electrocutionObservation
      * @return void
      */
     private function notifyCreator(ElectrocutionObservation $electrocutionObservation)

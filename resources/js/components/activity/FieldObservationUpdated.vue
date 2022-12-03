@@ -1,6 +1,6 @@
 <template>
   <div class="activity-log-item">
-    {{ activity.created_at | formatDateTime }} {{ activity.causer.full_name }} {{ trans('activityLog.changed') }} {{ formatedChanges }}: {{ activity.properties.reason }}
+    {{ activity.created_at | formatDateTime }} {{ activity.causer.full_name }} {{ trans('activityLog.changed') }} {{ formatedChanges }}. {{ trans('activityLog.reason') }}: {{ activity.properties.reason }}
   </div>
 </template>
 
@@ -18,10 +18,14 @@ export default {
   computed: {
     formatedChanges() {
       const old = this.activity.properties.old
+      const field = ['fid', 'rid']
 
       return Object.keys(old).map(key => {
         const val = this.oldValue(old, key)
-        return `${this.trans('labels.field_observations.'+key)}` + (val ? ` (${val})` : '')
+        if (field.includes(key))
+          return `${this.trans('labels.field_observations.'+key)}` + (val ? ` (${val})` : '')
+        else
+          return `${this.trans('labels.observations.'+key)}` + (val ? ` (${val})` : '')
       }).join(', ')
     }
   },

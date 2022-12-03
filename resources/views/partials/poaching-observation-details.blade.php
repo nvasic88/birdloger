@@ -1,27 +1,27 @@
 <table class="table is-bordered is-narrow">
     <tbody>
         <tr>
-            <td><b>{{ __('labels.field_observations.status') }}</b></td>
+            <td><b>{{ __('labels.observations.status') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->status_translation }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.taxon') }}</b></td>
+            <td><b>{{ __('labels.observations.taxon') }}</b></td>
             <td class="is-fullwidth">{{ optional($poachingObservation->observation->taxon)->name }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.date') }}</b></td>
-            <td class="is-fullwidth">{{ $poachingObservation->observation->year }} {{ $poachingObservation->observation->month }} {{ $poachingObservation->observation->day }}</td>
+            <td><b>{{ __('labels.observations.date') }}</b></td>
+            <td>{{ $electrocutionObservation->observation->day }}.{{ $electrocutionObservation->observation->month }}.{{ $electrocutionObservation->observation->year }}.</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.photos') }}</b></td>
-            <td class="is-fullwidth">
+            <td><b>{{ __('labels.observations.photos') }}</b></td>
+            <td>
                 <div class="columns">
                     @foreach ($poachingObservation->photos as $photo)
                         <div class="column is-one-third">
-                            <img src="{{ "{$photo->url}?v={$photo->updated_at->timestamp}" }}">
+                            <img alt="" src="{{ "{$photo->url}?v={$photo->updated_at->timestamp}" }}">
                         </div>
                     @endforeach
                 </div>
@@ -29,32 +29,32 @@
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.latitude') }}</b></td>
+            <td><b>{{ __('labels.observations.latitude') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->observation->latitude }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.longitude') }}</b></td>
+            <td><b>{{ __('labels.observations.longitude') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->observation->longitude }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.mgrs10k') }}</b></td>
+            <td><b>{{ __('labels.observations.mgrs10k') }}</b></td>
             <td class="is-fullwidth">{{ preg_replace('/^[0-9]+[a-zA-Z]/', '$0 ', $poachingObservation->observation->mgrs10k) }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.accuracy_m') }}</b></td>
+            <td><b>{{ __('labels.observations.accuracy_m') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->observation->accuracy }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.elevation_m') }}</b></td>
+            <td><b>{{ __('labels.observations.elevation_m') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->observation->elevation }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.dataset') }}</b></td>
+            <td><b>{{ __('labels.observations.dataset') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->observation->dataset }}</td>
         </tr>
 
@@ -120,12 +120,8 @@
 
         <tr>
             <td><b>{{ __('labels.poaching_observations.offences') }}</b></td>
-            <td class="is-fullwidth">
-                @foreach ($poachingObservation->offences as $offence)
-                    {{__('labels.offence_cases.'.$offence->name)}}
-                    @if(!$loop->last)
-                        {{";"}}
-                    @endif
+            <td>
+                @foreach ($poachingObservation->offences as $offence){{__('labels.offence_cases.'.$offence->name)}}@if(!$loop->last){{","}}@endif
                 @endforeach
             </td>
         </tr>
@@ -200,27 +196,29 @@
             <td class="is-fullwidth">{{ $poachingObservation->suspect_profile}}</td>
         </tr>
 
-        <tr>
-            <td colspan="2"><b>{{ __('labels.poaching_observations.sources') }}</b></td>
-        </tr>
-        @foreach ($poachingObservation->sources as $source)
+        @if ($poachingObservation->sources != "[]")
             <tr>
-                <td>{{ __('labels.poaching_observations.source') }}</td>
-                <td class="is-fullwidth">{{__('labels.poaching_observations.'.$source->name)}}</td>
+                <td colspan="2"><b>{{ __('labels.poaching_observations.sources') }}</b></td>
             </tr>
-            <tr>
-                <td>{{ __('labels.poaching_observations.source_description') }}</td>
-                <td class="is-fullwidth">{{$source->description}}</td>
-            </tr>
-            <tr>
-                <td>{{ __('labels.poaching_observations.source_link') }}</td>
-                <td class="is-fullwidth"><a href="{{$source->link}}">{{$source->link}}</a></td>
-            </tr>
-        @endforeach
+            @foreach ($poachingObservation->sources as $source)
+                <tr>
+                    <td><b>{{ __('labels.poaching_observations.source') }}</b></td>
+                    <td class="is-fullwidth">{{__('labels.poaching_observations.'.$source->name)}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{ __('labels.poaching_observations.source_description') }}</b></td>
+                    <td class="is-fullwidth">{{$source->description}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{ __('labels.poaching_observations.source_link') }}</b></td>
+                    <td><a href="{{$source->link}}">{{$source->link}}</a></td>
+                </tr>
+            @endforeach
+        @endif
 
         <tr>
             <td><b>{{ __('labels.observations.observers') }}</b></td>
-            <td class="is-fullwidth">
+            <td>
                 @foreach ($poachingObservation->observation->observers as $observer)
                     {{$observer->firstName}} {{$observer->lastName}}
                     @if(!$loop->last)
@@ -241,17 +239,17 @@
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.identifier') }}</b></td>
+            <td><b>{{ __('labels.observations.identifier') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->identifier }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.data_license') }}</b></td>
+            <td><b>{{ __('labels.observations.data_license') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->license_translation }}</td>
         </tr>
 
         <tr>
-            <td><b>{{ __('labels.field_observations.submitted_using') }}</b></td>
+            <td><b>{{ __('labels.observations.submitted_using') }}</b></td>
             <td class="is-fullwidth">{{ $poachingObservation->observation->client_name ?? __('Unknown') }}</td>
         </tr>
     </tbody>

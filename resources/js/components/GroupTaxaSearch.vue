@@ -10,8 +10,8 @@
         @select="onTaxonSelect"
         autofocus
         :url="url"
-        :label="trans('labels.field_observations.taxon')"
-        :placeholder="trans('labels.field_observations.search_for_taxon')"
+        :label="trans('labels.observations.taxon')"
+        :placeholder="trans('labels.observations.search_for_taxon')"
         @enter="visitLink"
       />
     </section>

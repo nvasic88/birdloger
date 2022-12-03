@@ -10,8 +10,8 @@
           :message="form.errors.has('taxon_id') ? form.errors.first('taxon_id') : null"
           autofocus
           ref="taxonAutocomplete"
-          :label="trans('labels.field_observations.taxon')"
-          :placeholder="trans('labels.field_observations.search_for_taxon')"
+          :label="trans('labels.observations.taxon')"
+          :placeholder="trans('labels.observations.search_for_taxon')"
         />
 
         <nz-date-input
@@ -19,15 +19,15 @@
           :month.sync="form.month"
           :day.sync="form.day"
           :errors="form.errors"
-          :label="trans('labels.field_observations.date')"
+          :label="trans('labels.observations.date')"
           :placeholders="{
-              year: trans('labels.field_observations.year'),
-              month: trans('labels.field_observations.month'),
-              day: trans('labels.field_observations.day')
+              year: trans('labels.observations.year'),
+              month: trans('labels.observations.month'),
+              day: trans('labels.observations.day')
           }"
         />
 
-        <b-field :label="trans('labels.field_observations.photos')">
+        <b-field :label="trans('labels.observations.photos')">
           <div class="columns">
             <div class="column is-one-third">
               <nz-photo-upload
@@ -35,7 +35,7 @@
                 :image-path="getObservationPhotoAttribute(0, 'path')"
                 :image-license="getObservationPhotoAttribute(0, 'license')"
                 :licenses="licenses"
-                :text="trans('labels.field_observations.upload')"
+                :text="trans('labels.observations.upload')"
                 @uploaded="onPhotoUploaded"
                 @removed="onPhotoRemoved"
                 @cropped="onPhotoCropped"
@@ -51,7 +51,7 @@
                 :image-path="getObservationPhotoAttribute(1, 'path')"
                 :image-license="getObservationPhotoAttribute(1, 'license')"
                 :licenses="licenses"
-                :text="trans('labels.field_observations.upload')"
+                :text="trans('labels.observations.upload')"
                 @uploaded="onPhotoUploaded"
                 @removed="onPhotoRemoved"
                 @cropped="onPhotoCropped"
@@ -67,7 +67,7 @@
                 :image-path="getObservationPhotoAttribute(2, 'path')"
                 :image-license="getObservationPhotoAttribute(2, 'license')"
                 :licenses="licenses"
-                :text="trans('labels.field_observations.upload')"
+                :text="trans('labels.observations.upload')"
                 @uploaded="onPhotoUploaded"
                 @removed="onPhotoRemoved"
                 @cropped="onPhotoCropped"
@@ -98,24 +98,49 @@
       @click="showMoreDetails = !showMoreDetails"
     >
       {{
-        showMoreDetails ? trans('labels.field_observations.less_details') : trans('labels.field_observations.more_details')
+        showMoreDetails ? trans('labels.observations.less_details') : trans('labels.observations.more_details')
       }}
     </button>
 
     <div class="mt-4" v-show="showMoreDetails">
+      <div>
+        <b-field
+          :label="trans('labels.electrocution_observations.death_cause')"
+          label-for="death_cause"
+          :type="form.errors.has('death_cause') ? 'is-danger' : null"
+          :message="form.errors.has('death_cause') ? form.errors.first('death_cause') : null"
+        >
+          <b-select v-model="form.death_cause" expanded>
+            <option :value="null">{{ trans('labels.electrocution_observations.unknown') }}</option>
+            <option value="electrocution">{{ trans('labels.electrocution_observations.electrocution') }}</option>
+            <option value="collision">{{ trans('labels.electrocution_observations.collision') }}</option>
+          </b-select>
+        </b-field>
+
+        <b-checkbox v-model="form.found_dead">{{ trans('labels.electrocution_observations.found_dead') }}</b-checkbox>
+
+        <b-field
+          :label="trans('labels.electrocution_observations.found_dead_note')"
+          label-for="found_dead_note"
+          v-if="form.found_dead"
+          :error="form.errors.has('found_dead_note')"
+          :message="form.errors.has('found_dead_note') ? form.errors.first('found_dead_note') : null"
+        >
+          <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note"/>
+        </b-field>
+      </div>
 
       <div class="columns">
-
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.stage')"
+            :label="trans('labels.observations.stage')"
             label-for="stage"
             :type="form.errors.has('stage_id') ? 'is-danger' : null"
             :message="form.errors.has('stage_id') ? form.errors.first('stage_id') : null"
           >
             <b-select id="stage" v-model="form.stage_id" :disabled="!stages.length" @input="lastStageId = $event"
                       expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_stage') }}</option>
+              <option :value="null">{{ trans('labels.observations.choose_a_stage') }}</option>
               <option v-for="stage in stages" :value="stage.id" :key="stage.id"
                       v-text="trans(`stages.${stage.name}`)"></option>
             </b-select>
@@ -124,40 +149,17 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.sex')"
+            :label="trans('labels.observations.sex')"
             :type="form.errors.has('sex') ? 'is-danger' : null"
             :message="form.errors.has('sex') ? form.errors.first('sex') : null"
           >
             <b-select v-model="form.sex" expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+              <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
               <option v-for="(label,sex) in sexes" :key="sex" :value="sex" v-text="label"></option>
             </b-select>
           </b-field>
         </div>
       </div>
-
-      <b-field
-        :label="trans('labels.field_observations.types')"
-        :error="form.errors.has('observation_types_ids')"
-        :message="form.errors.has('observation_types_ids') ? form.errors.first('observation_types_ids') : null"
-      >
-        <b-taginput
-          v-model="selectedObservationTypes"
-          :data="availableObservationTypes"
-          autocomplete
-          :allowNew="false"
-          field="name"
-          icon="tag"
-          :placeholder="trans('labels.field_observations.types_placeholder')"
-          @typing="onTypeTyping"
-          @keyup.native.delete="onTypeBackspace"
-          open-on-focus
-        >
-          <template v-slot:default="props">
-            <span>{{ props.option.name }}</span>
-          </template>
-        </b-taginput>
-      </b-field>
 
       <b-field
         :label="trans('labels.observations.atlas_code')"
@@ -166,17 +168,59 @@
         :message="form.errors.has('atlas_code') ? form.errors.first('atlas_code') : null"
       >
         <b-select id="atlas-code" v-model="form.atlas_code" expanded>
-          <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+          <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
           <option v-for="atlasCode in atlasCodes" :value="atlasCode.code" v-text="atlasCode.name"
                   :key="atlasCode.code"></option>
         </b-select>
       </b-field>
 
       <div class="columns">
-
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.number')"
+            :label="trans('labels.electrocution_observations.column_type')"
+            label-for="column_type"
+            :error="form.errors.has('column_type')"
+            :message="form.errors.has('column_type') ? form.errors.first('column_type') : null"
+          >
+            <b-input id="column_type" name="column_type" v-model="form.column_type"/>
+          </b-field>
+        </div>
+        <div class="column">
+          <b-field
+            :label="trans('labels.electrocution_observations.console_type')"
+            label-for="console_type"
+            :error="form.errors.has('console_type')"
+            :message="form.errors.has('console_type') ? form.errors.first('console_type') : null"
+          >
+            <b-input id="console_type" name="console_type" v-model="form.console_type"/>
+          </b-field>
+        </div>
+        <div class="column">
+          <b-field
+            :label="trans('labels.electrocution_observations.voltage')"
+            label-for="voltage"
+            :error="form.errors.has('voltage')"
+            :message="form.errors.has('voltage') ? form.errors.first('voltage') : null"
+          >
+            <b-input id="voltage" name="voltage" v-model="form.voltage"/>
+          </b-field>
+        </div>
+        <div class="column">
+          <b-field
+            :label="trans('labels.electrocution_observations.iba')"
+            label-for="iba"
+            :error="form.errors.has('iba')"
+            :message="form.errors.has('iba') ? form.errors.first('iba') : null"
+          >
+            <b-input id="iba" name="iba" v-model="form.iba"/>
+          </b-field>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <b-field
+            :label="trans('labels.observations.number')"
             label-for="number"
             :type="form.errors.has('number') ? 'is-danger' : null"
             :message="form.errors.has('number') ? form.errors.first('number') : null"
@@ -187,13 +231,13 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.number_of')"
+            :label="trans('labels.observations.number_of')"
             label-for="number_of"
             :type="form.errors.has('number_of') ? 'is-danger' : null"
             :message="form.errors.has('number_of') ? form.errors.first('number_of') : null"
           >
             <b-select v-model="form.number_of" expanded>
-              <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+              <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
               <option value="individual">{{ trans('labels.number_of.individual') }}</option>
               <option value="couple">{{ trans('labels.number_of.couple') }}</option>
               <option value="singing_male">{{ trans('labels.number_of.singing_male') }}</option>
@@ -225,11 +269,10 @@
             <b-input id="data_limit" name="data_limit" v-model="form.data_limit"/>
           </b-field>
         </div>
-
       </div>
 
       <b-field
-        :label="trans('labels.field_observations.note')"
+        :label="trans('labels.observations.note')"
         label-for="note"
         :error="form.errors.has('note')"
         :message="form.errors.has('note') ? form.errors.first('note') : null"
@@ -237,9 +280,8 @@
         <b-input id="note" type="textarea" v-model="form.note"/>
       </b-field>
 
-
       <b-field
-        :label="trans('labels.field_observations.habitat')"
+        :label="trans('labels.observations.habitat')"
         label-for="habitat"
         :error="form.errors.has('habitat')"
         :message="form.errors.has('habitat') ? form.errors.first('habitat') : null"
@@ -250,50 +292,26 @@
       <div class="columns">
         <div class="column">
           <b-field
-            :label="trans('labels.electrocution_observations.time_of_departure')"
-            label-for="time_of_departure"
-            :type="form.errors.has('time_of_departure') ? 'is-danger' : null"
-            :message="form.errors.has('time_of_departure') ? form.errors.first('time_of_departure') : null"
+            :label="trans('labels.electrocution_observations.time_of_corpse_found')"
+            label-for="time_of_corpse_found"
+            :type="form.errors.has('time_of_corpse_found') ? 'is-danger' : null"
+            :message="form.errors.has('time_of_corpse_found') ? form.errors.first('time_of_corpse_found') : null"
           >
             <b-timepicker
-              id="time_of_departure"
-              :value="time_of_departure"
+              id="time_of_corpse_found"
+              :value="time_of_corpse_found"
               @input="onDepartureTimeInput"
-              :placeholder="trans('labels.field_observations.click_to_select')"
+              :placeholder="trans('labels.observations.click_to_select')"
               icon="clock-o"
               :mobile-native="false"
             >
-              <button type="button" class="button is-danger" @click="form.time_of_departure = null">
+              <button type="button" class="button is-danger" @click="form.time_of_corpse_found = null">
                 <b-icon icon="close"></b-icon>
               </button>
             </b-timepicker>
           </b-field>
         </div>
 
-        <div class="column">
-          <b-field
-            :label="trans('labels.electrocution_observations.time_of_arrival')"
-            label-for="time_of_arrival"
-            :type="form.errors.has('time_of_arrival') ? 'is-danger' : null"
-            :message="form.errors.has('time_of_arrival') ? form.errors.first('time_of_arrival') : null"
-          >
-            <b-timepicker
-              id="time_of_arrival"
-              :value="time_of_arrival"
-              @input="onArrivalTimeInput"
-              :placeholder="trans('labels.field_observations.click_to_select')"
-              icon="clock-o"
-              :mobile-native="false"
-            >
-              <button type="button" class="button is-danger" @click="form.time_of_arrival = null">
-                <b-icon icon="close"></b-icon>
-              </button>
-            </b-timepicker>
-          </b-field>
-        </div>
-      </div>
-
-      <div class="columns">
         <div class="column">
           <b-field
             :label="trans('labels.electrocution_observations.duration')"
@@ -304,45 +322,7 @@
             <b-input id="duration" type="number" v-model="form.duration"/>
           </b-field>
         </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.electrocution_observations.distance')"
-            label-for="distance"
-            :error="form.errors.has('distance')"
-            :message="form.errors.has('distance') ? form.errors.first('distance') : null"
-          >
-            <b-input id="distance" type="number" v-model="form.distance"/>
-          </b-field>
-        </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.electrocution_observations.transportation')"
-            label-for="transportation"
-            :error="form.errors.has('transportation')"
-            :message="form.errors.has('transportation') ? form.errors.first('transportation') : null"
-          >
-            <b-input id="transportation" name="transportation" v-model="form.transportation"/>
-          </b-field>
-        </div>
       </div>
-
-      <b-field
-        :label="trans('labels.field_observations.description')"
-        label-for="description"
-        :error="form.errors.has('description')"
-        :message="form.errors.has('description') ? form.errors.first('description') : null"
-      >
-        <b-input id="description" type="textarea" v-model="form.description"/>
-      </b-field>
-
-      <b-field
-        :label="trans('labels.field_observations.comment')"
-        label-for="comment"
-        :error="form.errors.has('comment')"
-        :message="form.errors.has('comment') ? form.errors.first('comment') : null"
-      >
-        <b-input id="comment" type="textarea" v-model="form.comment"/>
-      </b-field>
 
       <div class="columns">
         <div class="column">
@@ -358,22 +338,12 @@
         </div>
         <div class="column">
           <b-field
-            :label="trans('labels.electrocution_observations.number_of_pillars')"
-            label-for="number_of_pillars"
-            :error="form.errors.has('number_of_pillars')"
-            :message="form.errors.has('number_of_pillars') ? form.errors.first('number_of_pillars') : null"
+            :label="trans('labels.electrocution_observations.pillar_number')"
+            label-for="pillar_number"
+            :error="form.errors.has('pillar_number')"
+            :message="form.errors.has('pillar_number') ? form.errors.first('pillar_number') : null"
           >
-            <b-input id="number_of_pillars" name="number_of_pillars" type="number" v-model="form.number_of_pillars"/>
-          </b-field>
-        </div>
-        <div class="column">
-          <b-field
-            :label="trans('labels.electrocution_observations.transmission_line')"
-            label-for="transmission_line"
-            :error="form.errors.has('transmission_line')"
-            :message="form.errors.has('transmission_line') ? form.errors.first('transmission_line') : null"
-          >
-            <b-input id="transmission_line" name="transmission_line" v-model="form.transmission_line"/>
+            <b-input id="pillar_number" name="pillar_number" v-model="form.pillar_number"/>
           </b-field>
         </div>
       </div>
@@ -411,15 +381,6 @@
         </div>
       </div>
 
-      <b-field
-        :label="trans('labels.electrocution_observations.annotation')"
-        label-for="annotation"
-        :error="form.errors.has('annotation')"
-        :message="form.errors.has('annotation') ? form.errors.first('annotation') : null"
-      >
-        <b-input id="annotation" type="textarea" v-model="form.annotation"/>
-      </b-field>
-
       <div class="columns">
         <div class="column">
           <b-field
@@ -439,7 +400,7 @@
 
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.dataset')"
+            :label="trans('labels.observations.dataset')"
             label-for="dataset"
             :type="form.errors.has('dataset') ? 'is-danger' : null"
             :message="form.errors.has('dataset') ? form.errors.first('dataset') : null"
@@ -448,18 +409,6 @@
           </b-field>
         </div>
       </div>
-
-      <b-checkbox v-model="form.found_dead">{{ trans('labels.observations.found_dead') }}</b-checkbox>
-
-      <b-field
-        :label="trans('labels.observations.found_dead_note')"
-        label-for="found_dead_note"
-        v-if="form.found_dead"
-        :error="form.errors.has('found_dead_note')"
-        :message="form.errors.has('found_dead_note') ? form.errors.first('found_dead_note') : null"
-      >
-        <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note"/>
-      </b-field>
 
       <hr>
 
@@ -521,28 +470,16 @@
 
       <hr>
 
-      <template v-if="showObserverIdentifier">
-        <nz-user-autocomplete
-          v-model="form.identifier"
-          @select="onIdentifierSelect"
-          :error="form.errors.has('identifier')"
-          :message="form.errors.has('identifier') ? form.errors.first('identifier') : null"
-          :user="form.identified_by"
-          :label="trans('labels.field_observations.identifier')"
-          :disabled="!isIdentified"
-        />
-      </template>
-
       <div class="columns">
         <div class="column">
           <b-field
-            :label="trans('labels.field_observations.data_license')"
+            :label="trans('labels.observations.data_license')"
             label-for="data_license"
             :type="form.errors.has('data_license') ? 'is-danger' : null"
             :message="form.errors.has('data_license') ? form.errors.first('data_license') : null"
           >
             <b-select id="data_license" v-model="form.data_license" expanded>
-              <option :value="null">{{ trans('labels.field_observations.default') }}</option>
+              <option :value="null">{{ trans('labels.observations.default') }}</option>
               <option v-for="(label, value) in licenses" :value="value" v-text="label" v-bind:key="value"></option>
             </b-select>
           </b-field>
@@ -559,7 +496,7 @@
           'is-loading': submittingWithRedirect
       }"
       @click.prevent="submitWithRedirect"
-      v-tooltip="{content: trans('labels.field_observations.save_tooltip')}"
+      v-tooltip="{content: trans('labels.observations.save_tooltip')}"
     >
       {{ trans('buttons.save') }}
     </button>
@@ -573,7 +510,7 @@
       }"
       @click.prevent="submitWithoutRedirect"
       v-if="submitMore"
-      v-tooltip="{content: trans('labels.field_observations.save_more_tooltip')}"
+      v-tooltip="{content: trans('labels.observations.save_more_tooltip')}"
     >
       {{ trans('buttons.save_more') }}
     </button>
@@ -635,6 +572,7 @@ export default {
           sex: null,
           number: null,
           number_of: 'individual',
+          death_cause: 'unknown',
           project: null,
           habitat: null,
           found_on: null,
@@ -643,8 +581,6 @@ export default {
           found_dead_note: '',
           data_license: null,
           image_license: null,
-          time_of_departure: null,
-          time_of_arrival: null,
           types: [],
           observers: [],
           field_observers: [],
@@ -654,20 +590,20 @@ export default {
           identified_by: null,
           dataset: null,
           atlas_code: null,
-          description: '',
           comment: '',
           data_provider: '',
           data_limit: '',
           position: null,
           state: null,
-          annotation: '',
-          number_of_pillars: null,
+          pillar_number: '',
           distance_from_pillar: null,
-          transmission_line: null,
           age: null,
           duration: null,
-          distance: null,
-          transportation: null,
+          time_of_corpse_found: null,
+          column_type: null,
+          console_type: null,
+          voltage: null,
+          iba: null,
 
         }
       }
@@ -723,12 +659,8 @@ export default {
   },
 
   computed: {
-    time_of_departure() {
-      return this.form.time_of_departure ? dayjs(this.form.time_of_departure, 'HH:mm').toDate() : null
-    },
-
-    time_of_arrival() {
-      return this.form.time_of_arrival ? dayjs(this.form.time_of_arrival, 'HH:mm').toDate() : null
+    time_of_corpse_found() {
+      return this.form.time_of_corpse_found ? dayjs(this.form.time_of_corpse_found, 'HH:mm').toDate() : null
     },
 
     selectedObservationTypes: {
@@ -869,11 +801,7 @@ export default {
      * Set time.
      */
     onDepartureTimeInput(value) {
-      this.form.time_of_departure = value ? dayjs(value).format('HH:mm') : null
-    },
-
-    onArrivalTimeInput(value) {
-      this.form.time_of_arrival = value ? dayjs(value).format('HH:mm') : null
+      this.form.time_of_corpse_found = value ? dayjs(value).format('HH:mm') : null
     },
 
     /**
@@ -1028,7 +956,7 @@ export default {
 
       return [
         this.trans('Use data from photo to fill the form?') + "\n",
-        ...Object.keys(data).map(key => `${this.trans('labels.field_observations.' + key)}: ${data[key]}`)
+        ...Object.keys(data).map(key => `${this.trans('labels.observations.' + key)}: ${data[key]}`)
       ].join("\n")
     },
 

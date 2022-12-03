@@ -112,42 +112,42 @@ class ElectrocutionObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.latitude'),
+                'label' => trans('labels.observations.latitude'),
                 'value' => 'latitude',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.longitude'),
+                'label' => trans('labels.observations.longitude'),
                 'value' => 'longitude',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.accuracy'),
+                'label' => trans('labels.observations.accuracy'),
                 'value' => 'accuracy',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.day'),
+                'label' => trans('labels.observations.day'),
                 'value' => 'day',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.month'),
+                'label' => trans('labels.observations.month'),
                 'value' => 'month',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.year'),
+                'label' => trans('labels.observations.year'),
                 'value' => 'year',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.date'),
+                'label' => trans('labels.observations.date'),
                 'value' => 'date',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.field_observations.taxon'),
+                'label' => trans('labels.observations.taxon'),
                 'value' => 'taxon',
                 'required' => true,
             ],
@@ -257,15 +257,15 @@ class ElectrocutionObservationImport extends BaseImport
             'distance' => trans('labels.electrocution_observations.distance'),
             'transportation' => trans('labels.electrocution_observations.transportation'),
 
-            'latitude' => trans('labels.field_observations.latitude'),
-            'longitude' => trans('labels.field_observations.longitude'),
-            'accuracy' => trans('labels.field_observations.accuracy'),
-            'day' => trans('labels.field_observations.day'),
-            'month' => trans('labels.field_observations.month'),
-            'year' => trans('labels.field_observations.year'),
-            'date' => trans('labels.field_observations.date'),
+            'latitude' => trans('labels.observations.latitude'),
+            'longitude' => trans('labels.observations.longitude'),
+            'accuracy' => trans('labels.observations.accuracy'),
+            'day' => trans('labels.observations.day'),
+            'month' => trans('labels.observations.month'),
+            'year' => trans('labels.observations.year'),
+            'date' => trans('labels.observations.date'),
             'input_date' => trans('labels.poaching_observations.input_date'),
-            'taxon' => trans('labels.field_observations.taxon'),
+            'taxon' => trans('labels.observations.taxon'),
 
             'observers' => trans('labels.observations.observers'),
         ]);
@@ -303,7 +303,7 @@ class ElectrocutionObservationImport extends BaseImport
     }
 
     /**
-     * Get observation data specific to field observation from the request.
+     * Get observation data specific to electrocution observation from the request.
      *
      * @param  array  $item
      * @return array

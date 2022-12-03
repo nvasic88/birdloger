@@ -44,13 +44,11 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     protected $casts = [
         'unidentifiable' => 'boolean',
         'approved_at' => 'datetime',
-        'time_of_departure' => 'datetime',
+        'time_of_corpse_found' => 'datetime',
         'time_of_arrival' => 'datetime',
         'distance_from_pillar' => 'integer',
         'age' => 'integer',
-        'number_of_pillars' => 'integer',
         'duration' => 'integer',
-        'distance' => 'integer',
     ];
 
     protected function filters()
@@ -359,7 +357,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      */
     public function getStatusTranslationAttribute()
     {
-        return trans('labels.field_observations.statuses.'.$this->status);
+        return trans('labels.observations.statuses.'.$this->status);
     }
 
     /**
@@ -635,8 +633,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'found_on' => $this->observation->found_on,
             'found_dead' => $this->observation->found_dead,
             'found_dead_note' => $this->observation->found_dead_note,
-            'time_of_departure' => optional($this->time_of_departure)->format('H:i'),
-            'time_of_arrival' => optional($this->time_of_arrival)->format('H:i'),
+            'time_of_corpse_found' => optional($this->time_of_corpse_found)->format('H:i'),
             'status' => $this->status,
             'activity' => $this->activity,
             'types' => $this->observation->types,
@@ -647,20 +644,19 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'dataset' => $this->observation->dataset,
             'atlas_code' => $this->observation->atlas_code,
             'observers' => $this->observation->observers,
-            'description' => $this->observation->description,
-            'comment' => $this->observation->comment,
             'data_provider' => $this->observation->data_provider,
             'data_limit' => $this->observation->data_limit,
             'distance_from_pillar' => $this->distance_from_pillar,
             'age' => $this->age,
             'position' => $this->position,
             'state' => $this->state,
-            'annotation' => $this->annotation,
-            'number_of_pillars' => $this->number_of_pillars,
-            'transmission_line' => $this->transmission_line,
+            'pillar_number' => $this->pillar_number,
             'duration' => $this->duration,
-            'distance' => $this->distance,
-            'transportation' => $this->transportation,
+            'death_cause' => $this->death_cause,
+            'column_type' => $this->column_type,
+            'console_type' => $this->console_type,
+            'voltage' => $this->voltage,
+            'iba' => $this->iba,
         ];
     }
 
@@ -699,8 +695,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'found_on' => $this->observation->found_on,
             'found_dead' => $this->observation->found_dead,
             'found_dead_note' => $this->observation->found_dead_note,
-            'time_of_departure' => optional($this->time_of_departure)->format('H:i'),
-            'time_of_arrival' => optional($this->time_of_arrival)->format('H:i'),
+            'time_of_corpse_found' => optional($this->time_of_corpse_found)->format('H:i'),
             'status' => $this->status,
             'activity' => $this->activity,
             'types' => $this->observation->types,
@@ -711,20 +706,19 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'dataset' => $this->observation->dataset,
             'atlas_code' => $this->observation->atlas_code,
             'observers' => $this->observation->observers,
-            'description' => $this->observation->description,
-            'comment' => $this->observation->comment,
             'data_provider' => $this->observation->data_provider,
             'data_limit' => $this->observation->data_limit,
             'distance_from_pillar' => $this->distance_from_pillar,
             'age' => $this->age,
             'position' => $this->position,
             'state' => $this->state,
-            'annotation' => $this->annotation,
-            'number_of_pillars' => $this->number_of_pillars,
-            'transmission_line' => $this->transmission_line,
+            'pillar_number' => $this->pillar_number,
             'duration' => $this->duration,
-            'distance' => $this->distance,
-            'transportation' => $this->transportation,
+            'death_cause' => $this->death_cause,
+            'column_type' => $this->column_type,
+            'console_type' => $this->console_type,
+            'voltage' => $this->voltage,
+            'iba' => $this->iba,
         ];
     }
 

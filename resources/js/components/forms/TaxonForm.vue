@@ -268,7 +268,7 @@
           :message="form.errors.has('gn_status') ? form.errors.first('gn_status') : null"
         >
           <b-select v-model="form.gn_status" expanded>
-            <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+            <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
             <option value="I" >Negnezdarica - iščezla vrsta</option>
             <option value="IG">Negnezdarica - iščezla gnezdeća populacija</option>
             <option value="NG">Negnezdarica</option>
@@ -287,7 +287,7 @@
           :message="form.errors.has('iucn_cat') ? form.errors.first('iucn_cat') : null"
         >
           <b-select v-model="form.iucn_cat" expanded>
-            <option :value="null">{{ trans('labels.field_observations.choose_a_value') }}</option>
+            <option :value="null">{{ trans('labels.observations.choose_a_value') }}</option>
             <option value="EX">{{ trans('labels.iucn.EX') }}</option>
             <option value="EW">{{ trans('labels.iucn.EW') }}</option>
             <option value="CR">{{ trans('labels.iucn.CR') }}</option>
