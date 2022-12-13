@@ -5,8 +5,6 @@ namespace App\Http\Requests;
 use App\Annex;
 use App\ConservationDocument;
 use App\ConservationLegislation;
-use App\Family;
-use App\Order;
 use App\RedList;
 use App\Rules\UniqueTaxonName;
 use App\Stage;
@@ -87,8 +85,6 @@ class UpdateTaxon extends FormRequest
             'protected_note' => ['nullable', 'string'],
             'iucn_cat' => ['nullable', 'string'],
             'full_sci_name' => ['nullable', 'string'],
-            'family_name' => ['required', 'string'],
-            'order_name' => ['required', 'string'],
         ];
     }
 
@@ -118,14 +114,11 @@ class UpdateTaxon extends FormRequest
                 'conservationDocuments',
             ])->toArray();
 
-            Family::whereId($taxon->family_id)->update(['name' => $this->input('family_name')]);
-            Order::whereId($taxon->order_id)->update(['name' => $this->input('order_name')]);
-
             $taxon->update(array_merge(array_map('trim', $this->only(['name', 'rank'])), $this->only([
                 'parent_id', 'author', 'uses_atlas_codes',
                 'spid', 'birdlife_seq', 'birdlife_id', 'ebba_code', 'euring_code',
                 'euring_sci_name', 'eunis_n2000code', 'eunis_sci_name', 'bioras_sci_name',
-                'refer', 'prior', 'gn_status', 'type', 'family_id', 'strictly_protected', 'strictly_note',
+                'refer', 'prior', 'gn_status', 'type', 'strictly_protected', 'strictly_note',
                 'protected', 'protected_note', 'iucn_cat', 'full_sci_name',
             ]), Localization::transformTranslations($this->only([
                 'description', 'native_name',

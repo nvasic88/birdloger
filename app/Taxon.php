@@ -27,24 +27,24 @@ class Taxon extends Model
         'subphylum' => 57,
         // 'superclass' => 53,
         'class' => 50,
-        'subclass' => 47,
+        #'subclass' => 47,
         // 'superorder' => 43,
         'order' => 40,
-        'suborder' => 37,
-        'infraorder' => 35,
-        'superfamily' => 33,
+        #'suborder' => 37,
+        #'infraorder' => 35,
+        #'superfamily' => 33,
         // 'epifamily' => 32,
         'family' => 30,
-        'subfamily' => 27,
+        #'subfamily' => 27,
         // 'supertribe' => 26,
-        'tribe' => 25,
-        'subtribe' => 24,
+        #'tribe' => 25,
+        #'subtribe' => 24,
         'genus' => 20,
         // 'genushybrid' => 20,
         'species' => 10,
-        'speciescomplex' => 10,
+        #'speciescomplex' => 10,
         // 'hybrid' => 10,
-        'subspecies' => 5,
+        #'subspecies' => 5,
         // 'variety' => 5,
         // 'form' => 5,
     ];
@@ -308,26 +308,6 @@ class Taxon extends Model
     }
 
     /**
-     * Taxon belong to one family.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function family()
-    {
-        return $this->belongsTo(Family::class);
-    }
-
-    /**
-     * Taxon belong to one order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function order()
-    {
-        return $this->family->order();
-    }
-
-    /**
      * Scope the query to get only species or taxa of lower ranks.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -481,7 +461,7 @@ class Taxon extends Model
      *
      * @return bool
      */
-    public function isSpecies()
+    public function isSpecies(): bool
     {
         return $this->rank === 'species';
     }
@@ -672,8 +652,6 @@ class Taxon extends Model
         static::deleting(function ($model) {
             $model->activity()->delete();
             $model->synonyms()->delete();
-            $model->order()->delete();
-            $model->family()->delete();
         });
     }
 }

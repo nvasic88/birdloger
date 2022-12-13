@@ -4,8 +4,6 @@ namespace App\Importing;
 
 use App\Annex;
 use App\DEM\Reader as DEMReader;
-use App\Family;
-use App\Order;
 use App\Support\Localization;
 use App\Synonym;
 use App\Taxon;
@@ -325,14 +323,11 @@ class TaxonImport extends BaseImport
      */
     protected function getTaxonData(array $item)
     {
-        $order_family = $this->createOrderFamily($item);
-
         return [
-            'name' => Arr::get($item, 'name'),
+            'name' => ucwords(strtolower(Arr::get($item, 'name'))),
             'spid' => Arr::get($item, 'spid'),
             'type' => Arr::get($item, 'type'),
-            'order_id' => Arr::get($order_family, 'order_id'),
-            'family_id' => Arr::get($order_family, 'family_id'),
+            'parent_id' => $this->getOrCreateParentID($item),
             'strictly_protected' => $this->getBoolean($item, 'strictly_protected'),
             'strictly_note' => Arr::get($item, 'strictly_note') ?: null,
             'protected' => $this->getBoolean($item, 'protected'),
@@ -372,20 +367,39 @@ class TaxonImport extends BaseImport
         return strtolower($yes) === strtolower($value);
     }
 
-    private function createOrderFamily(array $item)
+    private function getOrCreateParentID(array $item)
     {
-        $order = Order::firstOrCreate(['name' => Arr::get($item, 'order')]);
+        $oname = trim(Arr::get($item, 'order'));
+        $order = Taxon::firstOrCreate(
+            ['name' => ucwords(strtolower($oname))],
+            [
+                'name' => ucwords(strtolower($oname)),
+                'rank' => 'order',
+                'rank_level' => 40,
+                'parent_id' => 5, # 5 is Aves class by TaxaSeeder
+                'author' => null,
+                'type' => null,
+                'spid' => null,
+            ]
+        );
         $order->save();
 
-        $family = Family::firstOrCreate(
-            array_merge(
-                ['name' => Arr::get($item, 'family')],
-                ['order_id' => $order->id]
-            )
+        $fname = trim(Arr::get($item, 'family'));
+        $family = Taxon::firstOrCreate(
+            ['name' => ucwords(strtolower($fname))],
+            [
+                'name' => ucwords(strtolower($fname)),
+                'rank' => 'family',
+                'rank_level' => 30,
+                'parent_id' => $order->id,
+                'author' => null,
+                'type' => null,
+                'spid' => null,
+            ]
         );
         $family->save();
 
-        return ['family_id' => $family->id, 'order_id' => $order->id];
+        return $family->id;
     }
 
     private function createSynonyms(array $item, $taxon)

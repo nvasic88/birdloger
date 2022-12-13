@@ -63,7 +63,6 @@ class TaxaController
             'stages' => Stage::all(),
             'synonyms' => $taxon->load(['synonyms']),
             'annexes' => Annex::all(),
-            'family' => $taxon->load(['family']),
             'synonym_names' => [],
         ]);
     }

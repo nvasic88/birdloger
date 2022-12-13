@@ -59,6 +59,12 @@ Install Laravel Passport clients and keys with:
 php artisan passport:install
 ```
 
+Link storage to public folder with:
+
+```bash
+php artisan link:storage
+```
+
 For time and resource consuming jobs such as sending emails, processing photos, importing and exporting data, queues are used. To start queue worker run:
 
 ```bash
@@ -103,6 +109,4 @@ To add a new territory, add it to configuration in `config/biologer.php` using e
 Birdloger is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ### TODO
-- Rework GroupViews
 - Rework Unit/Feature Tests
-- Fix removing Observation and its Observers

@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ObservationTypesTableSeeder::class);
         $this->call(AnnexesTableSeeder::class);
         $this->call(OffenceCasesTableSeeder::class);
+        $this->call(TaxaTableSeeder::class);
 
         // $this->call(UsersTableSeeder::class);
-        // $this->call(TaxaTableSeeder::class);
         // $this->call(TerritorySpecificTableSeeder::class);
         // $this->call(RedListsTableSeeder::class);
         // $this->call(ConservationLegislationsTableSeeder::class);

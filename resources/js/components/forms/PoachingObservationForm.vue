@@ -2,7 +2,7 @@
   <form :action="action" method="POST" :lang="locale" class="poaching-observation-form">
     <div class="columns is-desktop">
       <div class="column is-half-desktop">
-        <nz-taxon-autocomplete
+        <nz-taxon-species-autocomplete
           v-model="form.taxon_suggestion"
           @select="onTaxonSelect"
           :taxon="observation.taxon"
@@ -802,7 +802,7 @@ import UserMixin from '@/mixins/UserMixin'
 import NzDateInput from '@/components/inputs/DateInput'
 import NzPhotoUpload from '@/components/inputs/PhotoUpload'
 import NzSpatialInput from '@/components/inputs/SpatialInput'
-import NzTaxonAutocomplete from '@/components/inputs/TaxonAutocomplete'
+import NzTaxonSpeciesAutocomplete from '@/components/inputs/TaxonSpeciesAutocomplete'
 import NzUserAutocomplete from '@/components/inputs/UserAutocomplete'
 
 export default {
@@ -814,7 +814,7 @@ export default {
     NzDateInput,
     NzPhotoUpload,
     NzSpatialInput,
-    NzTaxonAutocomplete,
+    NzTaxonSpeciesAutocomplete,
     NzUserAutocomplete
   },
 

@@ -6,17 +6,13 @@ use App\Http\Controllers\Api\ApprovedPoachingObservationsBatchController;
 use App\Http\Controllers\Api\Autocomplete\PublicationsController as AutocompletePublicationsController;
 use App\Http\Controllers\Api\Autocomplete\UsersController as AutocompleteUsersController;
 use App\Http\Controllers\Api\CancelledImportsController;
-use App\Http\Controllers\Api\Curator\ApprovedObservationExportsController;
 use App\Http\Controllers\Api\Curator\ApprovedObservationsController;
-use App\Http\Controllers\Api\Curator\PendingObservationExportsController;
 use App\Http\Controllers\Api\Curator\PendingObservationsController;
-use App\Http\Controllers\Api\Curator\UnidentifiableObservationExportsController;
 use App\Http\Controllers\Api\Curator\UnidentifiableObservationsController;
 use App\Http\Controllers\Api\ElectrocutionObservationImportsController;
 use App\Http\Controllers\Api\ElectrocutionObservationsController;
 use App\Http\Controllers\Api\ElevationController;
 use App\Http\Controllers\Api\ExportsController;
-use App\Http\Controllers\Api\FamiliesController;
 use App\Http\Controllers\Api\FieldObservationExportsController;
 use App\Http\Controllers\Api\FieldObservationImportsController;
 use App\Http\Controllers\Api\FieldObservationsController;
@@ -33,14 +29,12 @@ use App\Http\Controllers\Api\My\ReadNotificationsBatchController;
 use App\Http\Controllers\Api\My\UnreadNotificationsController;
 use App\Http\Controllers\Api\ObservationTypesController;
 use App\Http\Controllers\Api\ObserversController;
-use App\Http\Controllers\Api\OrdersController;
 use App\Http\Controllers\Api\PendingFieldObservationsBatchController;
 use App\Http\Controllers\Api\PhotoUploadsController;
 use App\Http\Controllers\Api\PoachingObservationImportsController;
 use App\Http\Controllers\Api\PoachingObservationsController;
 use App\Http\Controllers\Api\PublicationAttachmentsController;
 use App\Http\Controllers\Api\PublicationsController;
-use App\Http\Controllers\Api\PublicFieldObservationExportsController;
 use App\Http\Controllers\Api\PublicFieldObservationsController;
 use App\Http\Controllers\Api\ReadAnnouncementsController;
 use App\Http\Controllers\Api\RegisterController;
@@ -104,6 +98,11 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         ->middleware('can:delete,taxon')
         ->name('api.taxa.destroy');
 
+    // Autocomplete route for species
+    Route::get('species', [TaxaController::class, 'species'])
+        ->withoutMiddleware('verified')
+        ->name('api.taxa.species');
+
     // Synonyms
     Route::post('synonyms', [SynonymsController::class, 'store'])
         ->name('api.synonyms.create');
@@ -120,26 +119,6 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
 
     Route::delete('observers/{observer}', [ObserversController::class, 'destroy'])
         ->name('api.observers.destroy');
-
-    //Orders
-    Route::post('orders', [OrdersController::class, 'store'])
-        ->name('api.orders.create');
-
-    Route::put('orders/{id}', [OrdersController::class, 'update'])
-        ->name('api.orders.update');
-
-    Route::get('orders/{name}', [OrdersController::class, 'check'])
-        ->name('api.orders.check')->where('name', '[A-Za-z]+');
-
-    //Families
-    Route::post('families', [FamiliesController::class, 'store'])
-        ->name('api.families.create');
-
-    Route::put('families/{id}', [FamiliesController::class, 'update'])
-        ->name('api.families.update');
-
-    Route::get('families/{name}', [FamiliesController::class, 'check'])
-        ->name('api.families.check')->where('name', '[A-Za-z]+');
 
     Route::get('observation-types', [ObservationTypesController::class, 'index'])
         ->withoutMiddleware('verified')
@@ -212,10 +191,6 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     // Public field observations
     Route::get('public-field-observations', [PublicFieldObservationsController::class, 'index'])
         ->name('api.public-field-observations.index');
-
-    // Public field observation exports
-    Route::post('public-field-observation-exports', [PublicFieldObservationExportsController::class, 'store'])
-        ->name('api.public-field-observation-exports.store');
 
     Route::post('cancelled-imports', [CancelledImportsController::class, 'store'])
         ->name('api.cancelled-imports.store');
@@ -471,22 +446,13 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
             ->middleware('can:list,App\FieldObservation')
             ->name('api.curator.pending-observations.index');
 
-        Route::post('pending-observations/export', [PendingObservationExportsController::class, 'store'])
-            ->name('api.curator.pending-observation-exports.store');
-
         Route::get('approved-observations', [ApprovedObservationsController::class, 'index'])
             ->middleware('can:list,App\FieldObservation')
             ->name('api.curator.approved-observations.index');
 
-        Route::post('approved-observations/export', [ApprovedObservationExportsController::class, 'store'])
-            ->name('api.curator.approved-observation-exports.store');
-
         Route::get('unidentifiable-observations', [UnidentifiableObservationsController::class, 'index'])
             ->middleware('can:list,App\FieldObservation')
             ->name('api.curator.unidentifiable-observations.index');
-
-        Route::post('unidentifiable-observations/export', [UnidentifiableObservationExportsController::class, 'store'])
-            ->name('api.curator.unidentifiable-observation-exports.store');
     });
 
     Route::prefix('autocomplete')->namespace('Autocomplete')->group(function () {

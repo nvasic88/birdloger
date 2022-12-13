@@ -160,8 +160,9 @@ class CustomTaxaExport extends BaseExport
             'type' => $item->type,
             'spid' => $item->spid,
             'name' => $item->name,
-            'order' => $item->order->name,
-            'family' => $item->family->name,
+
+            'order' => $this->getAncestorByRank($item, 'order'),
+            'family' => $this->getAncestorByRank($item, 'family'),
             'synonyms' => $item->synonyms->map->name->implode('; '),
             'strictly_protected' => $item->strictly_protected ? __('Yes') : __('No'),
             'strictly_note' => $item->strictly_note,
@@ -194,5 +195,17 @@ class CustomTaxaExport extends BaseExport
         }
 
         return $transformed;
+    }
+
+    private function getAncestorByRank(Taxon $item, $rank)
+    {
+        foreach ($item->ancestors()->get() as $ancestor) {
+
+            if ($ancestor->rank == $rank) {
+                return $ancestor->name;
+            }
+        }
+
+        return '';
     }
 }

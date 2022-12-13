@@ -5,7 +5,21 @@
     @submit.prevent="submitWithRedirect"
   >
     <div class="columns">
-      <div class="column is-6">
+      <div class="column is-4">
+        <nz-taxon-autocomplete
+          :label="trans('labels.taxa.parent')"
+          v-model="parentName"
+          @select="onTaxonSelect"
+          :error="form.errors.has('parent_id')"
+          :message="form.errors.first('parent_id')"
+          :taxon="taxon.parent || null"
+          :except="taxon.id"
+          :placeholder="trans('labels.taxa.search_for_taxon')"
+          autofocus
+        />
+      </div>
+
+      <div class="column is-5">
         <b-field
           :label="trans('labels.taxa.name')"
           class="is-required"
@@ -18,25 +32,19 @@
 
       <div class="column is-3">
         <b-field
-          :label="trans('taxonomy.order')"
+          :label="trans('labels.taxa.rank')"
           class="is-required"
-          :type="form.errors.has('order') ? 'is-danger' : ''"
-          :message="form.errors.has('order') ? form.errors.first('order') : ''"
+          :type="form.errors.has('rank') ? 'is-danger' : ''"
+          :message="form.errors.has('rank') ? form.errors.first('rank') : ''"
         >
-          <b-input v-model="form.order_name" />
-        </b-field>
-      </div>
-
-      <div class="column is-3">
-        <b-field
-          :label="trans('taxonomy.family')"
-          class="is-required"
-          :type="form.errors.has('family') ? 'is-danger' : ''"
-          :message="
-            form.errors.has('family') ? form.errors.first('family') : ''
-          "
-        >
-          <b-input v-model="form.family_name">A</b-input>
+          <b-select v-model="form.rank" expanded>
+            <option
+              v-for="(rank, index) in rankOptions"
+              :value="rank.value"
+              :key="index"
+              v-text="rank.label"
+            />
+          </b-select>
         </b-field>
       </div>
     </div>
@@ -90,7 +98,6 @@
     </b-field>
 
     <hr>
-
 
     <div class="columns">
       <div class="column">
@@ -507,7 +514,6 @@ export default {
           iucn_cat: null,
           sp: null,
           full_sci_name: null,
-          family_id: null,
 
         };
       }
@@ -612,14 +618,14 @@ export default {
           prior: this.taxon.prior,
           gn_status: this.taxon.gn_status,
           type: this.taxon.type,
-          family_name: this.taxon.family_id ? this.taxon.family.name : "",
-          order_name: this.taxon.family_id ? this.taxon.family.order.name : "",
+          //family_name: this.taxon.family_id ? this.taxon.family.name : "",
+          //order_name: this.taxon.family_id ? this.taxon.family.order.name : "",
           strictly_note: this.taxon.strictly_note,
           protected_note: this.taxon.protected_note,
           iucn_cat: this.taxon.iucn_cat,
           sp: this.taxon.sp,
           full_sci_name: this.taxon.full_sci_name,
-          family_id: this.taxon.family_id ? this.taxon.family_id : 0,
+          //family_id: this.taxon.family_id ? this.taxon.family_id : 0,
           synonym_names: this.synonymNames,
         },
         {

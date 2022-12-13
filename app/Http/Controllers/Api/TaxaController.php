@@ -19,8 +19,23 @@ class TaxaController
     public function index(Request $request)
     {
         $taxa = Taxon::with([
-            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators', 'family',
-        ])->filter($request)->orderBy('id')->paginate($request->input('per_page', 15));
+            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators',
+        ])
+            #->filter(['rank' => 'species'])
+            ->filter($request)->orderBy('id')
+            ->paginate($request->input('per_page', 15));
+
+        return new TaxonCollectionResource($taxa);
+    }
+
+    public function species(Request $request)
+    {
+        $taxa = Taxon::with([
+            'parent', 'stages', 'activity.causer', 'curators', 'ancestors.curators',
+        ])
+            ->filter($request)->orderBy('id')
+            ->where('rank', '=', 'species')
+            ->paginate($request->input('per_page', 15));
 
         return new TaxonCollectionResource($taxa);
     }

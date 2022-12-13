@@ -17,7 +17,7 @@ class TaxaTableSeeder extends Seeder
      */
     public function run()
     {
-        $file = __DIR__.'/data/'.Str::snake(config('biologer.territory')).'_taxa.sql';
+        $file = __DIR__.'/data/birds_taxa.sql';
 
         if (Taxon::count() === 0 && File::exists($file)) {
             $taxa = File::get($file);

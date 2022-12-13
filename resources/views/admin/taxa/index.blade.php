@@ -3,14 +3,13 @@
 @section('content')
     <div class="box">
         <nz-taxa-table
-            list-route="api.taxa.index"
+            list-route="api.taxa.species"
             edit-route="admin.taxa.edit"
             delete-route="api.taxa.destroy"
             export-url="{{ route('api.taxon-exports.store') }}"
             :export-columns="{{ $exportColumns }}"
             empty="{{ __('No data...') }}"
-            show-activity-log
-        />
+            show-activity-log></nz-taxa-table>
     </div>
 @endsection
 

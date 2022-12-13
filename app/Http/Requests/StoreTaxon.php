@@ -5,8 +5,6 @@ namespace App\Http\Requests;
 use App\Annex;
 use App\ConservationDocument;
 use App\ConservationLegislation;
-use App\Family;
-use App\Order;
 use App\RedList;
 use App\Rules\UniqueTaxonName;
 use App\Stage;
@@ -79,16 +77,12 @@ class StoreTaxon extends FormRequest
             'prior' => ['boolean'],
             'gn_status' => ['nullable', 'string'],
             'type' => ['required', 'string'],
-            'family_id' => ['required', 'integer'],
             'strictly_protected' => ['nullable', 'boolean'],
             'strictly_note' => ['nullable', 'string'],
             'protected' => ['nullable', 'boolean'],
             'protected_note' => ['nullable', 'string'],
             'iucn_cat' => ['nullable', 'string'],
             'full_sci_name' => ['nullable', 'string'],
-
-            'family_name' => ['required', 'string'],
-            'order_name' => ['required', 'string'],
         ];
     }
 
@@ -113,13 +107,12 @@ class StoreTaxon extends FormRequest
     {
         return Taxon::create(array_merge(
             array_map('trim', $this->only(['name', 'rank'])),
-            $this->createOrGetFamilyArray(),
             $this->only([
                 'parent_id', 'author', 'uses_atlas_codes',
                 'spid', 'birdlife_seq', 'birdlife_id', 'ebba_code', 'euring_code',
                 'euring_sci_name', 'eunis_n2000code', 'eunis_sci_name', 'bioras_sci_name',
                 'refer', 'prior', 'gn_status', 'type', 'strictly_protected', 'strictly_note',
-                'protected', 'protected_note', 'iucn_cat', 'full_sci_name', 'order_id',
+                'protected', 'protected_note', 'iucn_cat', 'full_sci_name',
             ]),
             Localization::transformTranslations($this->only([
                 'description', 'native_name',
@@ -155,24 +148,6 @@ class StoreTaxon extends FormRequest
             $this->mapRedListsData($this->input('red_lists_data', []))
         );
         $taxon->annexes()->sync($this->input('annexes_ids', []));
-    }
-
-    /**
-     * @return array
-     */
-    protected function createOrGetFamilyArray()
-    {
-        $orderTrim = array_map('trim', $this->only('order_name'));
-        $orderName['name'] = $orderTrim['order_name'];
-        $order = Order::firstOrCreate($orderName);
-        $order->save();
-
-        $familyTrim = array_map('trim', $this->only('family_name'));
-        $familyName['name'] = $familyTrim['family_name'];
-        $family = Family::firstOrCreate(array_merge($familyName, ['order_id' => $order->id]));
-        $family->save();
-
-        return array_map('trim', ['family_id' => strval($family->id), 'order_id' => strval($order->id)]);
     }
 
     /**
