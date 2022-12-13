@@ -430,7 +430,7 @@ class FieldObservationImport extends BaseImport
             'time' => Arr::get($item, 'time') ?: null,
             # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
-            'license' => $this->getLicense($item),
+            # 'license' => $this->getLicense($item),
             'rid' => Arr::get($item, 'rid') ?: null,
             'fid' => Arr::get($item, 'fid') ?: null,
         ];
