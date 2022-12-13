@@ -200,7 +200,6 @@ class CustomTaxaExport extends BaseExport
     private function getAncestorByRank(Taxon $item, $rank)
     {
         foreach ($item->ancestors()->get() as $ancestor) {
-
             if ($ancestor->rank == $rank) {
                 return $ancestor->name;
             }

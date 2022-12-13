@@ -2,9 +2,9 @@
 
 namespace App\Exports\ElectrocutionObservations;
 
+use App\ElectrocutionObservation;
 use App\Export;
 use App\Exports\BaseExport;
-use App\ElectrocutionObservation;
 use Illuminate\Support\Collection;
 
 class ElectrocutionObservationsExport extends BaseExport
@@ -156,7 +156,7 @@ class ElectrocutionObservationsExport extends BaseExport
             [
                 'label' => trans('labels.field_observations.dataset'),
                 'value' => 'dataset',
-            ],
+             ] ,
 
 
         ]);

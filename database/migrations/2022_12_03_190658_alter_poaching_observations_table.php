@@ -27,7 +27,6 @@ class AlterPoachingObservationsTable extends Migration
             $table->string('case_against_pib')->nullable();
             $table->string('case_submitted_to')->nullable();
             $table->string('case_name')->nullable();
-
         });
     }
 
