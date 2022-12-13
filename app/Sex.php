@@ -34,7 +34,7 @@ class Sex
      * Get value based on label.
      *
      * @param  string  $label
-     * @return void
+     * @return string
      */
     public static function getValueFromLabel($label)
     {
