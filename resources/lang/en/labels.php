@@ -182,18 +182,20 @@ return [
         'submitted_using' => 'Submitted Using',
 
         'observers' => 'Observers',
-        'firstName' => 'First Name',
-        'lastName' => 'Last Name',
+        'insert_observer_name' => 'Insert observer name',
+        'observer_name' => 'Observer name',
+        'remove_observer_tooltip' => 'Remove observer',
+        'add_observer' => 'Add observer',
+
         'data_limit' => 'Data limit',
         'data_provider' => 'Data provider',
-        'add_observer' => 'Add observer',
-        'remove_observer_tooltip' => 'Remove observer',
         'id_tooltip' => 'Species name must be selected with autocomplete function, id will be automatically selected.',
         'atlas_code' => 'Atlas Code',
         'found_dead' => 'Found dead?',
         'found_dead_note' => 'Note on dead observation',
-        'insert_first_name' => 'Insert first name',
-        'insert_last_name' => 'Insert last name',
+
+        'field_is_required' => 'This field is required',
+        'duplicate_value' => 'Identical value already exists',
     ],
 
     'electrocution_observations' => [

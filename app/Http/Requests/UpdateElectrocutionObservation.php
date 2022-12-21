@@ -83,7 +83,6 @@ class UpdateElectrocutionObservation extends FormRequest
             'number_of' => ['nullable', 'string'],
             'data_provider' => ['nullable', 'string'],
             'data_limit' => ['nullable', 'string'],
-            'field_observers' => ['nullable', 'array'],
             'position' => ['nullable', 'string'],
             'state' => ['nullable', 'string'],
             'pillar_number' => ['nullable', 'string'],
@@ -297,13 +296,12 @@ class UpdateElectrocutionObservation extends FormRequest
         $observer_ids = [];
 
         foreach ($this->input('observers') as $observer) {
-            $observer_ids[] = $observer['id'];
-        }
-
-        foreach ($this->input('field_observers') as $observer) {
+            if (isset($observer['id'])) {
+                $observer_ids[] = $observer['id'];
+                continue;
+            }
             $obs = Observer::firstOrCreate([
-                'firstName' => $observer['firstName'],
-                'lastName' => $observer['lastName'],
+                'name' => $observer['name'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;

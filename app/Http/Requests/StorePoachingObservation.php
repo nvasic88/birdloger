@@ -91,7 +91,6 @@ class StorePoachingObservation extends FormRequest
             'comment' => ['nullable', 'string'],
             'data_provider' => ['nullable', 'string'],
             'data_limit' => ['nullable', 'string'],
-            'field_observers' => ['nullable', 'array'],
 
             'indigenous' => ['boolean'],
             'exact_number' => ['boolean'],
@@ -430,10 +429,10 @@ class StorePoachingObservation extends FormRequest
     private function createObservers(PoachingObservation $poachingObservation)
     {
         $observer_ids = [];
-        foreach ($this->input('field_observers') as $observer) {
+
+        foreach ($this->input('observers') as $observer) {
             $obs = Observer::firstOrCreate([
-                'firstName' => $observer['firstName'],
-                'lastName' => $observer['lastName'],
+                'name' => $observer['name'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;

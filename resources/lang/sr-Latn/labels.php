@@ -182,18 +182,20 @@ return [
         'submitted_using' => 'Poslato preko',
 
         'observers' => 'Posmatrači',
-        'firstName' => 'Ime',
-        'lastName' => 'Prezime',
+        'insert_observer_name' => 'Unesite ime posmatrača',
+        'observer_name' => 'Ime posmatrača',
+        'remove_observer_tooltip' => 'Ukloni posmatrača',
+        'add_observer' => 'Dodaj posmatrača',
+
         'data_limit' => 'Data limit',
         'data_provider' => 'Data provider',
-        'add_observer' => 'Dodaj posmatrača',
-        'remove_observer_tooltip' => 'Ukloni posmatrača',
         'id_tooltip' => 'Naziv vrste mora biti izabran preko pretrage, ID se automatski popunjava',
         'atlas_code' => 'Atlas kod',
         'found_dead' => 'Jedinka nađena mrtva?',
         'found_dead_note' => 'Beleške o mrtvoj jedinki',
-        'insert_first_name' => 'Unesite ime posmatrača',
-        'insert_last_name' => 'Unesite prezime posmatrača',
+
+        'field_is_required' => 'Ovo polje je neophodno',
+        'duplicate_value' => 'Identičan zapis već postoji',
     ],
 
     'electrocution_observations' => [

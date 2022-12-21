@@ -87,8 +87,6 @@ class UpdateFieldObservation extends FormRequest
             'data_limit' => ['nullable', 'string'],
             'fid' => ['nullable', 'string'],
             'rid' => ['nullable', 'integer'],
-            'field_observers' => ['nullable', 'array'],
-            'removed_observers' => ['nullable', 'array'],
         ];
     }
 
@@ -284,13 +282,12 @@ class UpdateFieldObservation extends FormRequest
         $observer_ids = [];
 
         foreach ($this->input('observers') as $observer) {
-            $observer_ids[] = $observer['id'];
-        }
-
-        foreach ($this->input('field_observers') as $observer) {
+            if (isset($observer['id'])) {
+                $observer_ids[] = $observer['id'];
+                continue;
+            }
             $obs = Observer::firstOrCreate([
-                'firstName' => $observer['firstName'],
-                'lastName' => $observer['lastName'],
+                'name' => $observer['name'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;

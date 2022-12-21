@@ -344,63 +344,55 @@
 
       <hr>
 
-      <div><b>{{ trans('labels.observations.observers') }}</b></div>
-      <div class="columns">
-        <div class="column is-2"><b>{{ trans('labels.observations.firstName') }}</b></div>
-        <div class="column is-2"><b>{{ trans('labels.observations.lastName') }}</b></div>
-        <div class="column is-1"></div>
-      </div>
-      <div>
-        <div class="columns" v-for="(observer, index) in observers" :key="index">
-          <div class="column is-2">{{ observer.firstName }}</div>
-          <div class="column is-2">{{ observer.lastName }}</div>
-          <div class="column is-1">
-            <button type="button" class="delete" @click="removeObserver(index, observer.id)"
-                    v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-            </button>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="columns" v-for="(observer, index) in fieldObservers" :key="index">
-          <div class="column is-2">{{ observer.firstName }}</div>
-          <div class="column is-2">{{ observer.lastName }}</div>
-          <div class="column is-1">
-            <button type="button" class="delete" @click="removeObserver(index, 0)"
-                    v-tooltip="{content: trans('labels.observations.remove_observer_tooltip')}">
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">
+      <b-field
+        :label="trans('labels.observations.observers')"
+        :type="form.errors.has('observers') ? 'is-danger' : null"
+        :message="form.errors.has('observers') ? form.errors.first('observers') : null"
+        :addons="false"
+      >
+        <b-field
+          v-for="(_,i) in observers"
+          :key="i"
+          expanded
+          :addons="false"
+        >
           <b-field
-            :type="observerErrors.observerFirstName ? 'is-danger' : null"
-            :message="observerErrors.observerFirstName ? observerErrors.observerFirstName : null"
+            expanded
           >
-            <b-input id="observerFirstName" maxlength="50" v-model="observerFirstName"
-                     :placeholder="trans('labels.observations.insert_first_name')"
-                     v-on:keydown.native.enter.prevent="$refs.observerLastName.focus"
+            <b-input
+              :name="`observers[${i}][name]`"
+              v-model="form.observers[i].name"
+              :placeholder="trans('labels.observations.observer_name')"
+              expanded
             />
+
+            <p class="control">
+              <button type="button" class="button is-danger is-outlined" @click="removeObserver(i)">
+                <b-icon icon="times" size="is-small"/>
+              </button>
+            </p>
+
           </b-field>
-        </div>
-        <div class="column is-2">
-          <b-field
-            :type="observerErrors.observerLastName ? 'is-danger' : null"
-            :message="observerErrors.observerLastName ? observerErrors.observerLastName : null"
-          >
-            <b-input id="observerLastName" maxlength="50" v-model="observerLastName" ref="observerLastName"
-                     :placeholder="trans('labels.observations.insert_last_name')"
-                     v-on:keydown.native.enter.prevent="addObserver"
-            />
-          </b-field>
-        </div>
-        <div class="column is-1">
-          <button type="button" class="button is-primary" @click="addObserver">
-            {{ trans('labels.observations.add_observer') }}
-          </button>
-        </div>
-      </div>
+        </b-field>
+
+        <b-field
+          :type="observerErrors.observerName ? 'is-danger' : null"
+          :message="observerErrors.observerName ? trans(observerErrors.observerName) : null"
+        >
+
+          <b-input id="observerName" maxlength="50" v-model="observerName"
+                   :placeholder="trans('labels.observations.insert_observer_name')"
+                   expanded
+                   v-on:keydown.native.enter.prevent="addObserver"
+          />
+
+          <p class="control">
+            <button type="button" class="button is-secondary is-outlined" @click="addObserver">
+              {{ trans('labels.observations.add_observer') }}
+            </button>
+          </p>
+        </b-field>
+      </b-field>
 
       <hr>
 
@@ -529,7 +521,6 @@ export default {
           time: null,
           types: [],
           observers: [],
-          field_observers: [],
           observed_by_id: null,
           observed_by: null,
           identified_by_id: null,
@@ -568,11 +559,6 @@ export default {
 
     showObserverIdentifier: Boolean,
 
-    fieldObservers: {
-      type: Array,
-      default: () => []
-    },
-
     atlasCodes: Array,
   },
 
@@ -586,8 +572,7 @@ export default {
       exifExtracted: false,
       lastStageId: this.observation.stage_id,
       observers: this.observation.observers,
-      observerFirstName: '',
-      observerLastName: '',
+      observerName: '',
       observerErrors: {
         type: Array,
         default: () => []
@@ -657,44 +642,38 @@ export default {
         observation_types_ids: observation.types.map(type => type.id),
         observers: this.observation.observers,
         reason: null,
-        field_observers: this.fieldObservers,
       }, {
         resetOnSuccess: false
       })
     },
 
-    checkForm() {
-
-      if (this.observerFirstName && this.observerLastName) return true;
-
-    },
-
+    /**
+     * Add observer for field observation
+     *
+     */
     addObserver() {
-      if (this.observerFirstName && this.observerLastName) {
-        this.fieldObservers.push({
-          'firstName': this.observerFirstName,
-          'lastName': this.observerLastName,
-        })
-        this.observerFirstName = null;
-        this.observerLastName = null;
-        this.observerErrors = [];
+      let pass = true;
+      if (this.observerName) {
+        this.form.observers.forEach((item, index) => {
+          if (this.observerName === item.name) {
+            pass = false;
+            this.observerErrors.observerName = "labels.observations.duplicate_value";
+            this.$forceUpdate();
+          }
+        });
+
+        if (pass) {
+          this.form.observers.push({name: this.observerName});
+          this.observerName = null;
+          this.observerErrors = [];
+        }
       } else {
-        if (!this.observerFirstName) {
-          this.observerErrors.observerFirstName = "This field is required";
-          this.$forceUpdate();
-        }
-        if (!this.observerLastName) {
-          this.observerErrors.observerLastName = "This field is required";
-          this.$forceUpdate();
-        }
+        this.observerErrors.observerName = "labels.observations.field_is_required";
+        this.$forceUpdate();
       }
     },
 
-    removeObserver(index, id) {
-      if (id === 0){
-        this.$delete(this.fieldObservers, index);
-        return;
-      }
+    removeObserver(index) {
       this.$delete(this.observers, index);
     },
 

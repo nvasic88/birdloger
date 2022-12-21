@@ -83,7 +83,6 @@ class StoreElectrocutionObservation extends FormRequest
             'number_of' => ['nullable', 'string'],
             'data_provider' => ['nullable', 'string'],
             'data_limit' => ['nullable', 'string'],
-            'field_observers' => ['nullable', 'array'],
             'position' => ['nullable', 'string'],
             'state' => ['nullable', 'string'],
             'pillar_number' => ['nullable', 'string'],
@@ -366,10 +365,10 @@ class StoreElectrocutionObservation extends FormRequest
     private function createObservers(ElectrocutionObservation $electrocutionObservation)
     {
         $observer_ids = [];
-        foreach ($this->input('field_observers') as $observer) {
+
+        foreach ($this->input('observers') as $observer) {
             $obs = Observer::firstOrCreate([
-                'firstName' => $observer['firstName'],
-                'lastName' => $observer['lastName'],
+                'name' => $observer['name'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;

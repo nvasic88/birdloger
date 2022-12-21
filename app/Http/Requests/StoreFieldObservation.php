@@ -87,7 +87,6 @@ class StoreFieldObservation extends FormRequest
             'data_limit' => ['nullable', 'string'],
             'fid' => ['nullable', 'string'],
             'rid' => ['nullable', 'integer'],
-            'field_observers' => ['nullable', 'array'],
         ];
     }
 
@@ -352,10 +351,10 @@ class StoreFieldObservation extends FormRequest
     private function createObservers(FieldObservation $fieldObservation)
     {
         $observer_ids = [];
-        foreach ($this->input('field_observers') as $observer) {
+
+        foreach ($this->input('observers') as $observer) {
             $obs = Observer::firstOrCreate([
-                'firstName' => $observer['firstName'],
-                'lastName' => $observer['lastName'],
+                'name' => $observer['name'],
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;
