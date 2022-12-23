@@ -17,6 +17,8 @@
             approvable
             approve-route="api.approved-poaching-observations-batch.store"
             show-status
+            export-url="{{ route('api.poaching-observation-exports.store') }}"
+            :export-columns="{{ $exportColumns }}"
         ></nz-poaching-observations-table>
     </div>
 @endsection

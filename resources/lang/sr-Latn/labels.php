@@ -111,7 +111,8 @@ return [
         'sp' => 'SP',
         'full_sci_name' => 'Pun naučni naziv',
         'synonyms' => 'Lista sinonima',
-        'addSynonym' => 'Dodaj sinonim',
+        'add_synonym' => 'Dodaj sinonim',
+        'insert_synonym' => 'Unesi naziv sinonima',
         'annex' => 'Annex',
     ],
 

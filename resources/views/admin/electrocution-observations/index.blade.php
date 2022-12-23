@@ -17,6 +17,8 @@
             approvable
             approve-route="api.approved-electrocution-observations-batch.store"
             show-status
+            export-url="{{ route('api.electrocution-observation-exports.store') }}"
+            :export-columns="{{ $exportColumns }}"
         ></nz-electrocution-observations-table>
     </div>
 @endsection

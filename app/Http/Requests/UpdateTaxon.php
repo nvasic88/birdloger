@@ -85,6 +85,7 @@ class UpdateTaxon extends FormRequest
             'protected_note' => ['nullable', 'string'],
             'iucn_cat' => ['nullable', 'string'],
             'full_sci_name' => ['nullable', 'string'],
+            'removed_synonyms' => ['array'],
         ];
     }
 
@@ -276,13 +277,18 @@ class UpdateTaxon extends FormRequest
 
     private function createSynonyms(Taxon $taxon)
     {
-        $synonym_names = $this->input('synonym_names');
-        foreach ($synonym_names as $k => $v) {
-            $synonym = Synonym::firstOrCreate([
-                'name' => $v,
+        foreach ($this->input('removed_synonyms') as $removed) {
+            Synonym::where(['id' => $removed['id']])->delete();
+        }
+        foreach ($this->input('synonyms') as $synonym) {
+            if (isset($synonym['id'])) {
+                continue;
+            }
+            $s = Synonym::create([
+                'name' => $synonym['name'],
                 'taxon_id' => $taxon->id,
             ]);
-            $synonym->save();
+            $s->save();
         }
     }
 }

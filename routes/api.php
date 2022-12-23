@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CancelledImportsController;
 use App\Http\Controllers\Api\Curator\ApprovedObservationsController;
 use App\Http\Controllers\Api\Curator\PendingObservationsController;
 use App\Http\Controllers\Api\Curator\UnidentifiableObservationsController;
+use App\Http\Controllers\Api\ElectrocutionObservationExportsController;
 use App\Http\Controllers\Api\ElectrocutionObservationImportsController;
 use App\Http\Controllers\Api\ElectrocutionObservationsController;
 use App\Http\Controllers\Api\ElevationController;
@@ -22,24 +23,26 @@ use App\Http\Controllers\Api\LiteratureObservationImportsController;
 use App\Http\Controllers\Api\LiteratureObservationsController;
 use App\Http\Controllers\Api\My\ElectrocutionObservationsController as MyElectrocutionObservationsController;
 use App\Http\Controllers\Api\My\FieldObservationExportsController as MyFieldObservationExportsController;
+use App\Http\Controllers\Api\My\PoachingObservationExportsController as MyPoachingObservationExportsController;
+use App\Http\Controllers\Api\My\ElectrocutionObservationExportsController as MyElectrocutionObservationExportsController;
 use App\Http\Controllers\Api\My\FieldObservationsController as MyFieldObservationsController;
 use App\Http\Controllers\Api\My\PoachingObservationsController as MyPoachingObservationsController;
 use App\Http\Controllers\Api\My\ProfileController;
 use App\Http\Controllers\Api\My\ReadNotificationsBatchController;
 use App\Http\Controllers\Api\My\UnreadNotificationsController;
 use App\Http\Controllers\Api\ObservationTypesController;
-use App\Http\Controllers\Api\ObserversController;
 use App\Http\Controllers\Api\PendingFieldObservationsBatchController;
 use App\Http\Controllers\Api\PhotoUploadsController;
+use App\Http\Controllers\Api\PoachingObservationExportsController;
 use App\Http\Controllers\Api\PoachingObservationImportsController;
 use App\Http\Controllers\Api\PoachingObservationsController;
 use App\Http\Controllers\Api\PublicationAttachmentsController;
 use App\Http\Controllers\Api\PublicationsController;
+use App\Http\Controllers\Api\PublicFieldObservationExportsController;
 use App\Http\Controllers\Api\PublicFieldObservationsController;
 use App\Http\Controllers\Api\ReadAnnouncementsController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\SourcesController;
-use App\Http\Controllers\Api\SynonymsController;
 use App\Http\Controllers\Api\TaxaController;
 use App\Http\Controllers\Api\TaxonExportsController;
 use App\Http\Controllers\Api\TaxonImportsController;
@@ -102,23 +105,6 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get('species', [TaxaController::class, 'species'])
         ->withoutMiddleware('verified')
         ->name('api.taxa.species');
-
-    // Synonyms
-    Route::post('synonyms', [SynonymsController::class, 'store'])
-        ->name('api.synonyms.create');
-
-    Route::put('synonyms/{synonym}', [SynonymsController::class, 'update'])
-        ->name('api.synonyms.update');
-
-    Route::delete('synonyms/{synonym}', [SynonymsController::class, 'destroy'])
-        ->name('api.synonyms.destroy');
-
-    // Observers
-    Route::post('observers', [ObserversController::class, 'store'])
-        ->name('api.observers.create');
-
-    Route::delete('observers/{observer}', [ObserversController::class, 'destroy'])
-        ->name('api.observers.destroy');
 
     Route::get('observation-types', [ObservationTypesController::class, 'index'])
         ->withoutMiddleware('verified')
@@ -188,9 +174,21 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::post('field-observation-exports', [FieldObservationExportsController::class, 'store'])
         ->name('api.field-observation-exports.store');
 
+    // Poaching observation exports
+    Route::post('poaching-observation-exports', [PoachingObservationExportsController::class, 'store'])
+        ->name('api.poaching-observation-exports.store');
+
+    // Electrocution observation exports
+    Route::post('electrocution-observation-exports', [ElectrocutionObservationExportsController::class, 'store'])
+        ->name('api.electrocution-observation-exports.store');
+
     // Public field observations
     Route::get('public-field-observations', [PublicFieldObservationsController::class, 'index'])
         ->name('api.public-field-observations.index');
+
+    // Public field observation exports
+    Route::post('public-field-observation-exports', [PublicFieldObservationExportsController::class, 'store'])
+        ->name('api.public-field-observation-exports.store');
 
     Route::post('cancelled-imports', [CancelledImportsController::class, 'store'])
         ->name('api.cancelled-imports.store');
@@ -427,6 +425,12 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
 
         Route::post('field-observations/export', [MyFieldObservationExportsController::class, 'store'])
             ->name('api.my.field-observation-exports.store');
+
+        Route::post('poaching-observations/export', [MyPoachingObservationExportsController::class, 'store'])
+            ->name('api.my.poaching-observation-exports.store');
+
+        Route::post('electrocution-observations/export', [MyElectrocutionObservationExportsController::class, 'store'])
+            ->name('api.my.electrocution-observation-exports.store');
 
         Route::get('profile', [ProfileController::class, 'show'])
             ->withoutMiddleware('verified')

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Exports\FieldObservations;
 
-use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
+use App\Exports\FieldObservations\ContributorElectrocutionObservationsCustomExport;
 use App\Jobs\PerformExport;
 use App\License;
 use App\Stage;
@@ -54,7 +54,7 @@ class ContributorFieldObservationsCustomExportTest extends TestCase
             'found_dead_note' => 'Found dead',
         ]);
 
-        $export = ContributorFieldObservationsCustomExport::create([
+        $export = ContributorElectrocutionObservationsCustomExport::create([
             'id', 'taxon', 'identifier', 'observer', 'sex', 'year', 'month',
             'day', 'latitude', 'longitude', 'location', 'accuracy', 'elevation',
             'stage', 'number', 'note', 'project', 'habitat', 'found_on', 'status',

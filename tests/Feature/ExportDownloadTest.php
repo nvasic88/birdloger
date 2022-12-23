@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
+use App\Exports\FieldObservations\ContributorElectrocutionObservationsCustomExport;
 use App\Taxon;
 use App\User;
 use Box\Spout\Common\Helper\EncodingHelper;
@@ -62,6 +62,6 @@ class ExportDownloadTest extends TestCase
             'taxon_id' => factory(Taxon::class)->create(['name' => 'Test taxon']),
         ]);
 
-        return tap(ContributorFieldObservationsCustomExport::create(['taxon'], [], true))->perform();
+        return tap(ContributorElectrocutionObservationsCustomExport::create(['taxon'], [], true))->perform();
     }
 }

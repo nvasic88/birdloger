@@ -10,10 +10,11 @@
             empty="{{ __('No data...') }}"
             show-status
             show-activity-log
-            @role([
-            'admin', 'poaching'])
+            @role(['admin', 'curator', 'poaching'])
             show-observer
             @endrole
+            export-url="{{ route('api.my.poaching-observation-exports.store') }}"
+            :export-columns="{{ $exportColumns }}"
         />
     </div>
 @endsection

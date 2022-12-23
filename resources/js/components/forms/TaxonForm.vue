@@ -367,52 +367,55 @@
     </div>
 
     <hr>
-    <label class="label">{{ trans("labels.taxa.synonyms") }}</label>
-    <div v-if="taxon.id != null">
-      <div v-if="synonyms.length > 0">
-        <b-field v-for="(synonym, index) in synonyms" :key="index">
-          <div class="columns">
-            <div class="column is-half">
-              <p>{{ synonym.name }}</p>
-            </div>
-            <div class="column">
-              <button
-                class="delete"
-                @click="removeSynonym(index)"
-                v-tooltip='"Remove"'
-              >
-              </button>
-            </div>
-          </div>
-        </b-field>
-      </div>
-    </div>
-    <b-field v-for="(synonym, index) in synonymNames" :key="index">
-      <div class="columns">
-        <div class="column is-half">
-          <p>{{ synonym }}</p>
-        </div>
-        <div class="column">
-          <button
-            class="delete"
-            @click="removeSynonymName(index)"
-            v-tooltip='"Remove"'
-          >
-          </button>
-        </div>
-      </div>
-    </b-field>
+    <b-field
+      :label="trans('labels.taxa.synonyms')"
+      :type="form.errors.has('synonyms') ? 'is-danger' : null"
+      :message="form.errors.has('synonyms') ? form.errors.first('synonyms') : null"
+      :addons="false"
+    >
+      <b-field
+        v-for="(_,i) in synonyms"
+        :key="i"
+        expanded
+        :addons="false"
+      >
+        <b-field
+          expanded
+        >
+          <b-input
+            :name="`synonyms[${i}][name]`"
+            v-model="form.synonyms[i].name"
+            :placeholder="trans('labels.taxa.synonym_name')"
+            expanded
+          />
 
-    <div class="columns">
-      <div class="column">
-        <b-input maxlength="100" v-model="synonym_name" v-on:keydown.native.enter.prevent="addSynonym"/>
-      </div>
-      <div class="column">
-        <button type="button" class="button is-primary" @click="addSynonym">
-          {{ trans("labels.taxa.addSynonym") }}
-        </button>
-      </div>
-    </div>
+          <p class="control">
+            <button type="button" class="button is-danger is-outlined" @click="removeSynonym(i)">
+              <b-icon icon="times" size="is-small"/>
+            </button>
+          </p>
+
+        </b-field>
+      </b-field>
+
+      <b-field
+        :type="synonym_error ? 'is-danger' : null"
+        :message="synonym_error ? trans(synonym_error) : null"
+      >
+
+        <b-input id="synonym_name" maxlength="50" v-model="synonym_name"
+                 :placeholder="trans('labels.taxa.insert_synonym')"
+                 expanded
+                 v-on:keydown.native.enter.prevent="addSynonym"
+        />
+
+        <p class="control">
+          <button type="button" class="button is-secondary is-outlined" @click="addSynonym">
+            {{ trans('labels.taxa.add_synonym') }}
+          </button>
+        </p>
+      </b-field>
+    </b-field>
 
     <hr>
 
@@ -514,7 +517,6 @@ export default {
           iucn_cat: null,
           sp: null,
           full_sci_name: null,
-
         };
       }
     },
@@ -538,12 +540,14 @@ export default {
       type: Object,
       default: () => defaultTranslations()
     },
-    synonymNames: {
+
+    removedSynonyms: {
       type: Array,
       default() {
         return [];
       }
     },
+
   },
 
   data() {
@@ -553,6 +557,7 @@ export default {
       selectedParent: null,
       chosenRedList: null,
       synonym_name: null,
+      synonym_error: null,
       synonyms: this.taxon.synonyms,
     };
   },
@@ -618,15 +623,13 @@ export default {
           prior: this.taxon.prior,
           gn_status: this.taxon.gn_status,
           type: this.taxon.type,
-          //family_name: this.taxon.family_id ? this.taxon.family.name : "",
-          //order_name: this.taxon.family_id ? this.taxon.family.order.name : "",
           strictly_note: this.taxon.strictly_note,
           protected_note: this.taxon.protected_note,
           iucn_cat: this.taxon.iucn_cat,
           sp: this.taxon.sp,
           full_sci_name: this.taxon.full_sci_name,
-          //family_id: this.taxon.family_id ? this.taxon.family_id : 0,
-          synonym_names: this.synonymNames,
+          removed_synonyms: this.removedSynonyms,
+
         },
         {
           resetOnSuccess: false
@@ -659,19 +662,35 @@ export default {
         );
     },
 
+    /**
+     * Add synonym for taxon
+     *
+     */
+    addSynonym() {
+      let pass = true;
+      if (this.synonym_name) {
+        this.form.synonyms.forEach((item, index) => {
+          if (this.synonym_name === item.name) {
+            pass = false;
+            this.synonym_error = "labels.observations.duplicate_value";
+            this.$forceUpdate();
+          }
+        });
+
+        if (pass) {
+          this.form.synonyms.push({name: this.synonym_name});
+          this.synonym_name = null;
+          this.synonym_error = null;
+        }
+      } else {
+        this.synonym_error = "labels.observations.field_is_required";
+        this.$forceUpdate();
+      }
+    },
+
     removeSynonym(index) {
-      axios.delete(route("api.synonyms.destroy", this.synonyms[index]));
+      this.removedSynonyms.push(this.synonyms[index]);
       this.$delete(this.synonyms, index);
-    },
-
-    removeSynonymName(index) {
-      this.$delete(this.synonymNames, index);
-    },
-
-    addSynonym(){
-      if (!this.synonym_name) return;
-      this.synonymNames.push(this.synonym_name)
-      this.synonym_name = null;
     },
 
     /**

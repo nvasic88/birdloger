@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api;
 
-use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
+use App\Exports\FieldObservations\ContributorElectrocutionObservationsCustomExport;
 use App\Exports\FieldObservations\ContributorFieldObservationsDarwinCoreExport;
 use App\Jobs\PerformExport;
 use App\User;
@@ -26,7 +26,7 @@ class ExportContributorFieldObservationsTest extends TestCase
 
         $response->assertSuccessful();
         Queue::assertPushed(PerformExport::class, function ($job) use ($user) {
-            return $job->export->type === ContributorFieldObservationsCustomExport::class
+            return $job->export->type === ContributorElectrocutionObservationsCustomExport::class
                 && $job->export->user->is($user)
                 && $job->export->filter->isEmpty()
                 && $job->export->columns === ['id', 'taxon']

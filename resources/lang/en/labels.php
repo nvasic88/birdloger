@@ -111,7 +111,8 @@ return [
         'sp' => 'SP',
         'full_sci_name' => 'Full scientific name',
         'synonyms' => 'List of synonyms',
-        'addSynonym' => 'Add synonym',
+        'add_synonym' => 'Add synonym',
+        'insert_synonym' => 'Insert synonym name',
         'annex' => 'Annex',
     ],
 

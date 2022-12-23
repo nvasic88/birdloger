@@ -14,6 +14,8 @@
             'admin', 'electrocution'])
             show-observer
             @endrole
+            export-url="{{ route('api.my.electrocution-observation-exports.store') }}"
+            :export-columns="{{ $exportColumns }}"
         />
     </div>
 @endsection
