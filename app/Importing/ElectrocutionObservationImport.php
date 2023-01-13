@@ -2,6 +2,7 @@
 
 namespace App\Importing;
 
+use App\AtlasCode;
 use App\DEM\Reader as DEMReader;
 use App\ElectrocutionObservation;
 use App\License;
@@ -11,14 +12,18 @@ use App\Observer;
 use App\Rules\Day;
 use App\Rules\Decimal;
 use App\Rules\Month;
+use App\Sex;
 use App\Stage;
 use App\Support\Dataset;
 use App\Taxon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ElectrocutionObservationImport extends BaseImport
 {
+    const DELIM = ', ';
+
     /**
      * @var \App\DEM\Reader
      */
@@ -66,64 +71,18 @@ class ElectrocutionObservationImport extends BaseImport
     {
         return collect([
             [
-                'label' => trans('labels.electrocution_observations.distance_from_pillar'),
-                'value' => 'distance_from_pillar',
+                'label' => trans('labels.id'),
+                'value' => 'id',
+                'required' => true,
+            ],
+            [
+                'label' => trans('labels.observations.taxon'),
+                'value' => 'taxon',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.electrocution_observations.age'),
-                'value' => 'age',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.position'),
-                'value' => 'position',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.state'),
-                'value' => 'state',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.annotation'),
-                'value' => 'annotation',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.number_of_pillars'),
-                'value' => 'number_of_pillars',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.transmission_line'),
-                'value' => 'transmission_line',
-                'required' => false,
-            ],
-
-            [
-                'label' => trans('labels.electrocution_observations.time_of_departure'),
-                'value' => 'time_of_departure',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.time_of_arrival'),
-                'value' => 'time_of_arrival',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.latitude'),
-                'value' => 'latitude',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.longitude'),
-                'value' => 'longitude',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.accuracy'),
-                'value' => 'accuracy',
+                'label' => trans('labels.taxa.spid'),
+                'value' => 'spid',
                 'required' => false,
             ],
             [
@@ -142,14 +101,99 @@ class ElectrocutionObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.date'),
-                'value' => 'date',
+                'label' => trans('labels.observations.location'),
+                'value' => 'location',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.taxon'),
-                'value' => 'taxon',
-                'required' => true,
+                'label' => trans('labels.observations.latitude'),
+                'value' => 'latitude',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.longitude'),
+                'value' => 'longitude',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.death_cause'),
+                'value' => 'death_cause',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.found_dead_note'),
+                'value' => 'found_dead_note',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.stage'),
+                'value' => 'stage',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.sex'),
+                'value' => 'sex',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.atlas_code'),
+                'value' => 'atlas_code',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.column_type'),
+                'value' => 'column_type',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.console_type'),
+                'value' => 'console_type',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.voltage'),
+                'value' => 'voltage',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.iba'),
+                'value' => 'iba',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.number'),
+                'value' => 'number',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.number_of'),
+                'value' => 'number_of',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.data_provider'),
+                'value' => 'data_provider',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.data_limit'),
+                'value' => 'data_limit',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.note'),
+                'value' => 'note',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.habitat'),
+                'value' => 'habitat',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.time_of_corpse_found'),
+                'value' => 'time_of_corpse_found',
+                'required' => false,
             ],
             [
                 'label' => trans('labels.electrocution_observations.duration'),
@@ -157,13 +201,38 @@ class ElectrocutionObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.electrocution_observations.distance'),
-                'value' => 'distance',
+                'label' => trans('labels.electrocution_observations.distance_from_pillar'),
+                'value' => 'distance_from_pillar',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.electrocution_observations.transportation'),
-                'value' => 'transportation',
+                'label' => trans('labels.electrocution_observations.pillar_number'),
+                'value' => 'pillar_number',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.age'),
+                'value' => 'age',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.position'),
+                'value' => 'position',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.state'),
+                'value' => 'state',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.project'),
+                'value' => 'project',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.dataset'),
+                'value' => 'dataset',
                 'required' => false,
             ],
             [
@@ -171,9 +240,14 @@ class ElectrocutionObservationImport extends BaseImport
                 'value' => 'observers',
                 'required' => false,
             ],
+            [
+                'label' => trans('labels.observations.data_license'),
+                'value' => 'license',
+                'required' => false,
+            ],
 
         ])->pipe(function ($columns) use ($user) {
-            if (! $user || optional($user)->hasAnyRole(['admin', 'curator'])) {
+            if (! $user || optional($user)->hasAnyRole(['admin', 'electrocution'])) {
                 return $columns;
             }
 
@@ -197,7 +271,7 @@ class ElectrocutionObservationImport extends BaseImport
 
     public function generateErrorsRoute()
     {
-        return route('api.poaching-observation-imports.errors', $this->model());
+        return route('api.electrocution-observation-imports.errors', $this->model());
     }
 
     /**
@@ -209,19 +283,11 @@ class ElectrocutionObservationImport extends BaseImport
     protected function makeValidator(array $data)
     {
         return Validator::make($data, [
-            'distance_from_pillar' => ['nullable'],
-            'age' => ['nullable'],
-            'position' => ['string', 'nullable'],
-            'state' => ['string', 'nullable'],
-            'annotation' => ['text', 'nullable'],
-            'number_of_pillars' => ['nullable'],
-            'transmission_line' => ['string', 'nullable'],
-            'time_of_departure' => ['date_format:H:i', 'nullable'],
-            'time_of_arrival' => ['date_format:H:i:after:time_of_departure', 'nullable'],
-            'duration' => ['nullable'],
-            'distance' => ['nullable'],
-            'transportation' => ['string', 'nullable'],
-
+            'id' => ['nullable'],
+            'taxon' => [
+                'required',
+                'string',
+            ],
             'year' => ['bail', 'date_format:Y', 'nullable', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -235,27 +301,52 @@ class ElectrocutionObservationImport extends BaseImport
             ],
             'latitude' => ['nullable', new Decimal(['min' => -90, 'max' => 90])],
             'longitude' => ['nullable', new Decimal(['min' => -180, 'max' => 180])],
+            'location' => ['nullable'],
+            'sex' => ['nullable', Rule::in(Sex::options())],
+            'stage' => ['nullable', Rule::in($this->stagesTranslatedNames())],
+            'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
+
+            'distance_from_pillar' => ['nullable'],
+            'age' => ['nullable'],
+            'position' => ['string', 'nullable'],
+            'state' => ['string', 'nullable'],
+            'duration' => ['nullable'],
+
+            'time_of_corpse_found' => ['nullable', 'date_format:H:i'],
+            'death_cause' => ['nullable', Rule::in($this->deathCause())],
+            'column_type' => ['nullable'],
+            'console_type' => ['nullable'],
+            'voltage' => ['nullable'],
+            'iba' => ['nullable'],
+            'pillar_number' => ['nullable'],
             'accuracy' => ['nullable'],
-            'date' => ['nullable'],
             'input_date' => ['nullable'],
-            'taxon' => [
-                'required',
-                'string',
-            ],
+
             'observers' => ['nullable', 'string'],
+            'license' => ['nullable', 'string', Rule::in(array_values(License::getOptions()))],
+        ], [
+            'year.date_format' => trans('validation.year'),
+            'sex.in' => __('validation.in_extended', [
+                'attribute' => __('labels.observations.sex'),
+                'options' => Sex::labels()->implode(', '),
+            ]),
+            'stage.in' => __('validation.in_extended', [
+                'attribute' => __('labels.observations.stage'),
+                'options' => $this->stagesTranslatedNames()->implode(', '),
+            ]),
         ], [
             'distance_from_pillar' => trans('labels.electrocution_observations.distance_from_pillar'),
             'age' => trans('labels.electrocution_observations.age'),
             'position' => trans('labels.electrocution_observations.position'),
             'state' => trans('labels.electrocution_observations.state'),
-            'annotation' => trans('labels.electrocution_observations.annotation'),
-            'number_of_pillars' => trans('labels.electrocution_observations.number_of_pillars'),
-            'transmission_line' => trans('labels.electrocution_observations.transmission_line'),
-            'time_of_departure' => trans('labels.electrocution_observations.time_of_departure'),
-            'time_of_arrival' => trans('labels.electrocution_observations.time_of_arrival'),
+
+            'time_of_corpse_found' => trans('labels.electrocution_observations.time_of_corpse_found'),
             'duration' => trans('labels.electrocution_observations.duration'),
-            'distance' => trans('labels.electrocution_observations.distance'),
-            'transportation' => trans('labels.electrocution_observations.transportation'),
+            'death_cause' => trans('labels.electrocution_observations.death_cause'),
+            'column_type' => trans('labels.electrocution_observations.column_type'),
+            'console_type' => trans('labels.electrocution_observations.console_type'),
+            'voltage' => trans('labels.electrocution_observations.voltage'),
+            'pillar_number' => trans('labels.electrocution_observations.pillar_number'),
 
             'latitude' => trans('labels.observations.latitude'),
             'longitude' => trans('labels.observations.longitude'),
@@ -266,6 +357,7 @@ class ElectrocutionObservationImport extends BaseImport
             'date' => trans('labels.observations.date'),
             'input_date' => trans('labels.poaching_observations.input_date'),
             'taxon' => trans('labels.observations.taxon'),
+            'license' => trans('labels.observations.data_license'),
 
             'observers' => trans('labels.observations.observers'),
         ]);
@@ -289,6 +381,7 @@ class ElectrocutionObservationImport extends BaseImport
 
         $electrocutionObservation->observation->observers()->sync($this->getObservers($item), []);
 
+        #TODO: Temporary available until majority of observations are imported..
         $electrocutionObservation->approve();
 
         activity()->performedOn($electrocutionObservation)
@@ -310,14 +403,16 @@ class ElectrocutionObservationImport extends BaseImport
      */
     protected function getSpecificObservationData(array $item)
     {
-        $distance = $this->convertToNumberOrNull(Arr::get($item, 'distance') ?: null);
-        $duration = $this->convertToNumberOrNull(Arr::get($item, 'duration') ?: null);
-        $number_of_pillars = $this->convertToNumberOrNull(Arr::get($item, 'number_of_pillars') ?: null);
         $distance_from_pillar = $this->convertToNumberOrNull(Arr::get($item, 'distance_from_pillar') ?: null);
         $age = $this->convertToNumberOrNull(Arr::get($item, 'age') ?: null);
+        $death_cause = $this->getDeathCause(Arr::get($item, 'death_cause'));
+        $position = $this->getPosition(Arr::get($item, 'position'));
+        $state = $this->getState(Arr::get($item, 'state'));
+        $duration = $this->convertToNumberOrNull(Arr::get($item, 'duration') ?: null);
+
 
         return [
-            'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
+            # 'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
             # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
@@ -325,16 +420,18 @@ class ElectrocutionObservationImport extends BaseImport
 
             'distance_from_pillar' => $distance_from_pillar,
             'age' => $age,
-            'position' => Arr::get($item, 'position') ?: null,
-            'state' => $this->getBoolean($item, 'state'),
-            'annotation' => Arr::get($item, 'annotation') ?: null,
-            'number_of_pillars' => $number_of_pillars,
-            'transmission_line' => $this->getBoolean($item, 'transmission_line'),
-            'time_of_departure' => $this->getBoolean($item, 'time_of_departure'),
-            'time_of_arrival' => $this->getBoolean($item, 'time_of_arrival'),
+            'position' => $position,
+            'state' => $state,
+
+            'time_of_corpse_found' => Arr::get($item, 'time_of_corpse_found') ?: null,
+
+            'pillar_number' => Arr::get($item, 'pillar_number') ?: null,
+            'column_type' => Arr::get($item, 'column_type') ?: null,
+            'console_type' => Arr::get($item, 'console_type') ?: null,
+            'voltage' => Arr::get($item, 'voltage') ?: null,
+            'iba' => Arr::get($item, 'iba') ?: null,
+            'death_cause' => $death_cause,
             'duration' => $duration,
-            'distance' => $distance,
-            'transportation' => Arr::get($item, 'transportation') ?: null,
         ];
     }
 
@@ -352,6 +449,7 @@ class ElectrocutionObservationImport extends BaseImport
         $atlasCode = Arr::get($item, 'atlas_code');
         $day = $this->convertToNumberOrNull(Arr::get($item, 'day') ?: null);
         $month = $this->convertToNumberOrNull(Arr::get($item, 'month') ?: null);
+        $number = $this->convertToNumberOrNull(Arr::get($item, 'number') ?: null);
         $accuracy = $this->convertAccuracy($item);
 
         return [
@@ -371,32 +469,35 @@ class ElectrocutionObservationImport extends BaseImport
             'original_identification' => Arr::get($item, 'taxon'),
             'dataset' => Arr::get($item, 'dataset') ?? Dataset::default(),
             'approved_at' => $this->getApprovedAt($taxon),
-            #'number_of' => Arr::get($item, 'number_of') ?: null,
+            'number' => $number,
             'number_of' => NumberOf::getValueFromLabel(Arr::get($item, 'number_of', '')),
             'comment' => Arr::get($item, 'comment') ?: null,
             'data_provider' => Arr::get($item, 'data_provider') ?: null,
             'data_limit' => Arr::get($item, 'data_limit') ?: null,
+            'habitat' => Arr::get($item, 'habitat') ?: null,
+            'note' => Arr::get($item, 'note') ?: null,
             'description' => Arr::get($item, 'description') ?: null,
             'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
-            'found_dead' => $this->getFoundDead($item),
-            'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
+            'found_dead_note' => Arr::get($item, 'found_dead_note') ?: null,
+            'sex' => Sex::getValueFromLabel(Arr::get($item, 'sex', '')),
+            'project' => Arr::get($item, 'project') ?: null,
         ];
     }
 
     /**
-     * Get ID of taxon using it's name.
+     * Get ID of taxon using its name.
      *
      * @param  array  $data
-     * @return Taxon|null
+     * @return Taxon|void
      */
     protected function getTaxon(array $data)
     {
-        $name = explode(' ', Arr::get($data, 'taxon'));
-        if ($name == []) {
+        $name = Arr::get($data, 'taxon');
+        if ($name == null) {
             return;
         }
 
-        return Taxon::findByName($name[0].' '.$name[1]);
+        return Taxon::findByName($name);
     }
 
     /**
@@ -585,13 +686,11 @@ class ElectrocutionObservationImport extends BaseImport
      * Get license for the observation.
      *
      * @param  array  $data
-     * @return int
+     * @return int|null
      */
     protected function getLicense(array $data)
     {
-        return ($license = Arr::get($data, 'license'))
-            ? License::findByName($license)->id
-            : $this->model()->user->settings()->get('data_license');
+        return License::getValueFromLabel(Arr::get($data, 'license')) ?: $this->model()->user->settings()->get('data_license');
     }
 
     /**
@@ -672,24 +771,73 @@ class ElectrocutionObservationImport extends BaseImport
         if (! $observers) {
             return null;
         }
-        foreach (explode('; ', $observers) as $observer) {
-            $ob = explode(' ', $observer);
-            if (count($ob) < 2 || count($ob) > 3) {
-                break;
-            }
-            $firstName = $ob[0];
-            $lastName = $ob[1];
-            if (count($ob) > 2) {
-                $lastName .= ' '.$ob[2];
-            }
+        foreach (explode(self::DELIM, $observers) as $observer) {
             $obs = Observer::firstOrCreate([
-                'firstName' => $firstName,
-                'lastName' => $lastName,
+                'name' => $observer,
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;
         }
 
         return $observer_ids;
+    }
+
+    private function deathCause()
+    {
+        $lang = $this->model()->lang;
+
+        return [
+            trans('labels.electrocution_observations.electrocution', [], $lang),
+            trans('labels.electrocution_observations.collision', [], $lang),
+        ];
+    }
+
+    private function getDeathCause($item)
+    {
+        $lang = $this->model()->lang;
+        if ($item === trans('labels.electrocution_observations.electrocution', [], $lang)) {
+            return 'electrocution';
+        }
+        if ($item === trans('labels.electrocution_observations.collision', [], $lang)) {
+            return 'collision';
+        }
+        return;
+    }
+
+    private function getPosition($item)
+    {
+        $lang = $this->model()->lang;
+        if ($item === trans('labels.electrocution_observations.ground', [], $lang)) {
+            return 'ground';
+        }
+        if ($item === trans('labels.electrocution_observations.pillar', [], $lang)) {
+            return 'pillar';
+        }
+        return;
+    }
+
+    private function getState($item)
+    {
+        $lang = $this->model()->lang;
+        if ($item === trans('labels.electrocution_observations.alive', [], $lang)) {
+            return 'alive';
+        }
+        if ($item === trans('labels.electrocution_observations.fresh_corpse', [], $lang)) {
+            return 'fresh_corpse';
+        }
+        if ($item === trans('labels.electrocution_observations.in_decay_state', [], $lang)) {
+            return 'in_decay_state';
+        }
+        if ($item === trans('labels.electrocution_observations.corpse_remains', [], $lang)) {
+            return 'corpse_remains';
+        }
+        if ($item === trans('labels.electrocution_observations.dry_remains', [], $lang)) {
+            return 'dry_remains';
+        }
+        if ($item === trans('labels.electrocution_observations.fresh_remains', [], $lang)) {
+            return 'fresh_remains';
+        }
+
+        return;
     }
 }

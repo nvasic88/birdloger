@@ -80,4 +80,9 @@ class OffenceCase extends Model
             'name' => $this->name,
         ];
     }
+
+    public static function getNameTranslationAttribute($name)
+    {
+        return trans('labels.offence_cases.'.$name);
+    }
 }

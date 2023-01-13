@@ -55,7 +55,6 @@ class UpdateElectrocutionObservation extends FormRequest
             'sex' => ['nullable', Rule::in(Sex::options()->keys())],
             'stage_id' => ['nullable', Rule::in(Stage::pluck('id'))],
             'number' => ['nullable', 'integer', 'min:1'],
-            'found_dead' => ['nullable', 'boolean'],
             'found_dead_note' => ['nullable'],
             'data_license' => ['nullable', Rule::in(License::activeIds())],
             'photos' => ['nullable', 'array', 'max:'.config('biologer.photos_per_observation')],
@@ -94,6 +93,7 @@ class UpdateElectrocutionObservation extends FormRequest
             'console_type' => ['nullable','string'],
             'voltage' => ['nullable','string'],
             'iba' => ['nullable','string'],
+            'observers' => ['array'],
         ];
     }
 
@@ -129,7 +129,7 @@ class UpdateElectrocutionObservation extends FormRequest
             if (! empty($changed)) {
                 $this->logActivity($electrocutionObservation, $changed);
 
-                # $electrocutionObservation->moveToPending();
+                $electrocutionObservation->moveToPending();
             }
 
             $this->notifyCreator($electrocutionObservation);
@@ -205,8 +205,7 @@ class UpdateElectrocutionObservation extends FormRequest
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
             'atlas_code' => $this->input('atlas_code'),
-            'found_dead' => $this->input('found_dead', false),
-            'found_dead_note' => $this->input('found_dead', false) ? $this->input('found_dead_note') : null,
+            'found_dead_note' => $this->input('death_cause') === 'collision' ? $this->input('found_dead_note') : null,
         ];
 
         if ($this->user()->hasAnyRole(['admin', 'curator'])) {
@@ -298,6 +297,11 @@ class UpdateElectrocutionObservation extends FormRequest
         foreach ($this->input('observers') as $observer) {
             if (isset($observer['id'])) {
                 $observer_ids[] = $observer['id'];
+                $obs = Observer::find($observer['id']);
+                $obs->update([
+                    'name' => $observer['name'],
+                ]);
+                $obs->save();
                 continue;
             }
             $obs = Observer::firstOrCreate([

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Exports\FieldObservations;
+namespace App\Exports\PoachingObservations;
 
 use App\FieldObservation;
 use Illuminate\Http\Request;
 
-class FieldObservationsExportFactory
+class PoachingObservationsExportFactory
 {
     /**
-     * Custom columns exporter for all field observations.
+     * Custom columns exporter for all poaching observations.
      *
      * @return string
      */
     protected function customType()
     {
-        return CustomFieldObservationsExport::class;
+        return PoachingObservationsExport::class;
     }
 
     /**

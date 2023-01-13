@@ -42,10 +42,10 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      * @var array
      */
     protected $casts = [
+        'license' => 'integer',
         'unidentifiable' => 'boolean',
         'approved_at' => 'datetime',
         'time_of_corpse_found' => 'datetime',
-        'time_of_arrival' => 'datetime',
         'distance_from_pillar' => 'integer',
         'age' => 'integer',
         'duration' => 'integer',
@@ -84,7 +84,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     }
 
     /**
-     * List of fields that field observations can be sorted by.
+     * List of fields that electrocution observations can be sorted by.
      *
      * @return array
      */
@@ -151,7 +151,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     }
 
     /**
-     * User that has identified field observation taxon.
+     * User that has identified electrocution observation taxon.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -270,7 +270,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      */
     public function scopePublic($query)
     {
-        License::applyConstraintsToFieldObservations($query);
+        return License::applyConstraintsToFieldObservations($query);
     }
 
     /**
@@ -278,16 +278,9 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      * @param string $value
      * @return \Illuminate\Support\Carbon|null
      */
-    public function getArivalTimeAttribute($value)
+    public function getCorpseFoundTimeAttribute($value)
     {
-        return $this->memoize('time_of_arrival', function () use ($value) {
-            return $value ? Carbon::parse($value) : null;
-        });
-    }
-
-    public function getDepartureTimeAttribute($value)
-    {
-        return $this->memoize('time_of_departure', function () use ($value) {
+        return $this->memoize('time_of_corpse_found', function () use ($value) {
             return $value ? Carbon::parse($value) : null;
         });
     }
@@ -297,19 +290,9 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @param string $value
      */
-    public function setArivalTimeAttribute($value)
+    public function setCorpseFoundTimeAttribute($value)
     {
-        $this->forgetMemoized('time_of_arrival')->attributes['time_of_arrival'] = $value;
-    }
-
-    /**
-     * Setter for time attribute.
-     *
-     * @param string $value
-     */
-    public function setDepartureTimeAttribute($value)
-    {
-        $this->forgetMemoized('time_of_departure')->attributes['time_of_departure'] = $value;
+        $this->forgetMemoized('time_of_corpse_found')->attributes['time_of_corpse_found'] = $value;
     }
 
     /**
@@ -373,9 +356,9 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     /**
      * Add photos to the observation, using photos' paths.
      *
-     * @param array $photos Paths
-     * @param int $defaultLicense
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param $photos
+     * @param $defaultLicense
+     * @return array|Collection
      */
     public function addPhotos($photos, $defaultLicense)
     {
@@ -392,13 +375,13 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Remove unused photos and and add new ones.
+     * Remove unused photos and add new ones.
      *
      * @param Collection $photos
      * @param int $defaultLicense
-     * @return void
+     * @return array|array[]
      */
-    public function syncPhotos($photos, $defaultLicense)
+    public function syncPhotos(Collection $photos, int $defaultLicense): array
     {
         $result = [
             'cropped' => [],
@@ -444,11 +427,11 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Approve field observation.
+     * Approve electrocution observation.
      *
      * @return $this
      */
-    public function approve()
+    public function approve(): ElectrocutionObservation
     {
         $this->observation->approve();
 
@@ -464,7 +447,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return $this
      */
-    public function markAsUnidentifiable()
+    public function markAsUnidentifiable(): ElectrocutionObservation
     {
         $this->observation->unapprove();
 
@@ -480,7 +463,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return $this
      */
-    public function moveToPending()
+    public function moveToPending(): ElectrocutionObservation
     {
         $this->observation->unapprove();
 
@@ -492,21 +475,21 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Check if field observation is approved.
+     * Check if electrocution observation is approved.
      *
      * @return bool
      */
-    public function isApproved()
+    public function isApproved(): bool
     {
         return optional($this->observation)->isApproved();
     }
 
     /**
-     * Check if field observation is pending.
+     * Check if electrocution observation is pending.
      *
      * @return bool
      */
-    public function isPending()
+    public function isPending(): bool
     {
         return ! $this->isApproved() && ! $this->unidentifiable;
     }
@@ -517,7 +500,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      * @param User $user
      * @return bool
      */
-    public function isCreatedBy(User $user)
+    public function isCreatedBy(User $user): bool
     {
         return $this->observation->isCreatedBy($user);
     }
@@ -529,7 +512,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      * @param bool $evenWithoutTaxa
      * @return bool
      */
-    public function shouldBeCuratedBy(User $user, bool $evenWithoutTaxa = true)
+    public function shouldBeCuratedBy(User $user, bool $evenWithoutTaxa = true): bool
     {
         return $this->observation->shouldBeCuratedBy($user, $evenWithoutTaxa);
     }
@@ -539,7 +522,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return bool
      */
-    public function isAtLeastPartiallyOpenData()
+    public function isAtLeastPartiallyOpenData(): bool
     {
         return $this->license < 40;
     }
@@ -549,7 +532,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return string
      */
-    public function creatorName()
+    public function creatorName(): string
     {
         return $this->observation->creator->full_name;
     }
@@ -559,7 +542,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function curators()
+    public function curators(): \Illuminate\Database\Eloquent\Collection
     {
         $taxon = $this->observation->taxon;
 
@@ -583,7 +566,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return \App\License|null
      */
-    public function license()
+    public function license(): ?License
     {
         return License::findById($this->license);
     }
@@ -593,7 +576,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return bool
      */
-    public function shouldHideRealCoordinates()
+    public function shouldHideRealCoordinates(): bool
     {
         return $this->license()->shouldHideRealCoordinates() ||
             optional($this->observation->taxon)->restricted;
@@ -604,7 +587,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -623,6 +606,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'photos' => $this->observation->photos,
             'observer' => $this->observer,
             'identifier' => $this->identifier,
+            'license' => $this->license,
             'sex' => $this->observation->sex,
             'stage_id' => $this->observation->stage_id,
             'number' => $this->observation->number,
@@ -633,6 +617,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'found_on' => $this->observation->found_on,
             'found_dead' => $this->observation->found_dead,
             'found_dead_note' => $this->observation->found_dead_note,
+            'data_license' => $this->license,
             'time_of_corpse_found' => optional($this->time_of_corpse_found)->format('H:i'),
             'status' => $this->status,
             'activity' => $this->activity,
@@ -661,12 +646,12 @@ class ElectrocutionObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Serialize field observation to a flat array.
+     * Serialize electrocution observation to a flat array.
      * Mostly used for the frontend and diffing.
      *
      * @return array
      */
-    public function toFlatArray()
+    public function toFlatArray(): array
     {
         return [
             'id' => $this->id,
@@ -685,6 +670,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'photos' => $this->observation->photos,
             'observer' => $this->observer,
             'identifier' => $this->identifier,
+            'license' => $this->license,
             'sex' => $this->observation->sex,
             'stage_id' => $this->observation->stage_id,
             'number' => $this->observation->number,
@@ -695,6 +681,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
             'found_on' => $this->observation->found_on,
             'found_dead' => $this->observation->found_dead,
             'found_dead_note' => $this->observation->found_dead_note,
+            'data_license' => $this->license,
             'time_of_corpse_found' => optional($this->time_of_corpse_found)->format('H:i'),
             'status' => $this->status,
             'activity' => $this->activity,
@@ -748,7 +735,7 @@ class ElectrocutionObservation extends Model implements FlatArrayable
         });
     }
 
-    public function atlasCode()
+    public function atlasCode(): ?AtlasCode
     {
         return AtlasCode::findByCode($this->observation->atlas_code);
     }

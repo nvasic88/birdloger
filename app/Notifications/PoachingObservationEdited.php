@@ -6,7 +6,6 @@ use App\PoachingObservation;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class PoachingObservationEdited extends Notification implements ShouldQueue
@@ -73,25 +72,6 @@ class PoachingObservationEdited extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * NOTE: No longer used, should be deleted at some point.
-     *
-     * @param mixed $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject(trans('notifications.field_observations.edited_subject'))
-            ->line(trans('notifications.field_observations.edited_message'))
-            ->action(
-                trans('notifications.field_observations.action'),
-                route('contributor.field-observations.show', $this->poachingObservation)
-            );
-    }
-
-    /**
      * Format data for summary mail.
      *
      * @param mixed $notifiable
@@ -106,7 +86,7 @@ class PoachingObservationEdited extends Notification implements ShouldQueue
                 ? trans('notifications.field_observations.edited_message_with_taxon', ['taxonName' => $taxon->name])
                 : trans('notifications.field_observations.edited_message'),
             'actionText' => trans('notifications.field_observations.action'),
-            'actionUrl' => route('contributor.field-observations.show', $this->poachingObservation),
+            'actionUrl' => route('contributor.poaching-observations.show', $this->poachingObservation),
         ];
     }
 }

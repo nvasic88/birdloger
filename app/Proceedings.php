@@ -36,10 +36,19 @@ class Proceedings extends Model
      * Get value based on label.
      *
      * @param string $label
-     * @return void
+     * @return string
      */
     public static function getValueFromLabel($label)
     {
         return self::options()->flip()->get($label);
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    public static function getNameTranslationAttribute($name)
+    {
+        return trans('labels.proceedings.'.$name);
     }
 }

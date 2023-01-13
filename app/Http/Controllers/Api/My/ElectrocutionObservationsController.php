@@ -12,7 +12,7 @@ class ElectrocutionObservationsController
      * Get field observations made by the user.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\ElectrocutionObservationResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {

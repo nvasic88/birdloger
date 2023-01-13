@@ -91,7 +91,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * List of fields that field observations can be sorted by.
+     * List of fields that poaching observations can be sorted by.
      *
      * @return array
      */
@@ -198,7 +198,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * User that has identified field observation taxon.
+     * User that has identified poaching observation taxon.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -474,7 +474,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Approve field observation.
+     * Approve poaching observation.
      *
      * @return $this
      */
@@ -522,7 +522,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Check if field observation is approved.
+     * Check if poaching observation is approved.
      *
      * @return bool
      */
@@ -532,7 +532,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Check if field observation is pending.
+     * Check if poaching observation is pending.
      *
      * @return bool
      */
@@ -710,6 +710,7 @@ class PoachingObservation extends Model implements FlatArrayable
             'case_against_mb' => $this->case_against_mb,
             'case_against_pib' => $this->case_against_pib,
             'case_submitted_to' => $this->case_submitted_to,
+            'case_name' => $this->case_name,
 
             'sources' => $this->sources()->get(),
             'offences' => $this->offences()->get(),
@@ -718,7 +719,7 @@ class PoachingObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Serialize field observation to a flat array.
+     * Serialize poaching observation to a flat array.
      * Mostly used for the frontend and diffing.
      *
      * @return array
@@ -799,6 +800,7 @@ class PoachingObservation extends Model implements FlatArrayable
             'case_against_mb' => $this->case_against_mb,
             'case_against_pib' => $this->case_against_pib,
             'case_submitted_to' => $this->case_submitted_to,
+            'case_name' => $this->case_name,
 
             'sources' => $this->sources()->get(),
             'offences' => $this->offences()->get(),

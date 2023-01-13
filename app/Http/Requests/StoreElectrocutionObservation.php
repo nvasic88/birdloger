@@ -54,7 +54,6 @@ class StoreElectrocutionObservation extends FormRequest
             'stage_id' => ['nullable', Rule::in(Stage::pluck('id'))],
             'sex' => ['nullable', Rule::in(Sex::options()->keys())],
             'number' => ['nullable', 'integer', 'min:1'],
-            'found_dead' => ['nullable', 'boolean'],
             'found_dead_note' => ['nullable', 'string', 'max:1000'],
             'data_license' => ['nullable', Rule::in(License::activeIds())],
             'photos' => [
@@ -94,6 +93,7 @@ class StoreElectrocutionObservation extends FormRequest
             'console_type' => ['nullable','string'],
             'voltage' => ['nullable','string'],
             'iba' => ['nullable','string'],
+            'observers' => ['array'],
         ];
     }
 
@@ -117,7 +117,7 @@ class StoreElectrocutionObservation extends FormRequest
 
                 $this->logActivity($electrocutionObservation);
 
-                // $this->notifyCurators($fieldObservation);
+                // $this->notifyCurators($electrocutionObservation);
             });
         });
     }
@@ -133,13 +133,11 @@ class StoreElectrocutionObservation extends FormRequest
 
         $electrocutionObservation->observation()->create($this->getGeneralObservationData());
 
-        $electrocutionObservation->approve();
-
         return $electrocutionObservation;
     }
 
     /**
-     * Get observation data specific to field observation from the request.
+     * Get observation data specific to electrocution observation from the request.
      *
      * @return array
      */
@@ -203,8 +201,7 @@ class StoreElectrocutionObservation extends FormRequest
             'data_provider' => $this->input('data_provider'),
             'data_limit' => $this->input('data_limit'),
             'atlas_code' => $this->input('atlas_code'),
-            'found_dead' => $this->input('found_dead', false),
-            'found_dead_note' => $this->input('found_dead', false) ? $this->input('found_dead_note') : null,
+            'found_dead_note' => $this->input('death_cause') === 'collision' ? $this->input('found_dead_note') : null,
         ];
     }
 
@@ -305,7 +302,7 @@ class StoreElectrocutionObservation extends FormRequest
     }
 
     /**
-     * Sync field observation relations.
+     * Sync electrocution observation relations.
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @return void
@@ -316,7 +313,7 @@ class StoreElectrocutionObservation extends FormRequest
     }
 
     /**
-     * Log created activity for field observation.
+     * Log created activity for electrocution observation.
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @return void
@@ -329,7 +326,7 @@ class StoreElectrocutionObservation extends FormRequest
     }
 
     /**
-     * Notify curators of new field observation.
+     * Notify curators of new electrocution observation.
      *
      * @param \App\ElectrocutionObservation $electrocutionObservation
      * @return void

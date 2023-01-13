@@ -351,9 +351,9 @@ class FieldObservation extends Model implements FlatArrayable
     /**
      * Add photos to the observation, using photos' paths.
      *
-     * @param  array  $photos Paths
-     * @param  int  $defaultLicense
-     * @return array|\Illuminate\Database\Eloquent\Collection|Collection
+     * @param $photos
+     * @param $defaultLicense
+     * @return array|Collection
      */
     public function addPhotos($photos, $defaultLicense)
     {
@@ -362,7 +362,7 @@ class FieldObservation extends Model implements FlatArrayable
                 return UploadedPhoto::exists($photo['path']);
             })->map(function ($photo) use ($defaultLicense) {
                 return Photo::store(UploadedPhoto::relativePath($photo['path']), [
-                    'author' => $this->observation->observer,
+                    'author' => empty($this->observation->observer) ? '' : $this->observation->observer,
                     'license' => empty($photo['license']) ? $defaultLicense : $photo['license'],
                 ], Arr::get($photo, 'crop', []));
             })
@@ -370,11 +370,11 @@ class FieldObservation extends Model implements FlatArrayable
     }
 
     /**
-     * Remove unused photos and and add new ones.
+     * Remove unused photos and add new ones.
      *
-     * @param  Collection  $photos
-     * @param  int  $defaultLicense
-     * @return void
+     * @param $photos
+     * @param $defaultLicense
+     * @return array|array[]
      */
     public function syncPhotos($photos, $defaultLicense)
     {
@@ -385,7 +385,6 @@ class FieldObservation extends Model implements FlatArrayable
         ];
 
         $current = $this->photos()->get();
-
 
         // Removing
         $current->whereNotIn('id', $photos->pluck('id'))->each(function ($photo) use (&$result) {

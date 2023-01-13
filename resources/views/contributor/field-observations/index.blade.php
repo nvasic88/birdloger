@@ -10,7 +10,8 @@
             empty="{{ __('No data...') }}"
             show-status
             show-activity-log
-            @role(['admin', 'curator'])
+            @role([
+            'admin', 'curator'])
             show-observer
             @endrole
             export-url="{{ route('api.my.field-observation-exports.store') }}"

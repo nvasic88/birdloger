@@ -321,7 +321,7 @@
           <p class="modal-card-title">{{ trans('Activity Log') }}</p>
         </div>
         <div class="modal-card-body">
-          <nz-field-observation-activity-log :activities="activityLog"/>
+          <nz-poaching-observation-activity-log :activities="activityLog"/>
         </div>
       </div>
     </b-modal>

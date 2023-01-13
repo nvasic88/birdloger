@@ -83,6 +83,7 @@ class StoreTaxon extends FormRequest
             'protected_note' => ['nullable', 'string'],
             'iucn_cat' => ['nullable', 'string'],
             'full_sci_name' => ['nullable', 'string'],
+            'synonyms' => ['array'],
         ];
     }
 
@@ -181,12 +182,12 @@ class StoreTaxon extends FormRequest
 
     protected function createSynonyms(Taxon $taxon)
     {
-        foreach ($this->input('synonym_names') as $k => $v) {
-            $synonym = Synonym::create([
-                'name' => $v,
+        foreach ($this->input('synonyms') as $synonym) {
+            $s = Synonym::create([
+                'name' => $synonym['name'],
                 'taxon_id' => $taxon->id,
-                ]);
-            $synonym->save();
+            ]);
+            $s->save();
         }
     }
 }

@@ -22,6 +22,8 @@ use Illuminate\Validation\Rule;
 
 class FieldObservationImport extends BaseImport
 {
+    const DELIM = ', ';
+
     /**
      * @var \App\DEM\Reader
      */
@@ -219,11 +221,6 @@ class FieldObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.found_on'),
-                'value' => 'found_on',
-                'required' => false,
-            ],
-            [
                 'label' => trans('labels.observations.found_dead'),
                 'value' => 'found_dead',
                 'required' => false,
@@ -300,11 +297,13 @@ class FieldObservationImport extends BaseImport
             ],
             'latitude' => ['required', new Decimal(['min' => -90, 'max' => 90])],
             'longitude' => ['required', new Decimal(['min' => -180, 'max' => 180])],
+            'location' => ['nullable'],
             'elevation' => ['nullable', 'integer', 'max:10000'],
             'accuracy' => ['nullable', 'integer', 'max:50000'],
             'observers' => ['nullable', 'string'],
             'identifier' => ['nullable', 'string'],
             'sex' => ['nullable', Rule::in(Sex::options())],
+            'stage' => ['nullable', Rule::in($this->stagesTranslatedNames())],
             'number' => ['nullable', 'integer', 'min:1'],
             'number_of' => ['nullable', 'string',
                 Rule::in(NumberOf::options()), ],
@@ -324,15 +323,16 @@ class FieldObservationImport extends BaseImport
             'data_limit' => ['nullable', 'string'],
             'comment' => ['nullable', 'string'],
             'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
+            'license' => ['nullable', 'string', Rule::in(array_values(License::getOptions()))],
         ], [
             'year.date_format' => trans('validation.year'),
             'sex.in' => __('validation.in_extended', [
-                'attribute' => __('labels.literature_observations.sex'),
-                'options' => Sex::labels()->implode('; '),
+                'attribute' => __('labels.observations.sex'),
+                'options' => Sex::labels()->implode(', '),
             ]),
             'stage.in' => __('validation.in_extended', [
-                'attribute' => __('labels.literature_observations.stage'),
-                'options' => $this->stagesTranslatedNames()->implode('; '),
+                'attribute' => __('labels.observations.stage'),
+                'options' => $this->stagesTranslatedNames()->implode(', '),
             ]),
         ], [
             'rid' => trans('labels.observations.rid'),
@@ -403,6 +403,7 @@ class FieldObservationImport extends BaseImport
 
         $fieldObservation->observation->observers()->sync($this->getObservers($item), []);
 
+        #TODO: Temporary available until majority of observations are imported..
         $fieldObservation->approve();
 
         activity()->performedOn($fieldObservation)
@@ -425,12 +426,12 @@ class FieldObservationImport extends BaseImport
     protected function getSpecificObservationData(array $item)
     {
         return [
-            'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
+            # 'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
             'time' => Arr::get($item, 'time') ?: null,
             # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
-            # 'license' => $this->getLicense($item),
+            'license' => $this->getLicense($item),
             'rid' => Arr::get($item, 'rid') ?: null,
             'fid' => Arr::get($item, 'fid') ?: null,
         ];
@@ -580,19 +581,9 @@ class FieldObservationImport extends BaseImport
         if (! $observers) {
             return null;
         }
-        foreach (explode('; ', $observers) as $observer) {
-            $ob = explode(' ', $observer);
-            if (count($ob) < 2 || count($ob) > 3) {
-                break;
-            }
-            $firstName = $ob[0];
-            $lastName = $ob[1];
-            if (count($ob) > 2) {
-                $lastName .= ' '.$ob[2];
-            }
+        foreach (explode(self::DELIM, $observers) as $observer) {
             $obs = Observer::firstOrCreate([
-                'firstName' => $firstName,
-                'lastName' => $lastName,
+                'name' => $observer,
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;
@@ -732,9 +723,7 @@ class FieldObservationImport extends BaseImport
      */
     protected function getLicense(array $data)
     {
-        return ($license = Arr::get($data, 'license'))
-            ? License::findByName($license)->id
-            : $this->model()->user->settings()->get('data_license');
+        return License::getValueFromLabel(Arr::get($data, 'license')) ?: $this->model()->user->settings()->get('data_license');
     }
 
     /**

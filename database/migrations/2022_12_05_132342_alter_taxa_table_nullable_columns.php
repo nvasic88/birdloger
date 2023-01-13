@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class AlterTaxaTableNullableColumns extends Migration
@@ -12,7 +13,7 @@ class AlterTaxaTableNullableColumns extends Migration
      */
     public function up()
     {
-        Schema::table('taxa', function ($table) {
+        Schema::table('taxa', function (Blueprint $table) {
             $table->string('euring_code', 6)->nullable()->change();
             $table->string('birdlife_id', 9)->nullable()->change();
             $table->integer('birdlife_seq')->nullable()->change();

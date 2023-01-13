@@ -292,4 +292,43 @@ class License implements Arrayable
             }
         });
     }
+
+    /**
+     * Labels for Validity options.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function options()
+    {
+        return collect([
+            self::CC_BY_SA => __('licenses.'.self::CC_BY_SA),
+            self::OPEN => __('licenses.'.self::OPEN),
+            self::CC_BY_NC_SA => __('licenses.'.self::CC_BY_NC_SA),
+            self::PARTIALLY_OPEN => __('licenses.'.self::PARTIALLY_OPEN),
+            self::CLOSED_FOR_A_PERIOD => __('licenses.'.self::CLOSED_FOR_A_PERIOD),
+            self::CLOSED => __('licenses.'.self::CLOSED),
+        ]);
+    }
+
+    /**
+     * Get labels for licenses.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function labels()
+    {
+        return self::options()->values();
+    }
+
+    /**
+     * Get value based on label.
+     *
+     * @param string $label
+     * @return int
+     */
+    public static function getValueFromLabel($label)
+    {
+        return self::options()->flip()->get($label);
+    }
+
 }

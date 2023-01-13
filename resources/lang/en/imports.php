@@ -15,5 +15,6 @@ return [
         'saving' => 'Saving',
         'saving_failed' => 'Saving failed',
         'saved' => 'Saved',
+        'undefined' => 'Undefined status',
     ],
 ];

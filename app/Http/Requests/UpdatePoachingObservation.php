@@ -119,13 +119,15 @@ class UpdatePoachingObservation extends FormRequest
             'sanction_rsd' => ['nullable', 'integer'],
             'sanction_eur' => ['nullable', 'integer'],
             'community_sentence' => ['nullable', 'integer'],
-            'sources' => ['nullable', 'array'],
-            'removed_sources' => ['nullable', 'array'],
+            'sources' => ['array'],
+            'removed_sources' => ['array'],
+            'suspects' => ['array'],
+            'removed_suspects' => ['array'],
+            'observers' => ['array'],
 
             'offences_ids' => ['nullable', 'array'],
             'offences_ids.*' => ['required', Rule::in(OffenceCase::pluck('id')->all())],
 
-            'new_suspects' => ['nullable', 'array'],
             'case_name' => ['nullable', 'string'],
             'case_against' => ['nullable', 'string'],
             'case_against_mb' => ['nullable', 'string'],
@@ -163,7 +165,6 @@ class UpdatePoachingObservation extends FormRequest
             $this->updateSources($poachingObservation);
             $this->updateSuspects($poachingObservation);
 
-
             $changed = PoachingObservationDiff::changes($poachingObservation, $oldPoachingObservation);
 
             // Log activity and move to pending only if something more than
@@ -171,10 +172,10 @@ class UpdatePoachingObservation extends FormRequest
             if (! empty($changed)) {
                 $this->logActivity($poachingObservation, $changed);
 
-                # $poachingObservation->moveToPending();
+                $poachingObservation->moveToPending();
             }
 
-            // $this->notifyCreator($poachingObservation);
+            $this->notifyCreator($poachingObservation);
 
             return $poachingObservation;
         });
@@ -216,15 +217,15 @@ class UpdatePoachingObservation extends FormRequest
             'case_submitted_to' => $this->input('case_submitted_to'),
 
             'case_reported' => $this->input('case_reported'),
-            'case_reported_by' => $this->input('case_reported', false) ? $this->input('case_reported_by') : null,
-            'opportunity' => $this->input('case_reported', false) ? $this->input('opportunity') : null,
-            'annotation' => $this->input('case_reported', false) ? $this->input('annotation') : null,
-            'proceeding' => $this->input('case_reported', false) ? $this->input('proceeding') : null,
-            'verdict' => $this->input('case_reported', false) ? $this->input('verdict') : null,
-            'verdict_date' => $this->input('case_reported', false) ? $this->input('verdict_date') : null,
-            'sanction_rsd' => $this->input('case_reported', false) ? $this->input('sanction_rsd') : null,
-            'sanction_eur' => $this->input('case_reported', false) ? $this->input('sanction_eur') : null,
-            'community_sentence' => $this->input('case_reported', false) ? $this->input('community_sentence') : null,
+            'case_reported_by' => $this->input('case_reported_by'),
+            'opportunity' => $this->input('opportunity'),
+            'annotation' => $this->input('annotation'),
+            'proceeding' => $this->input('proceeding'),
+            'verdict' => $this->input('verdict'),
+            'verdict_date' => $this->input('verdict_date'),
+            'sanction_rsd' => $this->input('sanction_rsd'),
+            'sanction_eur' => $this->input('sanction_eur'),
+            'community_sentence' => $this->input('community_sentence'),
         ];
 
         if ($this->user()->hasAnyRole(['admin', 'curator'])) {
@@ -364,6 +365,11 @@ class UpdatePoachingObservation extends FormRequest
         foreach ($this->input('observers') as $observer) {
             if (isset($observer['id'])) {
                 $observer_ids[] = $observer['id'];
+                $obs = Observer::find($observer['id']);
+                $obs->update([
+                    'name' => $observer['name'],
+                ]);
+                $obs->save();
                 continue;
             }
             $obs = Observer::firstOrCreate([
@@ -382,46 +388,60 @@ class UpdatePoachingObservation extends FormRequest
 
     private function updateSources(PoachingObservation $poachingObservation)
     {
+        foreach ($this->input('removed_sources') as $removed) {
+            Source::find($removed['id'])->delete();
+        }
         foreach ($this->input('sources') as $source) {
-            $src = Source::firstOrCreate([
+            if (isset($source['id'])) {
+                $s = Source::find($source['id']);
+                $s->update([
+                    'name' => $source['name'],
+                    'description' => $source['description'],
+                    'link' => $source['link'],
+                ]);
+                continue;
+            }
+            $s = Source::create([
                 'name' => $source['name'],
                 'description' => $source['description'],
                 'link' => $source['link'],
                 'poaching_observation_id' => $poachingObservation['id'],
             ]);
-            $src->save();
-        }
-
-        foreach ($this->input('removed_sources') as $id) {
-            $source = Source::find($id);
-            $source->delete();
+            $s->save();
         }
     }
 
     private function updateSuspects(PoachingObservation $poachingObservation)
     {
-        $new_suspects = $this->input('new_suspects');
-        foreach ($new_suspects as $k => $v) {
-            $suspects = Suspect::firstOrCreate([
-                'name' => $v['name'],
-                'place' => $v['place'],
-                'profile' => $v['profile'],
-                'phone' => $v['phone'],
-                'email' => $v['email'],
-                'social_media' => $v['social_media'],
-                'note' => $v['note'],
+        foreach ($this->input('removed_suspects') as $removed) {
+            Suspect::find($removed['id'])->delete();
+        }
+        foreach ($this->input('suspects') as $suspects) {
+            if (isset($suspects['id'])) {
+                $s = Suspect::find($suspects['id']);
+                $s->update([
+                    'name' => $suspects['name'],
+                    'place' => $suspects['place'],
+                    'profile' => $suspects['profile'],
+                    'phone' => $suspects['phone'],
+                    'email' => $suspects['email'],
+                    'social_media' => $suspects['social_media'],
+                    'note' => $suspects['note'],
+                ]);
+                $s->save();
+                continue;
+            }
+            $s = Suspect::create([
+                'name' => $suspects['name'],
+                'place' => $suspects['place'],
+                'profile' => $suspects['profile'],
+                'phone' => $suspects['phone'],
+                'email' => $suspects['email'],
+                'social_media' => $suspects['social_media'],
+                'note' => $suspects['note'],
                 'poaching_observation_id' => $poachingObservation->id,
             ]);
-            $suspects->save();
-        }
-
-        $removed_suspects = $this->input('removed_suspects');
-        if (! $removed_suspects) {
-            return;
-        }
-        foreach ($removed_suspects as $id) {
-            $synonym = Suspect::find($id);
-            $synonym->delete();
+            $s->save();
         }
     }
 }

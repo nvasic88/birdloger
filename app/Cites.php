@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cites extends Model
 {
-    const I = '1';
-    const II = '2';
-    const III = '3';
+    const I = 'appendix_I';
+    const II = 'appendix_II';
+    const III = 'appendix_III';
 
     /**
      * Labels for Validity options.
@@ -25,7 +25,7 @@ class Cites extends Model
     }
 
     /**
-     * Get labels for sexes.
+     * Get labels for cites.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -38,10 +38,19 @@ class Cites extends Model
      * Get value based on label.
      *
      * @param string $label
-     * @return void
+     * @return string
      */
     public static function getValueFromLabel($label)
     {
         return self::options()->flip()->get($label);
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    public static function getNameTranslationAttribute($name)
+    {
+        return trans('labels.cites.'.$name);
     }
 }

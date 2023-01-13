@@ -15,5 +15,6 @@ return [
         'saving' => 'Čuvanje',
         'saving_failed' => 'Čuvanje nije uspelo',
         'saved' => 'Sačuvano',
+        'undefined' => 'Nepoznat status',
     ],
 ];

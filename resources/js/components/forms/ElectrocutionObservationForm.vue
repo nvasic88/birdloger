@@ -103,32 +103,28 @@
     </button>
 
     <div class="mt-4" v-show="showMoreDetails">
-      <div>
-        <b-field
-          :label="trans('labels.electrocution_observations.death_cause')"
-          label-for="death_cause"
-          :type="form.errors.has('death_cause') ? 'is-danger' : null"
-          :message="form.errors.has('death_cause') ? form.errors.first('death_cause') : null"
-        >
-          <b-select v-model="form.death_cause" expanded>
-            <option :value="null">{{ trans('labels.electrocution_observations.unknown') }}</option>
-            <option value="electrocution">{{ trans('labels.electrocution_observations.electrocution') }}</option>
-            <option value="collision">{{ trans('labels.electrocution_observations.collision') }}</option>
-          </b-select>
-        </b-field>
+      <b-field
+        :label="trans('labels.electrocution_observations.death_cause')"
+        label-for="death_cause"
+        :type="form.errors.has('death_cause') ? 'is-danger' : null"
+        :message="form.errors.has('death_cause') ? form.errors.first('death_cause') : null"
+      >
+        <b-select v-model="form.death_cause" expanded>
+          <option :value="null">{{ trans('labels.electrocution_observations.unknown') }}</option>
+          <option value="electrocution">{{ trans('labels.electrocution_observations.electrocution') }}</option>
+          <option value="collision">{{ trans('labels.electrocution_observations.collision') }}</option>
+        </b-select>
+      </b-field>
 
-        <b-checkbox v-model="form.found_dead">{{ trans('labels.electrocution_observations.found_dead') }}</b-checkbox>
-
-        <b-field
-          :label="trans('labels.electrocution_observations.found_dead_note')"
-          label-for="found_dead_note"
-          v-if="form.found_dead"
-          :error="form.errors.has('found_dead_note')"
-          :message="form.errors.has('found_dead_note') ? form.errors.first('found_dead_note') : null"
-        >
-          <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note"/>
-        </b-field>
-      </div>
+      <b-field
+        :label="trans('labels.electrocution_observations.found_dead_note')"
+        label-for="found_dead_note"
+        v-if="form.death_cause === 'collision'"
+        :error="form.errors.has('found_dead_note')"
+        :message="form.errors.has('found_dead_note') ? form.errors.first('found_dead_note') : null"
+      >
+        <b-input id="found_dead_note" type="textarea" v-model="form.found_dead_note"/>
+      </b-field>
 
       <div class="columns">
         <div class="column">
@@ -363,20 +359,32 @@
           <b-field
             :label="trans('labels.electrocution_observations.position')"
             label-for="position"
-            :error="form.errors.has('position')"
+            :type="form.errors.has('position') ? 'is-danger' : null"
             :message="form.errors.has('position') ? form.errors.first('position') : null"
           >
-            <b-input id="position" name="position" v-model="form.position"/>
+            <b-select v-model="form.position" expanded>
+              <option :value="null">{{ trans('labels.electrocution_observations.choose_a_position') }}</option>
+              <option value="ground">{{ trans('labels.electrocution_observations.ground') }}</option>
+              <option value="pillar">{{ trans('labels.electrocution_observations.pillar') }}</option>
+            </b-select>
           </b-field>
         </div>
         <div class="column">
           <b-field
             :label="trans('labels.electrocution_observations.state')"
             label-for="state"
-            :error="form.errors.has('state')"
+            :type="form.errors.has('state') ? 'is-danger' : null"
             :message="form.errors.has('state') ? form.errors.first('state') : null"
           >
-            <b-input id="state" name="state" v-model="form.state"/>
+            <b-select v-model="form.state" expanded>
+              <option :value="null">{{ trans('labels.electrocution_observations.choose_a_state') }}</option>
+              <option value="alive">{{ trans('labels.electrocution_observations.alive') }}</option>
+              <option value="fresh_corpse">{{ trans('labels.electrocution_observations.fresh_corpse') }}</option>
+              <option value="in_decay_state">{{ trans('labels.electrocution_observations.in_decay_state') }}</option>
+              <option value="corpse_remains">{{ trans('labels.electrocution_observations.corpse_remains') }}</option>
+              <option value="dry_remains">{{ trans('labels.electrocution_observations.dry_remains') }}</option>
+              <option value="fresh_remains">{{ trans('labels.electrocution_observations.fresh_remains') }}</option>
+            </b-select>
           </b-field>
         </div>
       </div>
@@ -432,6 +440,7 @@
               v-model="form.observers[i].name"
               :placeholder="trans('labels.observations.observer_name')"
               expanded
+              required
             />
 
             <p class="control">
@@ -566,12 +575,11 @@ export default {
           sex: null,
           number: null,
           number_of: 'individual',
-          death_cause: 'unknown',
+          death_cause: null,
           project: null,
           habitat: null,
           found_on: null,
           stage_id: null,
-          found_dead: false,
           found_dead_note: '',
           data_license: null,
           image_license: null,
@@ -710,10 +718,6 @@ export default {
       }, {
         resetOnSuccess: false
       })
-    },
-
-    checkForm() {
-      if (this.observerName) return true;
     },
 
     /**
@@ -874,8 +878,7 @@ export default {
       return [
         'location', 'accuracy', 'elevation', 'latitude', 'longitude',
         'year', 'month', 'day', 'project', 'observer', 'observed_by',
-        'observed_by_id', 'data_license', 'image_license', 'found_dead',
-        'found_dead_note'
+        'observed_by_id', 'data_license', 'image_license', 'found_dead_note'
       ]
     },
 

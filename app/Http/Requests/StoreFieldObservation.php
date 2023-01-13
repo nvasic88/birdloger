@@ -87,6 +87,7 @@ class StoreFieldObservation extends FormRequest
             'data_limit' => ['nullable', 'string'],
             'fid' => ['nullable', 'string'],
             'rid' => ['nullable', 'integer'],
+            'observers' => ['array'],
         ];
     }
 
@@ -110,7 +111,7 @@ class StoreFieldObservation extends FormRequest
 
                 $this->logActivity($fieldObservation);
 
-                // $this->notifyCurators($fieldObservation);
+                //$this->notifyCurators($fieldObservation);
             });
         });
     }
@@ -125,8 +126,6 @@ class StoreFieldObservation extends FormRequest
         $fieldObservation = FieldObservation::create($this->getSpecificObservationData());
 
         $fieldObservation->observation()->create($this->getGeneralObservationData());
-
-        $fieldObservation->approve();
 
         return $fieldObservation;
     }

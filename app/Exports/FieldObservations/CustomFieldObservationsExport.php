@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 
 class CustomFieldObservationsExport extends BaseExport
 {
+    const DELIM = ', ';
+
     /**
      * Column labels and names.
      *
@@ -138,10 +140,6 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'habitat',
             ],
             [
-                'label' => trans('labels.observations.found_on'),
-                'value' => 'found_on',
-            ],
-            [
                 'label' => trans('labels.observations.found_dead'),
                 'value' => 'found_dead',
             ],
@@ -150,14 +148,9 @@ class CustomFieldObservationsExport extends BaseExport
                 'value' => 'found_dead_note',
             ],
             [
-                'label' => trans('labels.observations.status'),
-                'value' => 'status',
-            ],
-            [
                 'label' => trans('labels.observations.dataset'),
                 'value' => 'dataset',
             ],
-
 
         ]);
     }
@@ -226,8 +219,8 @@ class CustomFieldObservationsExport extends BaseExport
             'comment' => $item->observation->comment,
             'identifier' => $item->identifier,
             'observers' => $item->observation->observers->map(function ($observer) {
-                return "{$observer->firstName} {$observer->lastName}";
-            })->implode('; '),
+                return "{$observer->name}";
+            })->implode(self::DELIM),
 
             'location' => $item->observation->location,
             'mgrs10k' => $item->observation->mgrs10k,
@@ -245,7 +238,7 @@ class CustomFieldObservationsExport extends BaseExport
             'found_dead_note' => $item->observation->found_dead_note,
             'status' => $item->status_translation,
             'dataset' => $item->observation->dataset,
-            #'types' => $item->observation->types->pluck('name')->implode(', '),
+            'types' => $item->observation->types->pluck('name')->implode(self::DELIM),
 
         ];
     }

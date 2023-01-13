@@ -364,6 +364,7 @@
               v-model="form.observers[i].name"
               :placeholder="trans('labels.observations.observer_name')"
               expanded
+              required
             />
 
             <p class="control">

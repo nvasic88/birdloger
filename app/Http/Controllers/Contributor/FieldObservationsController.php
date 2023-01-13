@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Contributor;
 
+
 use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
 use App\FieldObservation;
+use App\ObservationType;
 use Illuminate\Http\Request;
 
 class FieldObservationsController
@@ -63,6 +65,7 @@ class FieldObservationsController
             'fieldObservation' => $fieldObservation->load([
                 'observation.taxon.stages', 'observedBy', 'identifiedBy',
             ]),
+            'observationTypes' => ObservationType::all(),
         ]);
     }
 }

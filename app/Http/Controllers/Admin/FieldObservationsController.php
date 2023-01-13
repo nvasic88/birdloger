@@ -53,6 +53,7 @@ class FieldObservationsController
         return view('admin.field-observations.edit', [
             'fieldObservation' => $fieldObservation->load([
                 'observation.taxon.curators',
+                'observation.taxon.stages',
                 'observedBy', 'identifiedBy',
             ]),
             'observationTypes' => ObservationType::all(),

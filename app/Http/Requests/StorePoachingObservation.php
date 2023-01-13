@@ -118,12 +118,13 @@ class StorePoachingObservation extends FormRequest
             'sanction_rsd' => ['nullable', 'integer'],
             'sanction_eur' => ['nullable', 'integer'],
             'community_sentence' => ['nullable', 'integer'],
-            'sources' => ['nullable', 'array'],
+            'sources' => ['array'],
+            'suspects' => ['array'],
+            'observers' => ['array'],
 
             'offences_ids' => ['nullable', 'array'],
             'offences_ids.*' => ['required', Rule::in(OffenceCase::pluck('id')->all())],
 
-            'new_suspects' => ['nullable', 'array'],
             'case_name' => ['nullable', 'string'],
             'case_against' => ['nullable', 'string'],
             'case_against_mb' => ['nullable', 'string'],
@@ -172,13 +173,11 @@ class StorePoachingObservation extends FormRequest
 
         $poachingObservation->observation()->create($this->getGeneralObservationData());
 
-        $poachingObservation->approve();
-
         return $poachingObservation;
     }
 
     /**
-     * Get observation data specific to field observation from the request.
+     * Get observation data specific to poaching observation from the request.
      *
      * @return array
      */
@@ -214,15 +213,16 @@ class StorePoachingObservation extends FormRequest
             'case_submitted_to' => $this->input('case_submitted_to'),
 
             'case_reported' => $this->input('case_reported'),
-            'case_reported_by' => $this->input('case_reported', false) ? $this->input('case_reported_by') : null,
-            'opportunity' => $this->input('case_reported', false) ? $this->input('opportunity') : null,
-            'annotation' => $this->input('case_reported', false) ? $this->input('annotation') : null,
-            'proceeding' => $this->input('case_reported', false) ? $this->input('proceeding') : null,
-            'verdict' => $this->input('case_reported', false) ? $this->input('verdict') : null,
-            'verdict_date' => $this->input('case_reported', false) ? $this->input('verdict_date') : null,
-            'sanction_rsd' => $this->input('case_reported', false) ? $this->input('sanction_rsd') : null,
-            'sanction_eur' => $this->input('case_reported', false) ? $this->input('sanction_eur') : null,
-            'community_sentence' => $this->input('case_reported', false) ? $this->input('community_sentence') : null,
+            'case_reported_by' => $this->input('case_reported_by'),
+            'opportunity' => $this->input('opportunity'),
+            'annotation' => $this->input('annotation'),
+            'proceeding' => $this->input('proceeding'),
+            'verdict' => $this->input('verdict'),
+            'verdict_date' => $this->input('verdict_date'),
+            'sanction_rsd' => $this->input('sanction_rsd'),
+            'sanction_eur' => $this->input('sanction_eur'),
+            'community_sentence' => $this->input('community_sentence'),
+
         ];
     }
 
@@ -368,7 +368,7 @@ class StorePoachingObservation extends FormRequest
     }
 
     /**
-     * Sync field observation relations.
+     * Sync poaching observation relations.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return void
@@ -380,7 +380,7 @@ class StorePoachingObservation extends FormRequest
     }
 
     /**
-     * Log created activity for field observation.
+     * Log created activity for poaching observation.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return void
@@ -393,7 +393,7 @@ class StorePoachingObservation extends FormRequest
     }
 
     /**
-     * Notify curators of new field observation.
+     * Notify curators of new poaching observation.
      *
      * @param \App\PoachingObservation $poachingObservation
      * @return void
@@ -443,7 +443,7 @@ class StorePoachingObservation extends FormRequest
     private function createSources($poachingObservation)
     {
         foreach ($this->input('sources') as $source) {
-            $src = Source::firstOrCreate([
+            $src = Source::create([
                 'name' => $source['name'],
                 'description' => $source['description'],
                 'link' => $source['link'],
@@ -455,19 +455,18 @@ class StorePoachingObservation extends FormRequest
 
     private function createSuspects($poachingObservation)
     {
-        $new_suspects = $this->input('new_suspects');
-        foreach ($new_suspects as $k => $v) {
-            $suspects = Suspect::firstOrCreate([
-                'name' => $v['name'],
-                'place' => $v['place'],
-                'profile' => $v['profile'],
-                'phone' => $v['phone'],
-                'email' => $v['email'],
-                'social_media' => $v['social_media'],
-                'note' => $v['note'],
+        foreach ($this->input('suspects') as $suspects) {
+            $s = Suspect::create([
+                'name' => $suspects['name'],
+                'place' => $suspects['place'],
+                'profile' => $suspects['profile'],
+                'phone' => $suspects['phone'],
+                'email' => $suspects['email'],
+                'social_media' => $suspects['social_media'],
+                'note' => $suspects['note'],
                 'poaching_observation_id' => $poachingObservation->id,
             ]);
-            $suspects->save();
+            $s->save();
         }
     }
 }

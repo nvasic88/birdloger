@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 
 class ElectrocutionObservationsExport extends BaseExport
 {
+    const DELIM = ', ';
+
     /**
      * Column labels and names.
      *
@@ -22,39 +24,7 @@ class ElectrocutionObservationsExport extends BaseExport
                 'value' => 'id',
             ],
             [
-                'label' => trans('labels.observations.rid'),
-                'value' => 'rid',
-            ],
-            [
-                'label' => trans('labels.observations.fid'),
-                'value' => 'fid',
-            ],
-            [
-                'label' => trans('labels.field_observations.latitude'),
-                'value' => 'latitude',
-            ],
-            [
-                'label' => trans('labels.field_observations.longitude'),
-                'value' => 'longitude',
-            ],
-            [
-                'label' => trans('labels.field_observations.day'),
-                'value' => 'day',
-            ],
-            [
-                'label' => trans('labels.field_observations.month'),
-                'value' => 'month',
-            ],
-            [
-                'label' => trans('labels.field_observations.year'),
-                'value' => 'year',
-            ],
-            [
-                'label' => trans('labels.field_observations.time'),
-                'value' => 'time',
-            ],
-            [
-                'label' => trans('labels.field_observations.taxon'),
+                'label' => trans('labels.observations.taxon'),
                 'value' => 'taxon',
             ],
             [
@@ -62,15 +32,71 @@ class ElectrocutionObservationsExport extends BaseExport
                 'value' => 'spid',
             ],
             [
+                'label' => trans('labels.observations.day'),
+                'value' => 'day',
+            ],
+            [
+                'label' => trans('labels.observations.month'),
+                'value' => 'month',
+            ],
+            [
+                'label' => trans('labels.observations.year'),
+                'value' => 'year',
+            ],
+            [
+                'label' => trans('labels.observations.location'),
+                'value' => 'location',
+            ],
+            [
+                'label' => trans('labels.observations.latitude'),
+                'value' => 'latitude',
+            ],
+            [
+                'label' => trans('labels.observations.longitude'),
+                'value' => 'longitude',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.death_cause'),
+                'value' => 'death_cause',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.found_dead_note'),
+                'value' => 'found_dead_note',
+            ],
+            [
+                'label' => trans('labels.observations.stage'),
+                'value' => 'stage',
+            ],
+            [
+                'label' => trans('labels.observations.sex'),
+                'value' => 'sex',
+            ],
+            [
                 'label' => trans('labels.observations.atlas_code'),
                 'value' => 'atlas_code',
             ],
             [
-                'label' => trans('labels.field_observations.number'),
+                'label' => trans('labels.electrocution_observations.column_type'),
+                'value' => 'column_type',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.console_type'),
+                'value' => 'console_type',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.voltage'),
+                'value' => 'voltage',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.iba'),
+                'value' => 'iba',
+            ],
+            [
+                'label' => trans('labels.observations.number'),
                 'value' => 'number',
             ],
             [
-                'label' => trans('labels.field_observations.number_of'),
+                'label' => trans('labels.observations.number_of'),
                 'value' => 'number_of',
             ],
             [
@@ -82,83 +108,57 @@ class ElectrocutionObservationsExport extends BaseExport
                 'value' => 'data_limit',
             ],
             [
-                'label' => trans('labels.field_observations.comment'),
-                'value' => 'comment',
+                'label' => trans('labels.observations.note'),
+                'value' => 'note',
             ],
             [
-                'label' => trans('labels.field_observations.identifier'),
-                'value' => 'identifier',
+                'label' => trans('labels.observations.habitat'),
+                'value' => 'habitat',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.time_of_corpse_found'),
+                'value' => 'time_of_corpse_found',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.duration'),
+                'value' => 'duration',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.distance_from_pillar'),
+                'value' => 'distance_from_pillar',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.pillar_number'),
+                'value' => 'pillar_number',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.age'),
+                'value' => 'age',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.position'),
+                'value' => 'position',
+            ],
+            [
+                'label' => trans('labels.electrocution_observations.state'),
+                'value' => 'state',
+            ],
+            [
+                'label' => trans('labels.observations.project'),
+                'value' => 'project',
+            ],
+            [
+                'label' => trans('labels.observations.dataset'),
+                'value' => 'dataset',
             ],
             [
                 'label' => trans('labels.exports.observers'),
                 'value' => 'observers',
             ],
             [
-                'label' => trans('labels.field_observations.location'),
-                'value' => 'location',
-            ],
-            [
-                'label' => trans('labels.field_observations.mgrs10k'),
-                'value' => 'mgrs10k',
-            ],
-            [
-                'label' => trans('labels.field_observations.accuracy'),
-                'value' => 'accuracy',
-            ],
-            [
-                'label' => trans('labels.field_observations.elevation'),
-                'value' => 'elevation',
-            ],
-            [
-                'label' => trans('labels.field_observations.sex'),
-                'value' => 'sex',
-            ],
-            [
-                'label' => trans('labels.field_observations.stage'),
-                'value' => 'stage',
-            ],
-            [
-                'label' => trans('labels.field_observations.data_license'),
+                'label' => trans('labels.observations.data_license'),
                 'value' => 'license',
             ],
-            [
-                'label' => trans('labels.field_observations.note'),
-                'value' => 'note',
-            ],
-            [
-                'label' => trans('labels.field_observations.description'),
-                'value' => 'description',
-            ],
-            [
-                'label' => trans('labels.field_observations.project'),
-                'value' => 'project',
-            ],
-            [
-                'label' => trans('labels.field_observations.habitat'),
-                'value' => 'habitat',
-            ],
-            [
-                'label' => trans('labels.field_observations.found_on'),
-                'value' => 'found_on',
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.found_dead'),
-                'value' => 'found_dead',
-            ],
-            [
-                'label' => trans('labels.electrocution_observations.found_dead_note'),
-                'value' => 'found_dead_note',
-            ],
-            [
-                'label' => trans('labels.field_observations.status'),
-                'value' => 'status',
-            ],
-            [
-                'label' => trans('labels.field_observations.dataset'),
-                'value' => 'dataset',
-             ] ,
-
-
         ]);
     }
 
@@ -172,7 +172,7 @@ class ElectrocutionObservationsExport extends BaseExport
     protected static function modifyAvailableColumns(Collection $columns)
     {
         return $columns->pipe(function ($columns) {
-            if (auth()->user()->hasAnyRole(['admin', 'curator'])) {
+            if (auth()->user()->hasAnyRole(['admin', 'electrocution'])) {
                 return $columns;
             }
 
@@ -208,45 +208,46 @@ class ElectrocutionObservationsExport extends BaseExport
 
         return [
             'id' => $item->id,
-            'rid' => $item->rid,
-            'fid' => $item->fid,
-            'latitude' => $item->observation->latitude,
-            'longitude' => $item->observation->longitude,
+            'taxon' => $taxon->name,
+            'spid' => $taxon->spid,
+            //'date' => $item->observation->day.'.'.$item->observation->month.'.'.$item->observation->year.'.',
+
             'day' => $item->observation->day,
             'month' => $item->observation->month,
             'year' => $item->observation->year,
-            'time' => optional($item->time)->format('H:i'),
-            'taxon' => $taxon->name,
-            'spid' => $taxon->spid,
+
+            # 'time' => optional($item->time)->format('H:i'),
+            'location' => $item->observation->location,
+            'latitude' => $item->observation->latitude,
+            'longitude' => $item->observation->longitude,
+            'death_cause' => $item->death_cause ? trans('labels.electrocution_observations.'.$item->death_cause) : null,
+            'found_dead_note' => $item->observation->found_dead_note,
+            'stage' => optional($item->observation->stage)->name_translation,
+            'sex' => $item->observation->sex_translation,
             'atlas_code' => $item->observation->atlas_code,
+            'column_type' => $item->column_type,
+            'console_type' => $item->console_type,
+            'voltage' => $item->voltage,
+            'iba' => $item->iba,
             'number' => $item->observation->number,
             'number_of' => $item->observation->number_of_translation,
             'data_provider' => $item->observation->data_provider,
             'data_limit' => $item->observation->data_limit,
-            'comment' => $item->observation->comment,
-            'identifier' => $item->identifier,
-            'observers' => $item->observation->observers->map(function ($observer) {
-                return "{$observer->firstName} {$observer->lastName}";
-            })->implode('; '),
-
-            'location' => $item->observation->location,
-            'mgrs10k' => $item->observation->mgrs10k,
-            'accuracy' => $item->observation->accuracy,
-            'elevation' => $item->observation->elevation,
-            'sex' => $item->observation->sex_translation,
-            'stage' => optional($item->observation->stage)->name_translation,
-            'license' => $item->license_translation,
             'note' => $item->observation->note,
-            'description' => $item->observation->description,
-            'project' => $item->observation->project,
             'habitat' => $item->observation->habitat,
-            'found_on' => $item->observation->found_on,
-            'found_dead' => $item->observation->found_dead ? __('Yes') : __('No'),
-            'found_dead_note' => $item->observation->found_dead_note,
-            'status' => $item->status_translation,
+            'time_of_corpse_found' => optional($item->time_of_corpse_found)->format('H:i'),
+            'duration' => $item->duration,
+            'distance_from_pillar' => $item->distance_from_pillar,
+            'pillar_number' => $item->pillar_number,
+            'age' => $item->age,
+            'position' => $item->position ? trans('labels.electrocution_observations.'.$item->position) : null,
+            'state' => $item->state ? trans('labels.electrocution_observations.'.$item->state) : null,
+            'project' => $item->observation->project,
             'dataset' => $item->observation->dataset,
-            #'types' => $item->observation->types->pluck('name')->implode(', '),
-
+            'observers' => $item->observation->observers->map(function ($observer) {
+                return "{$observer->name}";
+            })->implode(self::DELIM),
+            'license' => $item->license_translation,
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Importing;
 
+use App\AtlasCode;
 use App\Cites;
 use App\DEM\Reader as DEMReader;
 use App\License;
@@ -10,21 +11,25 @@ use App\Observation;
 use App\Observer;
 use App\OffenceCase;
 use App\PoachingObservation;
+use App\Proceedings;
 use App\Rules\Day;
 use App\Rules\Decimal;
 use App\Rules\InCaseInsensitive;
 use App\Rules\Month;
+use App\Sex;
 use App\Source;
 use App\Stage;
 use App\Support\Dataset;
+use App\Suspect;
 use App\Taxon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PoachingObservationImport extends BaseImport
 {
+    const DELIM = ', ';
+
     /**
      * @var \App\DEM\Reader
      */
@@ -74,53 +79,18 @@ class PoachingObservationImport extends BaseImport
 
         return collect([
             [
-                'label' => trans('labels.poaching_observations.data_id'),
-                'value' => 'data_id',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.poaching_observations.folder_id'),
-                'value' => 'folder_id',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.poaching_observations.file'),
-                'value' => 'file',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.poaching_observations.in_report'),
-                'value' => 'in_report',
+                'label' => trans('labels.id'),
+                'value' => 'id',
                 'required' => true,
             ],
             [
-                'label' => trans('labels.poaching_observations.locality'),
-                'value' => 'locality',
+                'label' => trans('labels.observations.taxon'),
+                'value' => 'taxon',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.poaching_observations.place'),
-                'value' => 'place',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.poaching_observations.municipality'),
-                'value' => 'municipality',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.latitude'),
-                'value' => 'latitude',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.longitude'),
-                'value' => 'longitude',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.observations.accuracy'),
-                'value' => 'accuracy',
+                'label' => trans('labels.taxa.spid'),
+                'value' => 'spid',
                 'required' => false,
             ],
             [
@@ -139,24 +109,39 @@ class PoachingObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.date'),
-                'value' => 'date',
+                'label' => trans('labels.observations.location'),
+                'value' => 'location',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.poaching_observations.input_date'),
-                'value' => 'input_date',
+                'label' => trans('labels.observations.latitude'),
+                'value' => 'latitude',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.observations.taxon'),
-                'value' => 'taxon',
-                'required' => true,
+                'label' => trans('labels.observations.longitude'),
+                'value' => 'longitude',
+                'required' => false,
             ],
             [
-                'label' => trans('labels.poaching_observations.indigenous'),
-                'value' => 'indigenous',
-                'required' => true,
+                'label' => trans('labels.poaching_observations.case_name'),
+                'value' => 'case_name',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.stage'),
+                'value' => 'stage',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.sex'),
+                'value' => 'sex',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.atlas_code'),
+                'value' => 'atlas_code',
+                'required' => false,
             ],
             [
                 'label' => trans('labels.poaching_observations.total'),
@@ -178,16 +163,49 @@ class PoachingObservationImport extends BaseImport
                 'value' => 'exact_number',
                 'required' => false,
             ],
-        ])->concat($offence_cases->map(function ($offence_case) {
-            return [
-                'label' => "{$offence_case}",
-                'value' => "{$offence_case}",
-                'required' => true,
-            ];
-        }))->concat([
+            [
+                'label' => trans('labels.poaching_observations.indigenous'),
+                'value' => 'indigenous',
+                'required' => false,
+            ],
             [
                 'label' => trans('labels.poaching_observations.offences'),
                 'value' => 'offences',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.locality'),
+                'value' => 'locality',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.place'),
+                'value' => 'place',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.municipality'),
+                'value' => 'municipality',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.data_id'),
+                'value' => 'data_id',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.folder_id'),
+                'value' => 'folder_id',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.file'),
+                'value' => 'file',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.in_report'),
+                'value' => 'in_report',
                 'required' => false,
             ],
             [
@@ -198,7 +216,7 @@ class PoachingObservationImport extends BaseImport
             [
                 'label' => trans('labels.poaching_observations.case_reported'),
                 'value' => 'case_reported',
-                'required' => true,
+                'required' => false,
             ],
             [
                 'label' => trans('labels.poaching_observations.case_reported_by'),
@@ -213,11 +231,6 @@ class PoachingObservationImport extends BaseImport
             [
                 'label' => trans('labels.poaching_observations.verdict_date'),
                 'value' => 'verdict_date',
-                'required' => false,
-            ],
-            [
-                'label' => trans('labels.poaching_observations.proceeding'),
-                'value' => 'proceeding',
                 'required' => false,
             ],
             [
@@ -236,6 +249,31 @@ class PoachingObservationImport extends BaseImport
                 'required' => false,
             ],
             [
+                'label' => trans('labels.poaching_observations.case_submitted_to'),
+                'value' => 'case_submitted_to',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.case_against'),
+                'value' => 'case_against',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.case_against_mb'),
+                'value' => 'case_against_mb',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.case_against_pib'),
+                'value' => 'case_against_pib',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.poaching_observations.proceeding'),
+                'value' => 'proceeding',
+                'required' => false,
+            ],
+            [
                 'label' => trans('labels.poaching_observations.opportunity'),
                 'value' => 'opportunity',
                 'required' => false,
@@ -246,20 +284,37 @@ class PoachingObservationImport extends BaseImport
                 'required' => false,
             ],
             [
-                'label' => trans('labels.poaching_observations.suspect_name'),
-                'value' => 'suspect_name',
+                'label' => trans('labels.poaching_observations.cites'),
+                'value' => 'cites',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.poaching_observations.suspect_place'),
-                'value' => 'suspect_place',
+                'label' => trans('labels.poaching_observations.origin_of_individuals'),
+                'value' => 'origin_of_individuals',
                 'required' => false,
             ],
             [
-                'label' => trans('labels.poaching_observations.suspects_number'),
-                'value' => 'suspects_number',
+                'label' => trans('labels.poaching_observations.suspects'),
+                'value' => 'suspects',
                 'required' => false,
             ],
+            [
+                'label' => trans('labels.poaching_observations.sources'),
+                'value' => 'sources',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.observers'),
+                'value' => 'observers',
+                'required' => false,
+            ],
+            [
+                'label' => trans('labels.observations.data_license'),
+                'value' => 'license',
+                'required' => false,
+            ],
+
+            /*
             [
                 'label' => trans('labels.poaching_observations.suspect_profile'),
                 'value' => 'suspect_profile',
@@ -320,6 +375,7 @@ class PoachingObservationImport extends BaseImport
                 'value' => 'observers',
                 'required' => false,
             ],
+             */
 
         ])->pipe(function ($columns) use ($user) {
             if (! $user || optional($user)->hasAnyRole(['admin', 'curator'])) {
@@ -358,13 +414,11 @@ class PoachingObservationImport extends BaseImport
     protected function makeValidator(array $data)
     {
         return Validator::make($data, [
-            'data_id' => ['string', 'nullable'],
-            'folder_id' => ['numeric', 'nullable'],
-            'file' => ['string', 'nullable'],
-            'in_report' => ['string', 'required', new InCaseInsensitive($this->yesNo())],
-            'locality' => ['nullable'],
-            'place' => ['nullable'],
-            'municipality' => ['nullable'],
+            'id' => ['integer'],
+            'taxon' => [
+                'required',
+                'string',
+            ],
             'year' => ['bail', 'date_format:Y', 'nullable', 'before_or_equal:now'],
             'month' => [
                 'bail',
@@ -378,46 +432,72 @@ class PoachingObservationImport extends BaseImport
             ],
             'latitude' => ['nullable', new Decimal(['min' => -90, 'max' => 90])],
             'longitude' => ['nullable', new Decimal(['min' => -180, 'max' => 180])],
-            'accuracy' => ['nullable'],
-            'date' => ['nullable'],
-            'input_date' => ['nullable'],
-            'taxon' => [
-                'required',
-                'string',
-            ],
-            'indigenous' => ['required', 'string', new InCaseInsensitive($this->yesNo())],
+            'location' => ['nullable'],
+            'sex' => ['nullable', Rule::in(Sex::options())],
+            'stage' => ['nullable', Rule::in($this->stagesTranslatedNames())],
+            'atlas_code' => ['nullable', 'integer', Rule::in(AtlasCode::CODES)],
             'total' => ['nullable'],
             'dead_from_total' => ['nullable'],
             'alive_from_total' => ['nullable'],
             'exact_number' => ['nullable', 'string', new InCaseInsensitive($this->yesNo())],
+            'indigenous' => ['required', 'string', new InCaseInsensitive($this->yesNo())],
             'offences' => ['nullable'],
+            'locality' => ['nullable'],
+            'place' => ['nullable'],
+            'municipality' => ['nullable'],
+            'data_id' => ['nullable'],
+            'folder_id' => ['nullable'],
+            'file' => ['nullable'],
+            'in_report' => ['string', 'required', new InCaseInsensitive($this->yesNo())],
             'offence_details' => ['nullable', 'string'],
             'case_reported' => ['string', 'required', new InCaseInsensitive($this->yesNo())],
             'case_reported_by' => ['nullable', 'string'],
             'verdict' => ['nullable', new InCaseInsensitive($this->yesNoRejected())],
             'verdict_date' => ['nullable'],
-            'proceeding' => ['nullable', 'string'],
             'sanction_rsd' => ['nullable'],
             'sanction_eur' => ['nullable'],
             'community_sentence' => ['nullable'],
+            'case_against' => ['nullable'],
+            'case_against_mb' => ['nullable'],
+            'case_against_pib' => ['nullable'],
+            'proceeding' => ['nullable'],
             'opportunity' => ['nullable', 'string', new InCaseInsensitive($this->yesNo())],
             'annotation' => ['nullable', 'string'],
-            'suspect_name' => ['nullable', 'string'],
-            'suspect_place' => ['nullable', 'string'],
-            'suspect_number' => ['nullable', 'numeric'],
-            'suspect_profile' => ['nullable', 'string'],
-            'annotation1' => ['nullable', 'string'],
-            'sources' => ['nullable', 'string'],
-            'facebook' => ['nullable', 'string'],
-            'youtube' => ['nullable', 'string'],
-            'social_media' => ['nullable', 'string'],
-            'ads' => ['nullable', 'string'],
-            'institutions' => ['nullable', 'string'],
-            'associates' => ['nullable', 'string'],
-            'cites' => ['nullable', 'string', Rule::in(Cites::options())],
+            'cites' => ['nullable', Rule::in(Cites::options())],
             'origin_of_individuals' => ['nullable', 'string'],
-            'observers' => ['nullable', 'string'],
+            'suspects' => ['nullable'],
+            'sources' => ['nullable'],
+            'observers' => ['nullable'],
+            'license' => ['nullable', 'string', Rule::in(array_values(License::getOptions()))],
+
+            #'facebook' => ['nullable', 'string'],
+            #'institutions' => ['nullable', 'string'],
+            #'associates' => ['nullable', 'string'],
+            #'youtube' => ['nullable', 'string'],
+            #'social_media' => ['nullable', 'string'],
+            #'ads' => ['nullable', 'string'],
+            #'accuracy' => ['nullable'],
+            #'date' => ['nullable'],
+            #'input_date' => ['nullable'],
+            #'annotation1' => ['nullable', 'string'],
+            #'suspect_profile' => ['nullable', 'string'],
+            #'suspect_number' => ['nullable', 'numeric'],
+            #'suspect_place' => ['nullable', 'string'],
+            #'suspect_name' => ['nullable', 'string'],
+
+
         ], [
+            'year.date_format' => trans('validation.year'),
+            'sex.in' => __('validation.in_extended', [
+                'attribute' => __('labels.observations.sex'),
+                'options' => Sex::labels()->implode(', '),
+            ]),
+            'stage.in' => __('validation.in_extended', [
+                'attribute' => __('labels.observations.stage'),
+                'options' => $this->stagesTranslatedNames()->implode(', '),
+            ]),
+        ], [
+            'id' => trans('labels.observations.id'),
             'data_id' => trans('labels.poaching_observations.data_id'),
             'folder_id' => trans('labels.poaching_observations.folder_id'),
             'file' => trans('labels.poaching_observations.file'),
@@ -427,13 +507,12 @@ class PoachingObservationImport extends BaseImport
             'place' => trans('labels.poaching_observations.place'),
             'latitude' => trans('labels.observations.latitude'),
             'longitude' => trans('labels.observations.longitude'),
-            'accuracy' => trans('labels.observations.accuracy'),
+
             'day' => trans('labels.observations.day'),
             'month' => trans('labels.observations.month'),
             'year' => trans('labels.observations.year'),
-            'date' => trans('labels.observations.date'),
-            'input_date' => trans('labels.poaching_observations.input_date'),
             'taxon' => trans('labels.observations.taxon'),
+            'license' => trans('labels.observations.data_license'),
             'indigenous' => trans('labels.poaching_observations.indigenous'),
             'total' => trans('labels.poaching_observations.total'),
             'dead_from_total' => trans('labels.poaching_observations.dead_from_total'),
@@ -451,21 +530,21 @@ class PoachingObservationImport extends BaseImport
             'community_sentence' => trans('labels.poaching_observations.community_sentence'),
             'opportunity' => trans('labels.poaching_observations.opportunity'),
             'annotation' => trans('labels.poaching_observations.annotation'),
-            'annotation1' => trans('labels.poaching_observations.annotation'),
-            'suspect_name' => trans('labels.poaching_observations.suspect_name'),
-            'suspect_place' => trans('labels.poaching_observations.suspect_place'),
-            'suspects_number' => trans('labels.poaching_observations.suspects_number'),
-            'suspect_profile' => trans('labels.poaching_observations.suspect_profile'),
+
             'sources' => trans('labels.poaching_observations.sources'),
-            'facebook' => trans('labels.poaching_observations.facebook'),
-            'youtube' => trans('labels.poaching_observations.youtube'),
-            'media' => trans('labels.poaching_observations.media'),
-            'ads' => trans('labels.poaching_observations.ads'),
-            'institutions' => trans('labels.poaching_observations.institutions'),
-            'associates' => trans('labels.poaching_observations.associates'),
             'cites' => trans('labels.poaching_observations.cites'),
             'origin_of_individuals' => trans('labels.poaching_observations.origin_of_individuals'),
             'observers' => trans('labels.observations.observers'),
+
+            'location' => trans('labels.observations.location'),
+            'sex' => trans('labels.observations.sex'),
+            'stage' => trans('labels.observations.stage'),
+            'atlas_code' => trans('labels.observations.atlas_code'),
+            'case_against' => trans('labels.poaching_observations.case_against'),
+            'case_against_mb' => trans('labels.poaching_observations.case_against_mb'),
+            'case_against_pib' => trans('labels.poaching_observations.case_against_pib'),
+            'suspects' => trans('labels.poaching_observations.suspects'),
+
         ]);
     }
 
@@ -510,12 +589,13 @@ class PoachingObservationImport extends BaseImport
         );
 
         $poachingObservation->observation->observers()->sync($this->getObservers($item), []);
-
         $poachingObservation->offences()->sync($this->getOffences($item), []);
 
-        $poachingObservation->approve();
-
         $this->createSources($item, $poachingObservation);
+        $this->createSuspects($item, $poachingObservation);
+
+        #TODO: Temporary available until majority of observations are imported..
+        $poachingObservation->approve();
 
         activity()->performedOn($poachingObservation)
             ->causedBy($this->model()->user)
@@ -536,31 +616,33 @@ class PoachingObservationImport extends BaseImport
      */
     protected function getSpecificObservationData(array $item)
     {
-        $annotation = $this->mergeAnnotations($item);
         $total = $this->convertToNumberOrNull(Arr::get($item, 'total') ?: null);
         $dead_from_alive = $this->convertToNumberOrNull(Arr::get($item, 'dead_from_total') ?: null);
         $alive_from_total = $this->convertToNumberOrNull(Arr::get($item, 'alive_from_total') ?: null);
-        $suspects_number = $this->convertToNumberOrNull(Arr::get($item, 'suspects_number') ?: null);
-
+        $case_against_mb = $this->convertToNumberOrNull(Arr::get($item, 'case_against_mb') ?: null);
+        $case_against_pib = $this->convertToNumberOrNull(Arr::get($item, 'case_against_pib') ?: null);
+        $case_against = $this->getCaseAgainst(Arr::get($item, 'case_against'));
         return [
-            'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
+            # 'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
             # 'observed_by_id' => $this->getObserverId($item),
             'identified_by_id' => $this->getIdentifierId($item),
             'license' => $this->getLicense($item),
 
-            'data_id' => Arr::get($item, 'data_id') ?: null,
-            'folder_id' => Arr::get($item, 'folder_id') ?: null,
-            'file' => Arr::get($item, 'file') ?: null,
-            'in_report' => $this->getBoolean($item, 'in_report'),
-            'locality' => Arr::get($item, 'locality') ?: null,
-            'place' => Arr::get($item, 'place') ?: null,
-            'municipality' => Arr::get($item, 'municipality') ?: null,
-            'indigenous' => $this->getBoolean($item, 'indigenous'),
+            'case_name' => Arr::get($item, 'case_name') ?: null,
             'total' => $total,
             'dead_from_total' => $dead_from_alive,
             'alive_from_total' => $alive_from_total,
             'exact_number' => $this->getBoolean($item, 'exact_number'),
+            'indigenous' => $this->getBoolean($item, 'indigenous'),
+            'locality' => Arr::get($item, 'locality') ?: null,
+            'place' => Arr::get($item, 'place') ?: null,
+            'municipality' => Arr::get($item, 'municipality') ?: null,
+
+            'data_id' => Arr::get($item, 'data_id') ?: null,
+            'folder_id' => Arr::get($item, 'folder_id') ?: null,
+            'file' => Arr::get($item, 'file') ?: null,
+            'in_report' => $this->getBoolean($item, 'in_report'),
             'offence_details' => Arr::get($item, 'offence_details') ?: null,
             'case_reported' => $this->getBoolean($item, 'case_reported'),
             'case_reported_by' => Arr::get($item, 'case_reported_by') ?: null,
@@ -569,15 +651,15 @@ class PoachingObservationImport extends BaseImport
             'sanction_rsd' => Arr::get($item, 'sanction_rsd') ?: null,
             'sanction_eur' => Arr::get($item, 'sanction_eur') ?: null,
             'community_sentence' => Arr::get($item, 'community_sentence') ?: null,
+            'case_submitted_to' => Arr::get($item, 'case_submitted_to') ?: null,
+            'case_against' => $case_against,
+            'case_against_mb' => $case_against_mb,
+            'case_against_pib' => $case_against_pib,
+            'proceeding' => Proceedings::getValueFromLabel(Arr::get($item, 'proceeding')),
             'opportunity' => $this->getBoolean($item, 'opportunity'),
-            'annotation' => $annotation,
-            'suspect_name' => Arr::get($item, 'suspect_name') ?: null,
-            'suspect_place' => Arr::get($item, 'suspect_place') ?: null,
-            'suspects_number' => $suspects_number,
-            'suspect_profile' => Arr::get($item, 'suspect_profile') ?: null,
-            'cites' => Arr::get($item, 'cites') ?: null,
+            'annotation' => Arr::get($item, 'annotation') ?: null,
+            'cites' => Cites::getValueFromLabel(Arr::get($item, 'cites')),
             'origin_of_individuals' => Arr::get($item, 'origin_of_individuals') ?: null,
-
         ];
     }
 
@@ -595,7 +677,7 @@ class PoachingObservationImport extends BaseImport
         $atlasCode = Arr::get($item, 'atlas_code');
         $day = $this->convertToNumberOrNull(Arr::get($item, 'day') ?: null);
         $month = $this->convertToNumberOrNull(Arr::get($item, 'month') ?: null);
-        $accuracy = $this->convertAccuracy($item);
+        #$accuracy = $this->convertAccuracy($item);
 
         return [
             'taxon_id' => $taxon ? $taxon->id : null,
@@ -605,7 +687,7 @@ class PoachingObservationImport extends BaseImport
             'month' => $month,
             'year' => Arr::get($item, 'year') ?: null,
             'location' => Arr::get($item, 'location') ?: null,
-            'accuracy' => $accuracy,
+            #'accuracy' => $accuracy,
             'created_by_id' => $this->model()->for_user_id ?: $this->model()->user_id,
             # 'observer' => $this->getObserver($item),
             'identifier' => $this->getIdentifier($item),
@@ -623,6 +705,7 @@ class PoachingObservationImport extends BaseImport
             'atlas_code' => $atlasCode === '' ? null : (int) $atlasCode,
             'found_dead' => $this->getFoundDead($item),
             'found_dead_note' => $this->getFoundDead($item) ? Arr::get($item, 'found_dead_note') : null,
+            'sex' => Sex::getValueFromLabel(Arr::get($item, 'sex', '')),
         ];
     }
 
@@ -866,9 +949,7 @@ class PoachingObservationImport extends BaseImport
      */
     protected function getLicense(array $data)
     {
-        return ($license = Arr::get($data, 'license'))
-            ? License::findByName($license)->id
-            : $this->model()->user->settings()->get('data_license');
+        return License::getValueFromLabel(Arr::get($data, 'license')) ?: $this->model()->user->settings()->get('data_license');
     }
 
     /**
@@ -907,14 +988,12 @@ class PoachingObservationImport extends BaseImport
 
     protected function getOffences(array $item)
     {
-        $offence_cases = collect(OffenceCase::labels())->toArray();
+        $offences = Arr::get($item, 'offences');
         $offence_ids = [];
-        foreach ($offence_cases as $offence_case) {
-            $case = Arr::get($item, $offence_case) ?: null;
-            if (is_numeric($case)) {
-                $value = OffenceCase::getValueFromLabel($offence_case);
-                $offence_ids[] = OffenceCase::where('name', $value)->first()->id;
-            }
+
+        foreach (explode(self::DELIM, $offences) as $offence) {
+            $value = OffenceCase::getValueFromLabel($offence);
+            $offence_ids[] = OffenceCase::where('name', $value)->first()->id;
         }
 
         return $offence_ids;
@@ -922,102 +1001,39 @@ class PoachingObservationImport extends BaseImport
 
     protected function createSources(array $item, $poachingObservation)
     {
-        $source = Arr::get($item, 'sources') ?: null;
+        $sources = Arr::get($item, 'sources') ?: null;
 
-        $name = '';
-        $link = '';
-        $description = '';
+        foreach (explode(self::DELIM, $sources) as $source) {
+            $s = json_decode($source);
+            $nsource = Source::create([
+                'name' => $s->name,
+                'description' => $s->description,
+                'link' => $s->link,
+                'poaching_observation_id' => $poachingObservation->id,
+            ]);
 
-        $facebook = Arr::get($item, 'facebook') ?: null;
-        if ($facebook != null and trim($facebook) != '') {
-            $name = 'social_media';
-            if (Str::of((trim($facebook)))->startsWith('http')) {
-                $link = trim($facebook);
-            }
-            $description = $source;
+            $nsource->save();
         }
-
-        $youtube = Arr::get($item, 'youtube') ?: null;
-        if ($youtube != null and trim($youtube) != '') {
-            $name = 'social_media';
-            if (Str::of((trim($youtube)))->startsWith('http')) {
-                $link = trim($youtube);
-            }
-            $description = $source;
-        }
-
-        $media = Arr::get($item, 'media') ?: null;
-        if ($media != null and trim($media) != '') {
-            $name = 'media';
-            if (Str::of((trim($media)))->startsWith('http')) {
-                $link = trim($media);
-            }
-            $description = $source;
-        }
-
-        $ads = Arr::get($item, 'ads') ?: null;
-        if ($ads != null and trim($ads) != '') {
-            $name = 'ads';
-            if (Str::of((trim($ads)))->startsWith('http')) {
-                $link = trim($ads);
-            }
-            $description = $source;
-        }
-
-        $institutions = Arr::get($item, 'institutions') ?: null;
-        if ($institutions != null and trim($institutions) != '') {
-            $name = 'institutions';
-            $description = $source;
-            if (Str::of((trim($institutions)))->startsWith('http')) {
-                $link = trim($institutions);
-            } else {
-                $description .= ' '.trim($institutions);
-            }
-        }
-
-        $associates = Arr::get($item, 'associates') ?: null;
-        if ($associates != null and trim($associates) != '') {
-            $name = 'associates';
-            $description = $source;
-            if (Str::of((trim($associates)))->startsWith('http')) {
-                $link = trim($associates);
-            } else {
-                $description .= ' '.trim($associates);
-            }
-        }
-
-        if ($name == '') {
-            return;
-        }
-
-        $source = Source::firstOrCreate([
-            'name' => $name,
-            'description' => $description,
-            'link' => $link,
-            'poaching_observation_id' => $poachingObservation->id,
-        ]);
-
-        $source->save();
     }
 
-    protected function mergeAnnotations(array $item)
+    protected function createSuspects(array $item, $poachingObservation)
     {
-        $a1 = Arr::get($item, 'annotation') ?: null;
-        $a2 = Arr::get($item, 'annotation1') ?: null;
+        $suspects = Arr::get($item, 'suspects') ?: null;
 
-        if ($a1 == null and $a2 == null) {
-            return;
+        foreach (explode(self::DELIM, $suspects) as $suspect) {
+            $s = json_decode($suspect);
+            $nsuspect = Suspect::create([
+                'name' => $s->name,
+                'place' => $s->place,
+                'profile' => $s->profile,
+                'phone' => $s->phone,
+                'email' => $s->email,
+                'social_media' => $s->social_media,
+                'poaching_observation_id' => $poachingObservation->id,
+            ]);
+
+            $nsuspect->save();
         }
-
-        if ($a1 == null) {
-            return $a2;
-        }
-
-        if ($a2 == null) {
-            return $a1;
-        }
-
-        return $a1.' '.$a2;
     }
 
     protected function getBoolean(array $item, string $key)
@@ -1082,24 +1098,27 @@ class PoachingObservationImport extends BaseImport
         if (! $observers) {
             return null;
         }
-        foreach (explode('; ', $observers) as $observer) {
-            $ob = explode(' ', $observer);
-            if (count($ob) < 2 || count($ob) > 3) {
-                break;
-            }
-            $firstName = $ob[0];
-            $lastName = $ob[1];
-            if (count($ob) > 2) {
-                $lastName .= ' '.$ob[2];
-            }
+        foreach (explode(self::DELIM, $observers) as $observer) {
             $obs = Observer::firstOrCreate([
-                'firstName' => $firstName,
-                'lastName' => $lastName,
+                'name' => $observer,
             ]);
             $obs->save();
             $observer_ids[] = $obs->id;
         }
 
         return $observer_ids;
+    }
+
+    private function getCaseAgainst($item)
+    {
+        $lang = $this->model()->lang;
+        if ($item === trans('labels.poaching_observations.individual', [], $lang)) {
+            return 'individual';
+        }
+        if ($item === trans('labels.poaching_observations.legal_entity', [], $lang)) {
+            return 'legal_entity';
+        }
+
+        return;
     }
 }

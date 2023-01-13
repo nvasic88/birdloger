@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Contributor;
 
-use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
+use App\Exports\PoachingObservations\PoachingObservationsExport;
+use App\ObservationType;
 use App\OffenceCase;
 use App\PoachingObservation;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class PoachingObservationsController
     public function index()
     {
         return view('contributor.poaching-observations.index', [
-            'exportColumns' => ContributorFieldObservationsCustomExport::availableColumnData(),
+            'exportColumns' => PoachingObservationsExport::availableColumnData(),
         ]);
     }
 
@@ -64,8 +65,12 @@ class PoachingObservationsController
             'poachingObservation' => $poachingObservation->load([
                 'observation.taxon.stages', 'observedBy', 'identifiedBy',
             ]),
+            'observationTypes' => ObservationType::all(),
             'offences' => OffenceCase::all(),
             'sources' => $poachingObservation->load(['sources']),
+            'suspects' => $poachingObservation->load(['suspects']),
+            'removed_sources' => [],
+            'removed_suspects' => [],
         ]);
     }
 }

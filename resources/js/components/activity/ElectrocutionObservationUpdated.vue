@@ -20,7 +20,7 @@ export default {
       const old = this.activity.properties.old
       const electrocution = ['duration', 'distance_from_pillar', 'pillar_number', 'age', 'position', 'state',
         'annotation', 'found_dead', 'found_dead_note', 'death_cause', 'column_type', 'console_type', 'voltage', 'iba',
-        'time_of_corpse_found', 'electrocution', 'collision', 'unknown']
+        'time_of_corpse_found', 'electrocution', 'collision', 'unknown', ]
 
       return Object.keys(old).map(key => {
         const val = this.oldValue(old, key)

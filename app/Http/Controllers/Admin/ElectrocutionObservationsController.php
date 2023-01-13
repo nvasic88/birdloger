@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-# use App\Exports\FieldObservations\CustomFieldObservationsExport;
 use App\ElectrocutionObservation;
+use App\Exports\ElectrocutionObservations\ElectrocutionObservationsExport;
 use App\ObservationType;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -19,7 +19,7 @@ class ElectrocutionObservationsController
     public function index()
     {
         return view('admin.electrocution-observations.index', [
-            # 'exportColumns' => CustomFieldObservationsExport::availableColumnData(),
+            'exportColumns' => ElectrocutionObservationsExport::availableColumnData(),
         ]);
     }
 
@@ -55,6 +55,7 @@ class ElectrocutionObservationsController
         return view('admin.electrocution-observations.edit', [
             'electrocutionObservation' => $electrocutionObservation->load([
                 'observation.taxon.curators',
+                'observation.taxon.stages',
                 'observedBy', 'identifiedBy',
             ]),
             'observationTypes' => ObservationType::all(),

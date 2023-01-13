@@ -42,7 +42,8 @@
         "spatie/laravel-cookie-consent": "^2.12.13",
         "spatie/laravel-menu": "^3.7.1",
         "stevebauman/purify": "^v4.0.1",
-        "tightenco/ziggy": "^0.9.4"
+        "tightenco/ziggy": "^0.9.4",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.17.6",

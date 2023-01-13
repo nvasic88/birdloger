@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Contributor;
 
 use App\ElectrocutionObservation;
+use App\Exports\ElectrocutionObservations\ElectrocutionObservationsExport;
+use App\ObservationType;
 use Illuminate\Http\Request;
 
 class ElectrocutionObservationsController
@@ -15,7 +17,7 @@ class ElectrocutionObservationsController
     public function index()
     {
         return view('contributor.electrocution-observations.index', [
-            # 'exportColumns' => ContributorFieldObservationsCustomExport::availableColumnData(),
+            'exportColumns' => ElectrocutionObservationsExport::availableColumnData(),
         ]);
     }
 
@@ -62,6 +64,7 @@ class ElectrocutionObservationsController
             'electrocutionObservation' => $electrocutionObservation->load([
                 'observation.taxon.stages', 'observedBy', 'identifiedBy',
             ]),
+            'observationTypes' => ObservationType::all(),
         ]);
     }
 }

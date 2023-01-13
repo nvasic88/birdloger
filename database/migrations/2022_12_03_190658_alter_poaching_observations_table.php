@@ -15,6 +15,7 @@ class AlterPoachingObservationsTable extends Migration
     public function up()
     {
         DB::statement("ALTER TABLE poaching_observations MODIFY COLUMN verdict ENUM('yes', 'no', 'rejected', 'declined', 'in_progress')");
+        DB::statement("ALTER TABLE poaching_observations MODIFY COLUMN cites ENUM('appendix_I', 'appendix_II', 'appendix_III')");
         Schema::table('poaching_observations', function (Blueprint $table) {
             $table->dropColumn('suspect_name');
             $table->dropColumn('suspect_place');

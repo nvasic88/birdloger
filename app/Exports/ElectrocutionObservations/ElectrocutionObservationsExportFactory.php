@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Exports\FieldObservations;
+namespace App\Exports\ElectrocutionObservations;
 
 use App\FieldObservation;
 use Illuminate\Http\Request;
 
-class FieldObservationsExportFactory
+class ElectrocutionObservationsExportFactory
 {
     /**
-     * Custom columns exporter for all field observations.
+     * Custom columns exporter for all electrocution observations.
      *
      * @return string
      */
     protected function customType()
     {
-        return CustomFieldObservationsExport::class;
+        return ElectrocutionObservationsExport::class;
     }
 
     /**

@@ -118,15 +118,14 @@
 
         <tr>
             <td><b>{{ __('labels.electrocution_observations.death_cause') }}</b></td>
-            <td> {{ __('labels.electrocution_observations.'.$electrocutionObservation->death_cause) }}</td>
+            <td>
+                @if ($electrocutionObservation->death_cause)
+                    {{ __('labels.electrocution_observations.'.$electrocutionObservation->death_cause) }}
+                @endif
+            </td>
         </tr>
 
-        <tr>
-            <td><b>{{ __('labels.electrocution_observations.found_dead') }}</b></td>
-            <td>{{ $electrocutionObservation->observation->found_dead ? __('Yes') : __('No') }}</td>
-        </tr>
-
-        @if ($electrocutionObservation->observation->found_dead)
+        @if ($electrocutionObservation->death_cause === 'collision')
             <tr>
                 <td><b>{{ __('labels.electrocution_observations.found_dead_note') }}</b></td>
                 <td>{{ $electrocutionObservation->observation->found_dead_note }}</td>
@@ -180,12 +179,20 @@
 
         <tr>
             <td><b>{{ __('labels.electrocution_observations.position') }}</b></td>
-            <td>{{ $electrocutionObservation->position }}</td>
+            <td>
+                @if ($electrocutionObservation->position)
+                    {{ __('labels.electrocution_observations.'.$electrocutionObservation->position) }}
+                @endif
+            </td>
         </tr>
 
         <tr>
             <td><b>{{ __('labels.electrocution_observations.state') }}</b></td>
-            <td>{{ $electrocutionObservation->state }}</td>
+            <td>
+                @if ($electrocutionObservation->state)
+                    {{ __('labels.electrocution_observations.'.$electrocutionObservation->state) }}
+                @endif
+            </td>
         </tr>
 
         <tr>

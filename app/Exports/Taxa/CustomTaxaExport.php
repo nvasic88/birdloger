@@ -184,9 +184,6 @@ class CustomTaxaExport extends BaseExport
             'full_sci_name' => $item->full_sci_name,
             'author' => $item->author,
 
-            # 'restricted' => $item->restricted ? __('Yes') : __('No'),
-            # 'allochthonous' => $item->allochthonous ? __('Yes') : __('No'),
-            # 'invasive' => $item->invasive ? __('Yes') : __('No'),
         ];
 
         foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $locale) {
@@ -197,6 +194,13 @@ class CustomTaxaExport extends BaseExport
         return $transformed;
     }
 
+    /**
+     * Extract ancestor by rank.
+     *
+     * @param Taxon $item
+     * @param $rank
+     * @return string
+     */
     private function getAncestorByRank(Taxon $item, $rank)
     {
         foreach ($item->ancestors()->get() as $ancestor) {

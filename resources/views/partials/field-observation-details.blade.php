@@ -21,7 +21,7 @@
                 <div class="columns">
                     @foreach ($fieldObservation->photos as $photo)
                         <div class="column is-one-third">
-                            <img src="{{ "{$photo->url}?v={$photo->updated_at->timestamp}" }}">
+                            <img src="{{ "{$photo->url}?v={$photo->updated_at->timestamp}" }}" alt="">
                         </div>
                     @endforeach
                 </div>
