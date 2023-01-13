@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Contributor;
 
-
 use App\Exports\FieldObservations\ContributorFieldObservationsCustomExport;
 use App\FieldObservation;
 use App\ObservationType;
