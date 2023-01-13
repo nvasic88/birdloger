@@ -290,6 +290,7 @@ class UpdateFieldObservation extends FormRequest
                     'name' => $observer['name'],
                 ]);
                 $obs->save();
+
                 continue;
             }
             $obs = Observer::firstOrCreate([

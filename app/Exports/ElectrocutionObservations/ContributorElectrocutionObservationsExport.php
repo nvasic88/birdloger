@@ -13,5 +13,4 @@ class ContributorElectrocutionObservationsExport extends ElectrocutionObservatio
     {
         return ContributorElectrocutionObservationsCustomExport::class;
     }
-
 }

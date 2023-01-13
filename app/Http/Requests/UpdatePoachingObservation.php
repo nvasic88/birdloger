@@ -370,6 +370,7 @@ class UpdatePoachingObservation extends FormRequest
                     'name' => $observer['name'],
                 ]);
                 $obs->save();
+
                 continue;
             }
             $obs = Observer::firstOrCreate([
@@ -399,6 +400,7 @@ class UpdatePoachingObservation extends FormRequest
                     'description' => $source['description'],
                     'link' => $source['link'],
                 ]);
+
                 continue;
             }
             $s = Source::create([
@@ -429,6 +431,7 @@ class UpdatePoachingObservation extends FormRequest
                     'note' => $suspects['note'],
                 ]);
                 $s->save();
+
                 continue;
             }
             $s = Suspect::create([

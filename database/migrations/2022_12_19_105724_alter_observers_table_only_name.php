@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -33,7 +34,6 @@ class AlterObserversTableOnlyName extends Migration
 
             $table->string('lastName', 50)->after('id');
             $table->string('firstName', 50)->after('id');
-
         });
     }
 }

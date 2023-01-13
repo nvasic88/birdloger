@@ -801,6 +801,7 @@ class ElectrocutionObservationImport extends BaseImport
         if ($item === trans('labels.electrocution_observations.collision', [], $lang)) {
             return 'collision';
         }
+
         return;
     }
 
@@ -813,6 +814,7 @@ class ElectrocutionObservationImport extends BaseImport
         if ($item === trans('labels.electrocution_observations.pillar', [], $lang)) {
             return 'pillar';
         }
+
         return;
     }
 

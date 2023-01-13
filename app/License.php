@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class License implements Arrayable
 {
@@ -29,14 +32,14 @@ class License implements Arrayable
     public $link;
 
     /**
-     * @var \Closure|bool
+     * @var Closure|bool
      */
     private $shouldHideRealCoordinates;
 
     /**
      * Constraint the query for field observations when this license is applied.
      *
-     * @var \Closure
+     * @var Closure
      */
     private $fieldObservationConstraint;
 
@@ -60,7 +63,7 @@ class License implements Arrayable
     /**
      * Fill the object attributes.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return void
      */
     public function fill(array $attributes)
@@ -75,7 +78,7 @@ class License implements Arrayable
     /**
      * Check if attribute is fillable.
      *
-     * @param  string  $attribute
+     * @param string $attribute
      * @return bool
      */
     protected function isFillable($attribute)
@@ -86,7 +89,7 @@ class License implements Arrayable
     /**
      * Get all licenses.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public static function all()
     {
@@ -152,7 +155,7 @@ class License implements Arrayable
     /**
      * Get all active licenses.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public static function allActive()
     {
@@ -174,7 +177,7 @@ class License implements Arrayable
     /**
      * Get license IDs.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public static function ids()
     {
@@ -184,7 +187,7 @@ class License implements Arrayable
     /**
      * Get active license IDs.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public static function activeIds()
     {
@@ -214,7 +217,7 @@ class License implements Arrayable
     /**
      * Find license by given ID.
      *
-     * @param  int  $id
+     * @param int $id
      * @return self|null
      */
     public static function findById($id)
@@ -225,7 +228,7 @@ class License implements Arrayable
     /**
      * Find license by given name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return self|null
      */
     public static function findByName($name)
@@ -270,7 +273,7 @@ class License implements Arrayable
     /**
      * Check if license is enabled.
      *
-     * @param  int  $licenseId
+     * @param int $licenseId
      * @return bool
      */
     public static function isEnabled($licenseId)
@@ -281,8 +284,8 @@ class License implements Arrayable
     /**
      * Apply constraints to field observations query depending on the license.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public static function applyConstraintsToFieldObservations($query)
     {
@@ -296,7 +299,7 @@ class License implements Arrayable
     /**
      * Labels for Validity options.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public static function options()
     {
@@ -313,7 +316,7 @@ class License implements Arrayable
     /**
      * Get labels for licenses.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public static function labels()
     {
@@ -330,5 +333,4 @@ class License implements Arrayable
     {
         return self::options()->flip()->get($label);
     }
-
 }

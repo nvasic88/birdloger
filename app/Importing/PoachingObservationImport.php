@@ -622,6 +622,7 @@ class PoachingObservationImport extends BaseImport
         $case_against_mb = $this->convertToNumberOrNull(Arr::get($item, 'case_against_mb') ?: null);
         $case_against_pib = $this->convertToNumberOrNull(Arr::get($item, 'case_against_pib') ?: null);
         $case_against = $this->getCaseAgainst(Arr::get($item, 'case_against'));
+
         return [
             # 'license' => Arr::get($item, 'data_license') ?: $this->model()->user->settings()->get('data_license'),
             'taxon_suggestion' => Arr::get($item, 'taxon') ?: null,
