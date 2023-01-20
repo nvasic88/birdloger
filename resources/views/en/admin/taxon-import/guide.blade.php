@@ -52,8 +52,8 @@
 
             <li>
                 Fields that have more than one value, like synonyms and annexes, they must be separated by
-                semicolon <b>;</b> and white space <b>&#9251;</b> example: . "Anthropoides virgo; Grus virgo"
-                i "1; 2b; 3a"
+                comma <b>,</b> and white space <b>&#9251;</b> example: . "Anthropoides virgo, Grus virgo"
+                i "1, 2b, 3a"
             </li>
         </ol>
 

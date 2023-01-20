@@ -51,8 +51,8 @@
 
             <li>
                 Polja koja imaju više od jedne vrednosti, kao što su: sinonimi i aneksi, moraju biti
-                odvojeni znakom <b>;</b> i praznim razmakom <b>&#9251;</b> npr. "Anthropoides virgo; Grus virgo"
-                i "1; 2b; 3a"
+                odvojeni znakom <b>,</b> i praznim razmakom <b>&#9251;</b> npr. "Anthropoides virgo, Grus virgo"
+                i "1, 2b, 3a"
             </li>
         </ol>
 

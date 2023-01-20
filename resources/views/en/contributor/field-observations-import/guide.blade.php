@@ -73,8 +73,8 @@
 
             <li>
                 Every observer must have first and last name. If there are more than one observer, they must be
-                separated by semicolon <b>;</b> and white space <b>&#9251;</b> example: "Anthropoides virgo;
-                Grus virgo" and "1; 2b; 3a".
+                separated by comma <b>,</b> and white space <b>&#9251;</b> example: "Anthropoides virgo,
+                Grus virgo" and "1, 2b, 3a".
             </li>
         </ol>
 
@@ -105,7 +105,7 @@
                     <td>20,210</td>
                     <td>45,400</td>
                     <td>2000</td>
-                    <td>Ivan Ivić; Miša Mišić</td>
+                    <td>Ivan Ivić, Miša Mišić</td>
                 </tr>
 
                 <tr>
@@ -113,7 +113,7 @@
                     <td>20,210</td>
                     <td>45,400</td>
                     <td>2015</td>
-                    <td>Miša Mišić; Rade Radić</td>
+                    <td>Miša Mišić, Rade Radić</td>
                 </tr>
             </tbody>
         </table>
