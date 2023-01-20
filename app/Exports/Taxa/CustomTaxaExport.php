@@ -144,7 +144,7 @@ class CustomTaxaExport extends BaseExport
      */
     protected function query(Export $export)
     {
-        return Taxon::with(['parent', 'ancestors'])->filter($export->filter)->orderBy('id');
+        return Taxon::where(['rank' => 'species'])->with(['parent', 'ancestors'])->filter($export->filter)->orderBy('id');
     }
 
     /**
