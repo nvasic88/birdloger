@@ -168,7 +168,7 @@
             <td><b>{{ __('labels.observations.observers') }}</b></td>
             <td>
                 @foreach ($fieldObservation->observation->observers as $observer)
-                    {{$observer->firstName}} {{$observer->lastName}}@if(!$loop->last){{";"}}@endif
+                    {{$observer->name}}@if(!$loop->last){{","}}@endif
                 @endforeach
             </td>
         </tr>
