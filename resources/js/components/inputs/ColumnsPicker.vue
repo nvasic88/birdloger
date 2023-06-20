@@ -1,6 +1,6 @@
 <template>
   <sortable-list v-model="allColumns" class="columns-picker">
-    <div class="panel" slot-scope="{ items }">
+    <div class="panel" v-slot="{ items }">
       <div class="panel-heading">
         <b-checkbox :value="allChecked" @change.native="checkAll" />{{ title }}
       </div>

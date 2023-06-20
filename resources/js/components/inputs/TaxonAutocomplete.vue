@@ -17,7 +17,7 @@
         :autofocus="autofocus"
         @keydown.native.enter="enterPressed"
       >
-        <template slot-scope="props">
+        <template v-slot="props">
           <div class="media">
             <div class="media-left">
               <img width="32" :src="props.option.thumbnail_url" v-if="props.option.thumbnail_url">

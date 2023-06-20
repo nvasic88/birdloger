@@ -14,7 +14,7 @@
         :autofocus="autofocus"
         :disabled="disabled"
       >
-        <template slot-scope="props">
+        <template v-slot="props">
           <div class="media">
             <div class="media-content">
               {{ props.option.full_name }} <small>&lt;{{ props.option.email }}&gt;</small>
