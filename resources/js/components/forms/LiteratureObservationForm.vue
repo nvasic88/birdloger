@@ -297,7 +297,7 @@
           :type="form.errors.has('found_on') ? 'is-danger' : null"
           :message="form.errors.has('found_on') ? form.errors.first('found_on') : null"
         >
-          <label for="found_on" class="label" slot="label">
+          <label for="found_on" class="label" v-slot="label">
             <span class="is-dashed" v-tooltip="{content: trans('labels.literature_observations.found_on_tooltip')}">
               {{ trans('labels.literature_observations.found_on') }}
             </span>

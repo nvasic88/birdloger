@@ -308,7 +308,7 @@
             :type="form.errors.has('project') ? 'is-danger' : null"
             :message="form.errors.has('project') ? form.errors.first('project') : null"
           >
-            <label for="project" class="label" slot="label">
+            <label for="project" class="label" v-slot="label">
               <span class="is-dashed" v-tooltip="{content: trans('labels.literature_observations.project_tooltip')}">
                 {{ trans('labels.literature_observations.project') }}
               </span>
