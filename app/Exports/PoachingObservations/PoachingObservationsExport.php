@@ -314,15 +314,11 @@ class PoachingObservationsExport extends BaseExport
             'observers' => $item->observation->observers->map(function ($observer) {
                 return "{$observer->name}";
             })->implode(self::DELIM),
-            #TODO: edit
             'sources' => $item->sources->map(function ($source) {
-                # return 'Has yet to be implemented';
-                return json_encode($source); # __('labels.poaching_observations.'.$source->name);
+                return json_encode($source);
             })->implode(self::DELIM),
-            #TODO: edit
             'suspects' => $item->suspects->map(function ($suspect) {
-                # return 'Has yet to be implemented';
-                return json_encode($suspect); #"{$suspect->name}";
+                return json_encode($suspect);
             })->implode(self::DELIM),
             'license' => $item->license_translation,
         ];
