@@ -193,7 +193,11 @@
 
         <tr>
             <td><b>{{ __('labels.poaching_observations.verdict') }}</b></td>
-            <td class="is-fullwidth">{{ __('labels.verdicts.'.$poachingObservation->verdict) }}</td>
+            <td class="is-fullwidth">
+                @isset ( $poachingObservation->verdict )
+                {{ __('labels.verdicts.'.$poachingObservation->verdict) }}
+                @endisset
+            </td>
         </tr>
 
         <tr>
@@ -203,7 +207,11 @@
 
         <tr>
             <td><b>{{ __('labels.poaching_observations.proceeding') }}</b></td>
-            <td class="is-fullwidth">{{ __('labels.proceedings.'.$poachingObservation->proceeding) }}</td>
+            <td class="is-fullwidth">
+                @isset ( $poachingObservation->proceeding )
+                    {{ __('labels.proceedings.'.$poachingObservation->proceeding) }}
+                @endisset
+            </td>
         </tr>
 
         <tr>
