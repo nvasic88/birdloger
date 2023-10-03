@@ -32,8 +32,6 @@ if (window.route) {
     Vue.prototype.$ziggy = window.route
 }
 
-Vue.component('Fragment', Fragment)
-
 Vue.component('NzNavbar', () => import(/* webpackChunkName: "public" */ './components/Navbar'))
 Vue.component('NzDashboardNavbar', () => import(/* webpackChunkName: "dashboard" */ './components/DashboardNavbar'))
 Vue.component('NzAnnouncement', () => import(/* webpackChunkName: "dashboard" */ './components/Announcement'))
