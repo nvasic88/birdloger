@@ -1,5 +1,6 @@
 import './bootstrap'
 import Vue from 'vue'
+import { Fragment } from 'vue-frag'
 import Buefy from './buefy'
 import dayjs from './dayjs'
 import * as VueGoogleMaps from 'vue2-google-maps'
@@ -31,6 +32,8 @@ Vue.use(VueGoogleMaps, gmapsConfig)
 if (window.route) {
     Vue.prototype.$ziggy = window.route
 }
+
+Vue.component('Fragment', Fragment)
 
 Vue.component('NzNavbar', () => import(/* webpackChunkName: "public" */ './components/Navbar'))
 Vue.component('NzDashboardNavbar', () => import(/* webpackChunkName: "dashboard" */ './components/DashboardNavbar'))

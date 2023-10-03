@@ -959,6 +959,7 @@ export default {
           case_against_mb: null,
           case_against_pib: null,
           case_submitted_to: null,
+          suspects: [],
           sources: [],
           offences: [],
         }
@@ -992,13 +993,6 @@ export default {
     offences: Array,
 
     removedSources: {
-      type: Array,
-      default() {
-        return [];
-      }
-    },
-
-    newSuspects: {
       type: Array,
       default() {
         return [];
@@ -1106,7 +1100,7 @@ export default {
         removed_sources: this.removedSources,
         verdict_date: this.observation.verdict_date ? new Date(this.observation.verdict_date) : null,
 
-        new_suspects: this.newSuspects,
+        suspects: this.observation.suspects,
         removed_suspects: this.removedSuspects,
       }, {
         resetOnSuccess: false
