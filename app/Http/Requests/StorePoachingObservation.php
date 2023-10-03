@@ -448,7 +448,7 @@ class StorePoachingObservation extends FormRequest
                 'description' => $source['description'],
                 'link' => $source['link'],
                 'ytid' => $source['ytid'],
-                'poaching_observation_id' => $poachingObservation['id'],
+                'poaching_observation_id' => $poachingObservation->id,
             ]);
             $src->save();
         }

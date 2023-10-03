@@ -719,13 +719,13 @@
             <option value="youtube">{{ trans("labels.poaching_observations.youtube") }}</option>
           </b-select>
 
-          <b-input id="sourceDescription" maxlength="50" v-model="sourceDescription"
+          <b-input id="source_description" maxlength="50" v-model="source_description"
                    :placeholder="trans('labels.poaching_observations.insert_source_description')"
                    expanded
                    v-on:keydown.native.enter.prevent="addSource"
           />
 
-          <b-input id="sourceLink" maxlength="50" v-model="sourceLink"
+          <b-input id="source_link" maxlength="50" v-model="source_link"
                    :placeholder="trans('labels.poaching_observations.insert_source_link')"
                    expanded
                    :maxlength="255"
@@ -1020,8 +1020,8 @@ export default {
       observers: this.observation.observers,
       observerName: null,
       sources: this.observation.sources,
-      sourceDescription: null,
-      sourceLink: null,
+      source_description: null,
+      source_link: null,
       suspect_name: null,
       suspect_place: null,
       suspect_profile: null,
@@ -1394,13 +1394,13 @@ export default {
       if (this.form.source) {
         this.form.sources.push({
           name: this.form.source,
-          description: this.sourceDescription,
-          link: this.sourceLink,
-          ytid: this.getIdFromString(this.sourceLink),
+          description: this.source_description,
+          link: this.source_ink,
+          ytid: this.getIdFromString(this.source_link),
         });
         this.form.source = null;
-        this.sourceDescription = null;
-        this.sourceLink = null;
+        this.source_description = null;
+        this.source_link = null;
         this.sourceErrors = null;
       } else {
         this.sourceErrors = 'labels.poaching_observations.must_select_source';
