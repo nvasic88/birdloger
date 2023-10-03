@@ -16,9 +16,8 @@ class AlterSourcesTableChangeName extends Migration
     {
         DB::statement("ALTER TABLE sources MODIFY COLUMN name ENUM('social_media', 'media', 'ads', 'institutions', 'associates', 'youtube')");
         Schema::table('sources', function (Blueprint $table) {
-            $table->string('ytid', 11)->after('link');
+            $table->string('ytid', 11)->after('link')->nullable();
         });
-
     }
 
     /**
