@@ -1,6 +1,5 @@
 import './bootstrap'
 import Vue from 'vue'
-import { Fragment } from 'vue-frag'
 import Buefy from './buefy'
 import dayjs from './dayjs'
 import * as VueGoogleMaps from 'vue2-google-maps'
