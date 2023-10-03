@@ -399,6 +399,7 @@ class UpdatePoachingObservation extends FormRequest
                     'name' => $source['name'],
                     'description' => $source['description'],
                     'link' => $source['link'],
+                    'ytid' => $source['ytid'],
                 ]);
 
                 continue;
@@ -407,6 +408,7 @@ class UpdatePoachingObservation extends FormRequest
                 'name' => $source['name'],
                 'description' => $source['description'],
                 'link' => $source['link'],
+                'ytid' => $source['ytid'],
                 'poaching_observation_id' => $poachingObservation['id'],
             ]);
             $s->save();

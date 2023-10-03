@@ -164,7 +164,13 @@
                 </tr>
                 <tr>
                     <td><b>{{ __('labels.poaching_observations.source_link') }}</b></td>
-                    <td><a href="{{$source->link}}">{{$source->link}}</a></td>
+                    @if ( preg_match( '@https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-]).*@i', $source->link ) )
+                        <td>
+                            <object width="425" height="350" data="http://www.youtube.com/v/{{ $source->ytid }}" type="application/x-shockwave-flash"></object>
+                        </td>
+                    @else
+                        <td><a href="{{$source->link}}">{{$source->link}}</a></td>
+                    @endif
                 </tr>
                 <tr><td colspan="2"></td> </tr>
             @endforeach

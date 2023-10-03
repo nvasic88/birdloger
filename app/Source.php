@@ -10,7 +10,7 @@ class Source extends Model
         'created_at', 'updated_at',
     ];
 
-    protected $fillable = ['source', 'name', 'description', 'link', 'poaching_observation_id'];
+    protected $fillable = ['source', 'name', 'description', 'link', 'ytid', 'poaching_observation_id'];
 
     /**
      * Convert the model instance to an array.
@@ -24,6 +24,7 @@ class Source extends Model
             'name' => $this->name,
             'description' => $this->description,
             'link' => $this->link,
+            'ytid' => $this->ytid,
         ];
     }
 
@@ -40,6 +41,7 @@ class Source extends Model
             'name' => $this->name,
             'description' => $this->description,
             'link' => $this->link,
+            'ytid' => $this->ytid,
         ];
     }
 }

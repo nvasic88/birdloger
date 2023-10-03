@@ -673,12 +673,14 @@
               <option value="ads">{{ trans("labels.poaching_observations.ads") }}</option>
               <option value="institutions">{{ trans("labels.poaching_observations.institutions") }}</option>
               <option value="associates">{{ trans("labels.poaching_observations.associates") }}</option>
+              <option value="youtube">{{ trans("labels.poaching_observations.youtube") }}</option>
             </b-select>
 
             <b-input
               :name="`sources[${i}][description]`"
               v-model="form.sources[i].description"
               :placeholder="trans('labels.poaching_observations.source_description')"
+              :maxlength="50"
               expanded
             />
 
@@ -686,7 +688,15 @@
               :name="`sources[${i}][link]`"
               v-model="form.sources[i].link"
               :placeholder="trans('labels.poaching_observations.source_link')"
+              :maxlength="255"
               expanded
+            />
+
+            <b-input
+              :name="`sources[${i}][ytid]`"
+              v-model="form.sources[i].ytid"
+              :maxlength="11"
+              type="hidden"
             />
 
             <p class="control">
@@ -706,6 +716,7 @@
             <option value="ads">{{ trans("labels.poaching_observations.ads") }}</option>
             <option value="institutions">{{ trans("labels.poaching_observations.institutions") }}</option>
             <option value="associates">{{ trans("labels.poaching_observations.associates") }}</option>
+            <option value="youtube">{{ trans("labels.poaching_observations.youtube") }}</option>
           </b-select>
 
           <b-input id="sourceDescription" maxlength="50" v-model="sourceDescription"
@@ -717,6 +728,7 @@
           <b-input id="sourceLink" maxlength="50" v-model="sourceLink"
                    :placeholder="trans('labels.poaching_observations.insert_source_link')"
                    expanded
+                   :maxlength="255"
                    v-on:keydown.native.enter.prevent="addSource"
           />
 
@@ -1390,6 +1402,7 @@ export default {
           name: this.form.source,
           description: this.sourceDescription,
           link: this.sourceLink,
+          ytid: this.getIdFromString(this.sourceLink),
         });
         this.form.source = null;
         this.sourceDescription = null;
@@ -1468,6 +1481,33 @@ export default {
       this.removedSuspects.push(this.suspects[index]);
       this.$delete(this.suspects, index);
     },
+
+    /**
+     * Get ID from URL
+     *
+     * source: https://github.com/kaorun343/vue-youtube-embed/blob/master/src/utils.js
+     */
+    getIdFromString(url = ""){
+      const ytRegex = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig
+      let id = ""
+      if (!url.match(ytRegex)){
+        return id
+      }
+      id = url.replace(ytRegex, '$1');
+      if (id.includes(';')) {
+        const pieces = id.split(';')
+
+        if (pieces[1].includes('%')) {
+          const uriComp = decodeURIComponent(pieces[1])
+          id = 'https://youtube.com${uriComp}'.replace(ytRegex, '$1')
+        } else {
+          id = pieces[0]
+        }
+      } else if (id.includes('#')) {
+        id = id.split("#")[0]
+      }
+      return id
+    }
 
   }
 }
