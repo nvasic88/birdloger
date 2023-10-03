@@ -1395,7 +1395,7 @@ export default {
         this.form.sources.push({
           name: this.form.source,
           description: this.source_description,
-          link: this.source_ink,
+          link: this.source_link,
           ytid: this.getIdFromString(this.source_link),
         });
         this.form.source = null;
