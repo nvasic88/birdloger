@@ -117,7 +117,7 @@
           :type="form.errors.has('citation') ? 'is-danger' : null"
           :message="form.errors.has('citation') ? form.errors.first('citation') : null"
         >
-          <label for="citation" class="label" v-slot="label">
+          <label for="citation" class="label" slot="label">
             <span
               class="is-dashed"
               v-tooltip="{content: trans('labels.publications.citation_tooltip')}"
