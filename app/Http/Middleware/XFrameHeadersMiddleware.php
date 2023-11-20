@@ -11,7 +11,7 @@ class XFrameHeadersMiddleware
     {
         $response = $next($request);
 
-        $response->headers->set('X-Frame-Options', env('X_FRAME_OPTIONS'));
+        $response->headers->set('X-Frame-Options', 'ALLOW-FROM https://www.youtube.com');
 
         return $response;
     }
