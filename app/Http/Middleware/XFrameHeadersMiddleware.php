@@ -9,28 +9,27 @@ class XFrameHeadersMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        /**
-         * This middleware was created to prevent OWASP warnings, like:
-         *
-         * The X-Frame-Options header is not set in the HTTP response, meaning the page can potentially be loaded into
-         * an attacker-controlled frame. This could lead to clickjacking, where an attacker adds an invisible layer on
-         * top of the legitimate page to trick users into clicking on a malicious link or taking a harmful action.
-         *
-         * The X-Frame-Options allows three values: DENY, SAMEORIGIN and ALLOW-FROM. It is recommended to use DENY,
-         * which prevents all domains from framing the page or SAMEORIGIN, which allows framing only by the same site.
-         * DENY and SAMEORGIN are supported by all browsers. Using ALLOW-FROM is not recommended because not all browsers support it.
-         *
-         * For more information, access: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html
-         *
-         */
         $response = $next($request);
-        $response->header('X-Frame-Options', 'ALLOW-FROM https://www.youtube.com');
-        return $response;
+
+        $xFrameOptions = 'SAMEORIGIN';
+
+        // In this example, we are only allowing the third party to include the "iframe" route
+        // It's always better to scope this to a given route / set of routes to avoid any unattended security problems
+        if ($request->routeIs('iframe') && $xFrameOptions = env('X_FRAME_OPTIONS', 'SAMEORIGIN')) {
+            if (false !== strpos($xFrameOptions, 'ALLOW-FROM')) {
+                $url = trim(str_replace('ALLOW-FROM', '', $xFrameOptions));
+
+                return $response->header('Content-Security-Policy', 'frame-ancestors '.$url);
+            }
+        }
+
+        return $response->header('X-Frame-Options', $xFrameOptions);
     }
 }
